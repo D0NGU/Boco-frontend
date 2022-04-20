@@ -6,11 +6,12 @@
   <h2 id="login" v-else>Login</h2>
 
   <label>Email:</label>
-  <input v-model="email">
+    <v-text-field v-model="email"></v-text-field>
 
   <label>Password: </label>
-  <input v-model="password">
-  <button v-on:click="handleClickSignIn(this.username, this.password)">Log in</button>
+    <v-text-field v-model="password"></v-text-field>
+
+  <v-btn v-on:click="handleClickSignIn(this.username, this.password)">Log in</v-btn>
   <label>{{loginStatus}}</label>
   </div>
 
@@ -53,33 +54,19 @@ export default {
 
 <style scoped>
 
+
 #LoginForm {
   display: grid;
   justify-content: center;
   margin: 40px;
   width: fit-content;
 }
-input {
-  padding: 10px;
-  width: 300px;
-}
+
 
 label {
   padding-top: 20px;
   width: 100px;
 }
 
-button {
-  width: 80px;
-  height: 40px;
-  font-size: 20px;
-  margin-top: 30px;
-  place-self: center;
-}
-
-.route {
-  margin-top: 15px;
-  margin-left: 20px;
-}
 
 </style>
