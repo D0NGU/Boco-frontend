@@ -2,29 +2,31 @@
 
 <template>
   <div id="LoginForm">
-  <h2 id="logfail" v-if="fail">Login failed!</h2>
-  <h2 id="login" v-else>Login</h2>
+    <h2 id="logfail" v-if="fail">Login failed!</h2>
+    <h2 id="login" v-else>Login</h2>
 
-  <label>Email:</label>
-    <v-text-field v-model="email"></v-text-field>
+    <div>
+      <label>Email:</label>
+      <v-text-field id="email" v-model="email"></v-text-field>
+    </div>
 
-  <label>Password: </label>
-    <v-text-field v-model="password"></v-text-field>
+    <div>
+      <label>Password: </label>
+      <v-text-field v-model="password"></v-text-field>
+    </div>
 
-  <v-btn v-on:click="handleClickSignIn(this.username, this.password)">Log in</v-btn>
-  <label>{{loginStatus}}</label>
+    <div id="log">
+      <v-btn v-on:click="handleClickSignIn(this.username, this.password)">Log in</v-btn>
+    </div>
+
+    <div>
+      <v-btn onclick="location.href = 'register'">Register new user</v-btn>
+    </div>
   </div>
-
-  <div v-if="fail">
-    <p id="text"> Not registered yet! </p>
-  </div>
-
-
 
 </template>
 
 <script>
-import store from '@/store';
 
 export default {
   methods: {
@@ -32,6 +34,10 @@ export default {
       console.log("Sign in button clicked!")
       const loginRequest = { username: username, password: password };
     },
+
+    goToRegisterForm() {
+
+    }
 
   },
 
@@ -45,7 +51,7 @@ export default {
 
   computed: {
     fail() {
-      return store.getters.getLoginStatus === "Fail"
+      return false
     },
   }
 
@@ -58,15 +64,24 @@ export default {
 #LoginForm {
   display: grid;
   justify-content: center;
-  margin: 40px;
-  width: fit-content;
-}
+  padding: 20px;
 
+}
 
 label {
   padding-top: 20px;
-  width: 100px;
 }
 
+v-btn {
+  padding: 10px;
+}
+
+h2 {
+  margin-bottom: 30px;
+}
+
+#log {
+  margin-bottom: 20px;
+}
 
 </style>

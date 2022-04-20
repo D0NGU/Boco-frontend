@@ -20,8 +20,6 @@ export default {
 <style>
 
 #loginPage {
-  display: grid;
-  padding: 30px;
-  place-content: center;
+
 }
 </style>
