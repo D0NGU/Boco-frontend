@@ -5,6 +5,7 @@
     <div id="navBar">
       <router-link :to="{name: 'Home'}">Home</router-link>|
       <router-link :to="{name: 'Account'}">Account</router-link>|
+      <router-link :to="{name: 'Listing'}">Create listing</router-link>|
       <router-link @click="logOut" :to="{name: 'Login'}">Log Out</router-link>
     </div>
   </div>

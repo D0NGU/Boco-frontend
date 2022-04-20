@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
+import Listing from '../views/Listing.vue'
 
 const routes = [
   {
@@ -20,7 +21,11 @@ const routes = [
     name: 'Login',
     component: Login
   },
-  
+  {
+    path: '/listing',
+    name: 'Listing',
+    component: Listing
+  },
   // Redirect any none-existing path to 404 page
   {
     path: '/:catchAll(.*)',
