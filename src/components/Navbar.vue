@@ -1,4 +1,4 @@
-<!-- Hovedside med annonser -->
+<!-- Navigasjonsbar som alltid skal vises uavhengig av current view -->
 
 <template>
   

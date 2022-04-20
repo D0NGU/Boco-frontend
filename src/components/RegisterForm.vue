@@ -1,4 +1,4 @@
-<!-- Hovedside med annonser -->
+<!-- registrerings komponent -->
 
 <template>
   

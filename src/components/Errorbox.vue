@@ -1,4 +1,4 @@
-<!-- Hovedside med annonser -->
+<!-- En errorboks. Inneholder en dynamisk feilmelding -->
 
 <template>
   

@@ -1,4 +1,4 @@
-<!-- Hovedside med annonser -->
+<!-- Login form -->
 
 <template>
   

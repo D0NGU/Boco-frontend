@@ -1,4 +1,4 @@
-<!-- Hovedside med annonser -->
+<!-- En "listing" instans. (En annonseboks) -->
 
 <template>
   
