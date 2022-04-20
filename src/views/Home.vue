@@ -1,7 +1,9 @@
 <!-- Hovedside med annonser -->
 
 <template>
-  
+  <div>
+
+  </div>
 </template>
 
 <script>
