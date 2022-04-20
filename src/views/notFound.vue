@@ -1,5 +1,5 @@
 <template>
-  <h1>404 Not Found</h1>
+  <h1>404</h1>
   <ErrorBox />
 </template>
 
@@ -9,7 +9,18 @@ import ErrorBox from '../components/Errorbox.vue'
 
 export default {
     name: 'NotFound',
-    components: {ErrorBox}
+    components: {ErrorBox},
+
+    data() {
+      return {
+
+      }
+    },
+
+    mounted() { // runs when view is mounted to the DOM
+        this.$store.commit('setErrorMsg', 'No such page')
+    }
+
 
 }
 </script>
