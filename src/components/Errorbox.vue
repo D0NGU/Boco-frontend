@@ -2,10 +2,18 @@
 
 <template>
 
-    <v-alert type="error">
+   
+
+    <v-alert
+      class="d-inline-flex pa-5"
+      border="bottom"
+      colored-border
+      type="warning"
+      elevation="2"
+      
+    >
       <h1> {{ errorMsg }} </h1>
     </v-alert>
-
 
   
 </template>
@@ -24,5 +32,8 @@ export default {
 
 <style>
 
+.error {
+
+}
 
 </style>
