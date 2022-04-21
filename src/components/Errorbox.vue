@@ -12,7 +12,7 @@
       elevation="2"
       
     >
-      <h1> {{ errorMsg }} </h1>
+      <h1> {{ message }} </h1>
     </v-alert>
 
   
@@ -21,19 +21,12 @@
 <script>
 export default {
 
-    computed: {
-        errorMsg() {
-            return this.$store.state.errorMsg
-        }
-    }
+    props: ['message'],
 
 }
 </script>
 
 <style>
 
-.error {
-
-}
 
 </style>

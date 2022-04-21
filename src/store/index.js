@@ -3,7 +3,6 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     loggedIn: true,
-    errorMsg: '',
     token: ''
 
   },
@@ -14,9 +13,6 @@ export default createStore({
       state.loggedIn = !state.loggedIn
     },
 
-    setErrorMsg(state, newErrorMsg) {
-      state.errorMsg = newErrorMsg
-    }
 
   },
   actions: {
