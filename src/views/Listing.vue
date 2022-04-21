@@ -5,34 +5,26 @@
   <div class="flex-column mb-6">
     <v-card class="container">
       <div>
-        <label>Navn på annonse</label>
-      </div>
-      <div>
-        <input
-            id="adName"
-            v-model="adName"
-            type="text"
-            placeholder="Navn på annonse"
-
-        />
+        <v-text-field
+            label="Navn på annonse"
+            :rules="rules"
+            hide-details="auto"
+          ></v-text-field>
       </div>
 
       <div>
-        <label>Beskrivelse</label>
+        <v-text-field
+            label="Beskrivelse"
+            :rules="rules"
+            hide-details="auto"
+        ></v-text-field>
       </div>
+
       <div>
-        <input
-            id="adDescription"
-            v-model="adDescription"
-            type="text"
-            placeholder="Beskrivelse"
-            outlined
-        />
-      </div>
-      <div>
-        <label>Bilder</label>
         <v-file-input
-            placeholder="Last opp bildene"
+            label="Last opp bildene"
+            :rules="rulesUpload"
+            hide-details="auto"
             accept="image/*"
             multiple
             chips
@@ -41,29 +33,24 @@
       </div>
 
       <div>
-        <label>Kategori</label>
-      </div>
-      <div>
         <v-select
           :items="items"
           label="Kategori"
+          :rules="rulesSelect"
+          hide-details="auto"
           outlined
           prepend-icon="mdi-widgets"
           ></v-select>
-
       </div>
 
       <div>
-        <label>Pris</label>
-      </div>
-      <div>
-        <input
-            id="adPrice"
+        <v-text-field
             v-model="adPrice"
             type="number"
-            placeholder="Pris"
+            label="Pris"
+            :rules="rulesNumber"
+            hide-details="auto"
         />
-        <label> kr</label>
       </div>
 
       <div>
@@ -84,14 +71,6 @@
         </v-radio-group>
       </div>
 
-      <!--<div>
-        <v-text-field
-          v-model="dateRange"
-          label="Datoer"
-          readonly
-          prepend-icon="mdi-calendar"
-        ></v-text-field>
-      </div>-->
       <div>
         <label>Fra dato:</label>
       </div>
@@ -103,35 +82,21 @@
         >
       </div>
       <div>
-        <label>Til dato:</label>
-      </div>
-      <div>
-        <input
-            id="toDate"
-            v-model="toDate"
-            type="date"
-        >
-      </div>
-      <div>
-        <label>Adresse</label>
-      </div>
-      <div>
-        <input
-            id="adAddress"
+        <v-text-field
             v-model="adAddress"
             type="text"
-            placeholder="Adresse"
+            label="Adresse"
+            :rules="rules"
+            hide-details="auto"
         />
       </div>
       <div>
-        <label>Telefon</label>
-      </div>
-      <div>
-        <input
-            id="adPhone"
+        <v-text-field
             v-model="adPhone"
-            type="text"
-            placeholder="Telefon"
+            type="number"
+            label="Telefon"
+            :rules="rulesNumber"
+            hide-details="auto"
         />
       </div>
       <div>
@@ -156,16 +121,46 @@
 
 export default {
   name: "AdPage",
+  data: () => ({
+    items: ['Hage', 'Verktøy', 'Turutstyr', 'Klatring', 'Ski', 'Båt', 'Bil', 'Sykkel'],
+    rules: [
+        value => !!value || 'Påkrevd.',
+        value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
+    ],
+    rulesNumber: [
+        value => !!value || 'Påkrevd.',
+        value => (value && value) || 'Må være tall.',
+    ],
+  }),
+  components:{
+    //Datepicker
+  },
+  methods: {
+    handleOnFocus() {
+      console.log("Focused");
+      this.isFocused = true;
+    },
+    handleOnBlur() {
+      this.isFocused = false;
+    }
+  }
 
 }
 </script>
 
 <style scope>
-  .container{
+  .container {
     padding: 1em;
   }
+  div{
+    margin: 0.1em;
+  }
+  .input-field {
+    margin-top: 30px;
+    position: relative;
+  }
   #adName {
-    border: 2px solid var(--bocoBlue);
+    background: var(--bocoBlue);
     border-radius: 5px;
     padding: 0.5em;
   }
@@ -192,5 +187,6 @@ export default {
   #createAdButton{
     background-color: var(--bocoBlue);
     color: white;
+    font-weight: bold;
   }
 </style>
