@@ -23,7 +23,6 @@
       <div>
         <v-file-input
             label="Last opp bildene"
-            :rules="rulesUpload"
             hide-details="auto"
             accept="image/*"
             multiple
@@ -46,7 +45,7 @@
       <div>
         <v-text-field
             v-model="adPrice"
-            type="number"
+            type="text"
             label="Pris"
             :rules="rulesNumber"
             hide-details="auto"
@@ -93,9 +92,9 @@
       <div>
         <v-text-field
             v-model="adPhone"
-            type="number"
+            type="text"
             label="Telefon"
-            :rules="rulesNumber"
+            :rules="rulesPhone"
             hide-details="auto"
         />
       </div>
@@ -128,23 +127,20 @@ export default {
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
     ],
     rulesNumber: [
+        value => !isNaN(value) || 'Må være tall.',
         value => !!value || 'Påkrevd.',
-        value => (value && value) || 'Må være tall.',
     ],
+    rulesPhone: [
+        value => !isNaN(value) || 'Må være tall.',
+        value => (value && !!(value.length == 8)) || 'Må være et gyldig telefonnummer.',
+    ]
   }),
   components:{
-    //Datepicker
+
   },
   methods: {
-    handleOnFocus() {
-      console.log("Focused");
-      this.isFocused = true;
-    },
-    handleOnBlur() {
-      this.isFocused = false;
-    }
-  }
 
+  },
 }
 </script>
 
