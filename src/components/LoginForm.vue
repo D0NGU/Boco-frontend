@@ -1,7 +1,9 @@
 <!-- Login form -->
 
 <template>
-  <div id="LoginForm">
+  <v-form ref="loginform" id="LoginForm" @submit.prevent="handleClickSignIn"
+          v-model="valid"
+          lazy-validation>
     <h2 id="login">Login</h2>
 
     <div>
@@ -28,43 +30,19 @@
     <div id="loginButton" class="text-center">
       <v-row justify="center">
         <v-btn
+            :disabled="!valid"
             dark
             color="green"
-            @click="dialog = true"
+            @click="handleClickSignIn()"
         >
           Log in
         </v-btn>
 
-        <v-dialog v-if="loginStatus ==='Fail'"
-                  v-model="dialog"
-                  persistent
-        >
+        <v-dialog v-model="dialog">
           <v-card>
-            <v-card-title class="text-h5"> Login failed </v-card-title>
+            <v-card-title class="text-h5" v-if="loginStatus !=='Successfull login'"> Login failed! </v-card-title>
+            <v-card-title class="text-h5" v-else="loginStatus ==='Successfull login'"> Login success! </v-card-title>
             <v-card-text> {{loginStatus}} </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                  color="red"
-                  text
-                  @click="dialog = false"
-              >
-                Close
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
-        <v-dialog v-if="loginStatus === 'Success'"
-                  v-model="dialog"
-                  persistent
-        >
-          <v-card>
-            <v-card-title class="text-h5"> Success! </v-card-title>
-            <v-card-text>
-              {{loginStatus}}
-            </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -88,32 +66,33 @@
         Register new user
       </v-btn>
     </div>
-  </div>
+  </v-form>
 
 </template>
 
 <script>
-//import axios from "axios";
-import LoginService from '../service/LoginService.js'
+import axios from "axios";
+//import LoginService from '../service/LoginService.js'
 export default {
 
   methods: {
-    async handleClickSignIn (email, password) {
+    async handleClickSignIn () {
+      this.dialog = true
       console.log("Sign in button clicked!")
-      const loginRequest = { email: email, password: password };
+      const loginRequest = { email: this.email, password: this.password };
 
-      /*await axios.post(`http://localhost:8080/api/auth/signin`, loginRequest).then(response => {
+      await axios.post(`http://localhost:8080/api/auth/signin`, loginRequest).then(response => {
         this.loginStatus = response.data
       }).catch((error) => {
         if (error.response) {
           this.loginStatus = error.response.data;
         }
-      })*/
+      })
 
     },
 
 
-    getToken() {
+    /*getToken() {
       console.log("In get token method")
 
       return LoginService.getToken(this.email, this.password).
@@ -135,15 +114,15 @@ export default {
 
           })
 
-    }
+    }*/
 
   },
 
   data() {
     return {
-      email: 'oskareid@stud.ntnu.no',
-      password: 'password',
-      loginStatus: 'Fail',
+      email: '',
+      password: '',
+      loginStatus: '',
       token1: '',
       error: '',
       rulesApplyToAll: [
@@ -155,6 +134,7 @@ export default {
       ],
       show: false,
       dialog: false,
+      valid: true,
     }
   },
 

@@ -1,7 +1,10 @@
 <!-- registrerings komponent -->
 
 <template>
-  <v-form ref="form" id="RegisterForm" @submit.prevent="submit">
+  <v-form ref="form" id="RegisterForm"
+          @submit.prevent="submit"
+          v-model="valid"
+          lazy-validation>
     <h1>Register</h1>
 
     <div id="test">
@@ -37,21 +40,20 @@
 
       <v-row justify="center">
         <v-btn
-            type="submit"
+            :disabled="!valid"
+            type="button"
             color="#CFD8DC"
             dark
-            @click.stop="dialog = true"
+            @click.stop="submit"
         >
           Register
         </v-btn>
 
-        <v-dialog v-if="regisState ==='Success' "
-                  v-model="dialog"
-                  persistent
-        >
+        <v-dialog v-model="dialog">
           <v-card>
-            <v-card-title class="text-h5"> Registered! </v-card-title>
-            <v-card-text> You are registered </v-card-text>
+            <v-card-title class="text-h5" v-if="regisState ==='Registered successfully!'"> Registered! </v-card-title>
+            <v-card-title class="text-h5" v-if="regisState !=='Registered successfully!'"> Registering failed </v-card-title>
+            <v-card-text> {{regisState}} </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -67,8 +69,6 @@
         </v-dialog>
       </v-row>
     </div>
-
-
 
   </v-form>
 </template>
@@ -90,25 +90,25 @@ export default {
         value => !!value || 'Required.',
       ],
       show: false,
-      regisState: 'Success',
-      dialog: false
+      regisState: '',
+      dialog: false,
+      valid: true,
     }
   },
 
   methods: {
     async submit() {
+      this.dialog = true
       if (this.$refs.form.validate()) {
         console.log("Form is validated")
 
         const registerNewUserRequest = { fname: this.firstname, lname: this.lastname, email: this.email,  password: this.password  };
-        let registerResponse;
 
         await axios.post(`http://localhost:8080/api/auth/signup`, registerNewUserRequest).then(response => {
-        registerResponse = response.data
-        console.log(registerResponse)
+        this.regisState = response.data
       }).catch((error) => {
         if (error.response) {
-          console.log(error.response.data)
+          this.regisState = error.response.data
         }
       })
       }
@@ -117,8 +117,10 @@ export default {
 
     close() {
       this.dialog = false
-      location.href = 'login'
-    }
+      this.$refs.form.reset()
+      this.$refs.form.resetValidation()
+    },
+
   }
 }
 </script>
