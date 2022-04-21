@@ -33,22 +33,36 @@
           Log in
         </v-btn>
 
-        <v-dialog
+        <v-dialog v-if="loginStatus ==='Fail' "
             v-model="dialog"
         >
           <v-card>
-            <v-card-title class="text-h5">
-              Login failed
-            </v-card-title>
+            <v-card-title class="text-h5"> Login failed </v-card-title>
+            <v-card-text> {{loginStatus}} </v-card-text>
 
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                  color="red"
+                  text
+                  @click="dialog = false"
+              >
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog v-if="loginStatus ==='Success'"
+            v-model="dialog"
+        >
+          <v-card>
             <v-card-text>
-              hiii
               {{loginStatus}}
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-
               <v-btn
                   color="red"
                   text
@@ -70,20 +84,21 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 export default {
+
   methods: {
     async handleClickSignIn (email, password) {
       console.log("Sign in button clicked!")
       const loginRequest = { email: email, password: password };
 
-      await axios.post(`http://localhost:8080/api/auth/signin`, loginRequest).then(response => {
+      /*await axios.post(`http://localhost:8080/api/auth/signin`, loginRequest).then(response => {
         this.loginStatus = response.data
       }).catch((error) => {
         if (error.response) {
           this.loginStatus = error.response.data;
         }
-      })
+      })*/
 
     },
 
@@ -93,7 +108,7 @@ export default {
     return {
       email: '',
       password: '',
-      loginStatus: '',
+      loginStatus: 'Fail',
       rulesApplyToAll: [
         value => !!value || 'Required.',
       ],

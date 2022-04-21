@@ -33,8 +33,37 @@
 
     </div>
 
-    <div>
-      <v-btn type="submit">Register</v-btn>
+    <div class="text-center">
+
+      <v-row justify="center">
+        <v-btn
+            type="submit"
+            dark
+            @click.stop="dialog = true"
+        >
+          Register
+        </v-btn>
+
+        <v-dialog v-if="regisState ==='Success' "
+                  v-model="dialog"
+        >
+          <v-card>
+            <v-card-title class="text-h5"> Registered! </v-card-title>
+            <v-card-text> You are registered </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                  color="red"
+                  text
+                  @click="dialog = false"
+              >
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </div>
 
 
@@ -59,6 +88,8 @@ export default {
         value => !!value || 'Required.',
       ],
       show: false,
+      regisState: 'Success',
+      dialog: false
     }
   },
 
