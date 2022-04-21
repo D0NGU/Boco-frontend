@@ -19,11 +19,35 @@
 </template>
 
 <script>
+
+import LoginService from '../service/LoginService.js'
+
 export default {
 
     props: ['message'],
 
+    data() {
+      return {
+          error: null,
+          email: 'oskareid@stud.ntnu.no',
+          password: 'password',
+          token: ''
+      }
+    },
+
+
+    
+methods: {
+  getToken() {
+           
+
+        },
 }
+      
+            
+}
+  
+
 </script>
 
 <style>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import boco from 'boco'
+import qs from 'qs'
 
 export default {
     /**
@@ -14,7 +14,7 @@ export default {
         const options = {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: boco.stringify(data),
+            data: qs.stringify(data),
             url: "http://localhost:8085/api/token"
         };
 
