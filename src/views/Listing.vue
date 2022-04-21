@@ -6,6 +6,7 @@
     <v-card class="container">
       <div>
         <v-text-field
+            v-model="adName"
             label="Navn på annonse"
             :rules="rules"
             hide-details="auto"
@@ -14,6 +15,7 @@
 
       <div>
         <v-text-field
+            v-model="adDescription"
             label="Beskrivelse"
             :rules="rules"
             hide-details="auto"
@@ -22,6 +24,7 @@
 
       <div>
         <v-file-input
+            v-model="adPicture"
             label="Last opp bildene"
             hide-details="auto"
             accept="image/*"
@@ -33,12 +36,13 @@
 
       <div>
         <v-select
-          :items="items"
-          label="Kategori"
-          :rules="rulesSelect"
-          hide-details="auto"
-          outlined
-          prepend-icon="mdi-widgets"
+            v-model="adCategory"
+            :items="items"
+            label="Kategori"
+            :rules="rulesSelect"
+            hide-details="auto"
+            outlined
+            prepend-icon="mdi-widgets"
           ></v-select>
       </div>
 
@@ -109,7 +113,15 @@
       <div>
         <v-btn
             id="createAdButton"
+            @click="saveAd()"
         >Lag annonse
+        </v-btn>
+      </div>
+      <div>
+        <v-btn
+            id="cancelButton"
+            onclick="location.href='/'"
+        >Avbryt
         </v-btn>
       </div>
     </v-card>
@@ -117,10 +129,24 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
 
 export default {
   name: "AdPage",
   data: () => ({
+    return: {
+      adName:'',
+      adDescription:'',
+      adPicture:'',
+      adCategory:'',
+      adPrice:'',
+      pricePer:'',
+      fromDate:'',
+      adAddress:'',
+      adPhone:'',
+      switch1:'',
+
+    },
     items: ['Hage', 'Verktøy', 'Turutstyr', 'Klatring', 'Ski', 'Båt', 'Bil', 'Sykkel'],
     rules: [
         value => !!value || 'Påkrevd.',
@@ -138,18 +164,35 @@ export default {
   components:{
 
   },
+  setup() {
+    const store = useStore();
+
+    const saveAd = () => {
+      store.commit("SET_ADNAME", data.token);
+
+    }
+  },
   methods: {
 
   },
 }
 </script>
 
-<style scope>
+<style scoped>
   .container {
     padding: 1em;
   }
   div{
-    margin: 0.1em;
+    margin: 0.4em;
+  }
+  #createAdButton{
+    background-color: var(--bocoBlue);
+    color: white;
+    font-weight: bold;
+  }
+  #cancelButton{
+    color: var(--bocoBlue);
+    font-weight: bold;
   }
   .input-field {
     margin-top: 30px;
@@ -179,10 +222,5 @@ export default {
     border: 2px solid var(--bocoBlue);
     border-radius: 5px;
     padding: 0.5em;
-  }
-  #createAdButton{
-    background-color: var(--bocoBlue);
-    color: white;
-    font-weight: bold;
   }
 </style>
