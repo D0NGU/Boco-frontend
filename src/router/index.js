@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
+import RegisterForm from "@/components/RegisterForm";
 
 const routes = [
   {
@@ -19,6 +20,12 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+
+  {
+    path: "/register",
+    name: "RegisterForm",
+    component: RegisterForm
   },
   
   // Redirect any none-existing path to 404 page
