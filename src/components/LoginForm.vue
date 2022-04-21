@@ -7,7 +7,7 @@
     <div>
       <label>Email:</label>
       <v-text-field
-          :rules="rulesApplyToAll"
+          :rules="emailRules"
           id="email"
           v-model="email">
       </v-text-field>
@@ -23,18 +23,21 @@
       </v-text-field>
     </div>
 
-    <div id="loginButton" class="text-center">
+    <!--<v-btn @click="getToken"> get token </v-btn>-->
 
+    <div id="loginButton" class="text-center">
       <v-row justify="center">
         <v-btn
             dark
-            @click.stop="dialog = true"
+            color="green"
+            @click="dialog = true"
         >
           Log in
         </v-btn>
 
-        <v-dialog v-if="loginStatus ==='Fail' "
-            v-model="dialog"
+        <v-dialog v-if="loginStatus ==='Fail'"
+                  v-model="dialog"
+                  persistent
         >
           <v-card>
             <v-card-title class="text-h5"> Login failed </v-card-title>
@@ -53,10 +56,12 @@
           </v-card>
         </v-dialog>
 
-        <v-dialog v-if="loginStatus ==='Success'"
-            v-model="dialog"
+        <v-dialog v-if="loginStatus === 'Success'"
+                  v-model="dialog"
+                  persistent
         >
           <v-card>
+            <v-card-title class="text-h5"> Success! </v-card-title>
             <v-card-text>
               {{loginStatus}}
             </v-card-text>
@@ -76,8 +81,12 @@
       </v-row>
     </div>
 
-    <div>
-      <v-btn onclick="location.href='register'">Register new user</v-btn>
+    <div class="text-center">
+      <v-btn
+          color="primary"
+          onclick="location.href='register'">
+        Register new user
+      </v-btn>
     </div>
   </div>
 
@@ -85,6 +94,7 @@
 
 <script>
 //import axios from "axios";
+import LoginService from '../service/LoginService.js'
 export default {
 
   methods: {
@@ -102,15 +112,46 @@ export default {
 
     },
 
+
+    getToken() {
+      console.log("In get token method")
+
+      return LoginService.getToken(this.email, this.password).
+      then(ans => {
+        this.token1 = ans.data
+        console.log(ans.data)
+        console.log("IN THEN")
+
+
+      })
+          .catch(err => {
+            if(err.response) {
+              this.error = err.response.data;
+            } else {
+              this.error = err
+            }
+
+            console.log(err.response)
+
+          })
+
+    }
+
   },
 
   data() {
     return {
-      email: '',
-      password: '',
+      email: 'oskareid@stud.ntnu.no',
+      password: 'password',
       loginStatus: 'Fail',
+      token1: '',
+      error: '',
       rulesApplyToAll: [
         value => !!value || 'Required.',
+      ],
+      emailRules: [
+        v => !!v || 'Required',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
       ],
       show: false,
       dialog: false,
@@ -122,12 +163,10 @@ export default {
 
 <style scoped>
 
-
 #LoginForm {
   display: grid;
   justify-content: center;
   padding: 20px;
-
 }
 
 label {

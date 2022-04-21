@@ -38,6 +38,7 @@
       <v-row justify="center">
         <v-btn
             type="submit"
+            color="#CFD8DC"
             dark
             @click.stop="dialog = true"
         >
@@ -46,6 +47,7 @@
 
         <v-dialog v-if="regisState ==='Success' "
                   v-model="dialog"
+                  persistent
         >
           <v-card>
             <v-card-title class="text-h5"> Registered! </v-card-title>
@@ -56,7 +58,7 @@
               <v-btn
                   color="red"
                   text
-                  @click="dialog = false"
+                  @click=close()
               >
                 Close
               </v-btn>
@@ -111,6 +113,11 @@ export default {
       })
       }
 
+    },
+
+    close() {
+      this.dialog = false
+      location.href = 'login'
     }
   }
 }
@@ -121,6 +128,8 @@ export default {
 #RegisterForm {
   display: grid;
   justify-content: center;
+  padding: 20px;
+  margin-top: 30px;
 }
 
 #test {
