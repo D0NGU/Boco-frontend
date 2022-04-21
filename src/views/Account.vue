@@ -36,7 +36,7 @@
           <p>Rangering som låner</p>
           <v-rating readonly="" v-model="ratingRenter"></v-rating>
           <br>
-          <v-icon> mdi-message-draw </v-icon> 45
+          <v-icon> mdi-message-draw </v-icon> {{reviewsCount}}
         </v-carousel-item>
       </v-carousel>
     </div>
@@ -67,9 +67,15 @@ export default {
       //TODO Hent rating fra backend
       ratingSeller: 5,
       ratingRenter: 5,
+      reviewsCount: '',
       tab: null,
     }
   },
+  methods: {
+      getRating(){
+        // TODO kjørt GET user også legg inn details
+      }
+  }
 }
 </script>
 
