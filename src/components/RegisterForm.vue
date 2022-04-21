@@ -1,34 +1,40 @@
 <!-- registrerings komponent -->
 
 <template>
-  <v-form id="RegisterForm" @submit.prevent="submit">
+  <v-form ref="form" id="RegisterForm" @submit.prevent="submit">
     <h1>Register</h1>
 
     <div id="test">
       <label>First Name:</label>
-      <v-text-field v-model="firstname"></v-text-field>
+      <v-text-field
+          :rules="rulesApplyToAll"
+          v-model="firstname">
+      </v-text-field>
 
       <label>Last Name: </label>
-      <v-text-field v-model="lastname"></v-text-field>
+      <v-text-field
+          :rules="rulesApplyToAll"
+          v-model="lastname">
+      </v-text-field>
 
       <label>Email:</label>
-      <v-text-field v-model="email"></v-text-field>
-
-      <label>Address:</label>
-      <v-text-field v-model="address"></v-text-field>
-
-      <label>Tlf:</label>
-      <v-text-field v-model="tlf"></v-text-field>
+      <v-text-field
+          :rules="emailRules"
+          v-model="email">
+      </v-text-field>
 
       <label>Password: </label>
-      <v-text-field v-model="password"></v-text-field>
+      <v-text-field
+          :rules="rulesApplyToAll"
+          v-model="password"
+          :type="show ?'text': 'password'"
+          @click:append="show=!show">
+      </v-text-field>
 
-      <label>Rewrite password: </label>
-      <v-text-field hide-details v-model="rewritePassword"></v-text-field>
     </div>
 
     <div>
-      <v-btn v-on:click="submit">Register</v-btn>
+      <v-btn type="submit">Register</v-btn>
     </div>
 
 
@@ -37,22 +43,43 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       firstname: '',
       lastname: '',
       email: '',
-      address: '',
-      tlf: '',
       password: '',
-      rewritePassword: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+      ],
+      rulesApplyToAll: [
+        value => !!value || 'Required.',
+      ],
+      show: false,
     }
   },
 
   methods: {
-    submit() {
-      console.log("Register button clicked")
+    async submit() {
+      if (this.$refs.form.validate()) {
+        console.log("Form is validated")
+
+        const registerNewUserRequest = { fname: this.firstname, lname: this.lastname, email: this.email,  password: this.password  };
+        let registerResponse;
+
+        await axios.post(`http://localhost:8080/api/auth/signup`, registerNewUserRequest).then(response => {
+        registerResponse = response.data
+        console.log(registerResponse)
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response.data)
+        }
+      })
+      }
+
     }
   }
 }
@@ -63,12 +90,9 @@ export default {
 #RegisterForm {
   display: grid;
   justify-content: center;
-  border: solid 2px;
-
 }
 
 #test {
-  border: solid 2px;
   width: 300px;
 }
 
