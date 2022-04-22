@@ -19,6 +19,7 @@
       <label>Password: </label>
       <v-text-field
           :rules="rulesApplyToAll"
+          id="password"
           v-model="password"
           :type="show ?'text': 'password'"
           @click:append="show=!show">
@@ -41,7 +42,7 @@
         <v-dialog v-model="dialog">
           <v-card>
             <v-card-title class="text-h5" v-if="loginStatus !=='Successfull login'"> Login failed! </v-card-title>
-            <v-card-text> {{loginStatus}} </v-card-text>
+            <v-card-text id="loginStatusLabel"> {{loginStatus}} </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
