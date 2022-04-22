@@ -11,7 +11,7 @@ class ListingsService{
 const listingService = new ListingsService();
 
 export default {
-    getToken(adname, description, address, price, unlisted, user_id, category) {
+    async getToken(adname, description, address, price, unlisted, user_id, category) {
         const data = {'adname': adname, 'description':description, 'address':address, 'price':price, 'unlisted':unlisted, 'user_id':user_id, 'category':category};
         const options = {
             method: 'POST',
