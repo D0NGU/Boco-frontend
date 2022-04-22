@@ -3,7 +3,6 @@
 <template>
   <div id="grid">
     <div id="topProfileContainer">
-      <v-btn id="logOutBtn" @click="logOut">Logg ut</v-btn>
       <div class="profileImage">
         <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture" class="profileImage"> </v-img>
       </div>
