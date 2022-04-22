@@ -4,6 +4,7 @@ import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
 import RegisterForm from "@/components/RegisterForm";
+import DeleteUser from "@/components/DeleteUser";
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     path: "/register",
     name: "RegisterForm",
     component: RegisterForm
+  },
+  {
+    path: "/deleteUser",
+    name: "DeleteUser",
+    component: DeleteUser
   },
   
   // Redirect any none-existing path to 404 page

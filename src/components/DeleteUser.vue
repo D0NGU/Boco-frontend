@@ -1,12 +1,13 @@
 <template>
   <v-card
       class="mx-auto"
-      max-width="200"
+      max-width="350"
       outlined
+
   >
     <v-list-item two-line>
-      <v-list-item-content>
-        <v-list-item-title class="text-h5 mb-1">
+      <v-list-item-content class="justify-center">
+        <v-list-item-title class="text-h8 mb-1">
           Er du sikker på at du vil slette brukeren din?
         </v-list-item-title>
         <v-list-item-subtitle>
@@ -15,13 +16,13 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-card-actions>
+    <v-card-actions class="justify-center">
       <v-btn
-        outlined
-        rounded
-        text
-        color="red"
-        v-on:click="deleteUser(this.user.id)"
+          outlined
+          rounded
+          text
+          color="red"
+          v-on:click="deleteUser(this.user.id)"
       >
         Slett bruker
       </v-btn>
@@ -29,6 +30,7 @@
         outlined
         rounded
         text
+        onclick="location.href='/'"
       >
         Avbryt
       </v-btn>
