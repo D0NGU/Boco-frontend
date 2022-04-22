@@ -186,9 +186,6 @@ export default {
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
     ]
   }),
-  components:{
-
-  },
   setup() {
     const store = useStore();
 
