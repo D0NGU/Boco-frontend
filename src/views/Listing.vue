@@ -3,7 +3,9 @@
 <template>
   <h1 id="createListingHeadline">Opprett en ny annonse</h1>
   <div class="flex-column mb-6">
+
     <v-card class="container">
+      <v-form v-model="isFormValid">
       <div>
         <v-text-field
             v-model="adName"
@@ -24,7 +26,6 @@
 
       <div>
         <v-file-input
-            v-model="adPicture"
             label="Last opp bildene"
             hide-details="auto"
             accept="image/*"
@@ -36,10 +37,9 @@
 
       <div>
         <v-select
-            v-model="adCategory"
+
             :items="items"
             label="Kategori"
-            :rules="rulesSelect"
             hide-details="auto"
             outlined
             prepend-icon="mdi-widgets"
@@ -102,6 +102,7 @@
             hide-details="auto"
         />
       </div>
+    </v-form>
       <div>
         <v-switch
             v-model="switch1"
@@ -113,6 +114,7 @@
       <div>
         <v-btn
             id="createAdButton"
+            :diabled="!isFormValid"
             @click="saveAd()"
         >Lag annonse
         </v-btn>
@@ -137,8 +139,6 @@ export default {
     return: {
       adName:'',
       adDescription:'',
-      adPicture:'',
-      adCategory:'',
       adPrice:'',
       pricePer:'',
       fromDate:'',
@@ -151,6 +151,7 @@ export default {
     rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
+
     ],
     rulesNumber: [
         value => !isNaN(value) || 'Må være tall.',
@@ -166,6 +167,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const alertCheck = false;
 
     const saveAd = () => {
       store.commit("SET_ADNAME", data.token);
@@ -173,7 +175,12 @@ export default {
     }
   },
   methods: {
+    saveAd(){
+      if(true){
+        alert('Annonsen ble lagret!');
+      }
 
+    },
   },
 }
 </script>
