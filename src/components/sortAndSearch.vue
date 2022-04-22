@@ -187,5 +187,9 @@ export default {
     width: 100px;
     margin: 0 20px;
   }
+  #sort-and-search-container {
+    margin: 10px;
+    padding: 20px;
+  }
 }
 </style>
