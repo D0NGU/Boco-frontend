@@ -74,7 +74,8 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
+import LoginService from '../service/LoginService'
 export default {
   data() {
     return {
@@ -101,18 +102,14 @@ export default {
       this.dialog = true
       if (this.$refs.form.validate()) {
         console.log("Form is validated")
-
-        const registerNewUserRequest = { fname: this.firstname, lname: this.lastname, email: this.email,  password: this.password  };
-
-        await axios.post(`http://localhost:8080/api/auth/signup`, registerNewUserRequest).then(response => {
-        this.regisState = response.data
-      }).catch((error) => {
-        if (error.response) {
-          this.regisState = error.response.data
-        }
-      })
+        await LoginService.handleClickSignUp(this.firstname, this.lastname, this.email, this.password).then(response => {
+          this.regisState = response.data
+        }).catch((error) => {
+          if (error.response) {
+            this.regisState = error.response.data
+          }
+        })
       }
-
     },
 
     close() {

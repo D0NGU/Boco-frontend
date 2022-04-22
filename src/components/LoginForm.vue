@@ -1,7 +1,7 @@
 <!-- Login form -->
 
 <template>
-  <v-form ref="loginform" id="LoginForm" @submit.prevent="handleClickSignIn"
+  <v-form ref="loginform" id="LoginForm" @submit.prevent="logInButton"
           v-model="valid"
           lazy-validation>
     <h2 id="login">Login</h2>
@@ -33,7 +33,7 @@
             :disabled="!valid"
             dark
             color="green"
-            @click="handleClickSignIn()"
+            @click="logInButton()"
         >
           Log in
         </v-btn>
@@ -41,7 +41,6 @@
         <v-dialog v-model="dialog">
           <v-card>
             <v-card-title class="text-h5" v-if="loginStatus !=='Successfull login'"> Login failed! </v-card-title>
-            <v-card-title class="text-h5" v-else="loginStatus ==='Successfull login'"> Login success! </v-card-title>
             <v-card-text> {{loginStatus}} </v-card-text>
 
             <v-card-actions>
@@ -71,51 +70,27 @@
 </template>
 
 <script>
-import axios from "axios";
-//import LoginService from '../service/LoginService.js'
+import LoginService from '@/service/LoginService'
 export default {
 
   methods: {
-    async handleClickSignIn () {
+    async logInButton() {
       this.dialog = true
-      console.log("Sign in button clicked!")
-      const loginRequest = { email: this.email, password: this.password };
+      if (this.$refs.loginform.validate()) {
+        console.log("Form is validated")
+        await LoginService.handleClickSignIn(this.email, this.password).then(response => {
+          this.loginStatus = response.data
+        }).catch((error) => {
+          if (error.response) {
+            this.loginStatus = error.response.data;
+          }
+        })
+      }
 
-      await axios.post(`http://localhost:8080/api/auth/signin`, loginRequest).then(response => {
-        this.loginStatus = response.data
-      }).catch((error) => {
-        if (error.response) {
-          this.loginStatus = error.response.data;
-        }
-      })
-
+      if (this.loginStatus === 'Successfull login'){
+        await this.$router.push('/');
+      }
     },
-
-
-    /*getToken() {
-      console.log("In get token method")
-
-      return LoginService.getToken(this.email, this.password).
-      then(ans => {
-        this.token1 = ans.data
-        console.log(ans.data)
-        console.log("IN THEN")
-
-
-      })
-          .catch(err => {
-            if(err.response) {
-              this.error = err.response.data;
-            } else {
-              this.error = err
-            }
-
-            console.log(err.response)
-
-          })
-
-    }*/
-
   },
 
   data() {
