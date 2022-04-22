@@ -13,13 +13,19 @@
 
 <script>
 
+
+import LoginService from '../service/LoginService.js'
+
 export default {
+
+  
+
 
   methods: {
     
     logOut() {
       this.$store.commit('setLogin')
-    }
+    },
 
   }
 
