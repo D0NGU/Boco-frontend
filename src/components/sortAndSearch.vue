@@ -2,13 +2,15 @@
 <v-card id="sort-and-search-container" elevation="2">
   <v-text-field
       v-model="searchBar"
+      id="searchBar"
+      @keyup="updateSearchList"
       density="comfortable"
       color="primary"
       label="Søk..."
       clearable
       variant="outlined"
-      id="searchBar"
-  ></v-text-field>
+      ></v-text-field>
+
 <!--
   PC Versjon?
 <div id="filteringButtons">
@@ -71,30 +73,52 @@
 </template>
 
 <script>
+import {getAllProducts, getProductsInCategory} from "@/service/ApiService";
+
 export default {
   name: "sortAndSearch",
+  props: {
+    products: Array,
+  },
   data() {
     return {
-      elementsList: [],
+      activeProductList: [],
       sortByDialog: false,
       filterDialog: false,
       searchBar: "",
       overlay: false,
       // TODO: Legg til disse listene automatisk?
-      sortByOptions: [{option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}, {option: 'Nærmest', active: false}],
-      categories: [{icon: 'mdi-basketball', category: 'Sport', active: false}, {icon: 'mdi-flower', category: 'Hage', active: false}, {icon: 'mdi-sofa-single', category: 'Møbler', active: false}],
+      sortByOptions: [{option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
+      categories: [{icon: 'mdi-basketball', category: 'Sport', active: false}, {icon: 'mdi-flower', category: 'Hage', active: false}, {icon: 'mdi-sofa-single', category: 'Møbler', active: false}, {icon: 'mdi-hammer-wrench', category: 'Verktøy', active: false}],
     };
   },
   methods: {
+    updateSearchList(){
+      this.$emit('update', this.filteredList)
+    },
     getAllElements() {
-      //TODO: Få liste fra backend
+      const products = getAllProducts()
+      products.forEach(product => this.products.push({name: product.name,
+        description: product.description,
+        address: product.address,
+        price: product.price,
+        unlisted: product.unlisted,
+        availableFrom: product.availableFrom,
+        availableTo: product.availableTo,
+        userId: product.userId,
+        category: product.category}))
     },
     selectSortByOption(selectedOption) {
       this.sortByOptions.forEach((option) => {
         option.active = option.option === selectedOption;
       })
       setTimeout(() => this.sortByDialog = false, 300);
-      //TODO: Sorter lista
+
+      if(selectedOption === "Pris lav-høy"){
+        this.activeProductList.sort((a, b) => a.price - b.price );
+      } else if(selectedOption === "Pris høy-lav"){
+        this.activeProductList.sort((a, b) => b.price - a.price );
+      }
     },
 
     selectCategory(selectedCategory) {
@@ -102,21 +126,30 @@ export default {
         category.active = category.category === selectedCategory;
       })
       setTimeout(() => this.filterDialog = false, 300);
-      //TODO: Få ny liste fra backend
-    },
-  },
+      setTimeout(() => this.filterDialog = false, 300);
+      this.activeProductList = [];
 
+      const newList = getProductsInCategory(selectedCategory)
+      newList.forEach(product => this.activeProductList.push({name: product.name,
+        description: product.description,
+        address: product.address,
+        price: product.price,
+        unlisted: product.unlisted,
+        availableFrom: product.availableFrom,
+        availableTo: product.availableTo,
+        userId: product.userId,
+        category: product.category}))
+    }
+  },
   computed: {
     filteredList() {
-      return this.elementsList.filter((element) => {
-        return element
-            .toLowerCase()
-            .includes(this.search.toLowerCase());
+      return this.activeProductList.filter((product) => {
+        return product.name.toLowerCase().includes(this.searchBar.toLowerCase());
       });
     },
   },
   beforeMount() {
-    this.getAllElements()
+    this.activeProductList = this.products;
   }
 
 }

@@ -8,7 +8,7 @@
         <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture" class="profileImage"> </v-img>
       </div>
       <v-tabs id="tabContainer"
-              v-model="tab">
+              v-model="tab" grow="">
         <v-tab class="tabHeader" value="items"><v-icon>mdi-newspaper</v-icon></v-tab>
         <v-tab class="tabHeader" value="history"><v-icon>mdi-history</v-icon></v-tab>
         <v-tab class="tabHeader" value="reviews"><v-icon>mdi-message-draw </v-icon></v-tab>
@@ -128,8 +128,5 @@ export default {
   width: 100%;
   z-index: 10;
   display: flex;
-}
-.tabHeader {
-  flex-grow: 1;
 }
 </style>
