@@ -1,6 +1,6 @@
 <!-- inneholder listing component -->
 
-<template>
+<!--<template>
   <h1 id="createListingHeadline">Opprett en ny annonse</h1>
   <div class="flex-column mb-6">
     <v-card class="container">
@@ -223,4 +223,25 @@ export default {
     border-radius: 5px;
     padding: 0.5em;
   }
+</style>-->
+
+<template>
+  <div id="listingPage">
+    <Listing></Listing>
+  </div>
+</template>
+
+<script>
+import Listing from "@/components/Listing";
+export default {
+  components: {
+    Listing,
+  },
+}
+</script>
+
+<style>
+#listingPage {
+  justify-content: center;
+}
 </style>
