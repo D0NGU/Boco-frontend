@@ -37,8 +37,8 @@
 
       <div>
         <v-select
-
-            :items="items"
+            v-model="categories"
+            :items="categories"
             label="Kategori"
             hide-details="auto"
             outlined
@@ -82,7 +82,7 @@
             id="fromDate"
             v-model="fromDate"
             type="date"
-        >
+        />
       </div>
       <div>
         <v-text-field
@@ -116,8 +116,28 @@
             id="createAdButton"
             :diabled="!isFormValid"
             @click="saveAd()"
+
         >Lag annonse
         </v-btn>
+
+        <v-dialog v-model="dialog">
+          <v-card>
+            <v-card-title class="text-h5" v-if="createdStatus !== 'Listing was sucessfully created'"> Listing was not created... </v-card-title>
+            <v-card-title class="text-h5" v-if="createdStatus === 'Listing was sucessfully created'"> Listing was successful! </v-card-title>
+            <v-card-text> {{ createdStatus }}</v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="red"
+                text
+                @click="dialog = false"
+              >
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
       <div>
         <v-btn
@@ -132,6 +152,8 @@
 
 <script>
 import { useStore } from "vuex";
+import axios from "axios";
+import ListingsService from "@/service/ListingsService";
 
 export default {
   name: "AdPage",
@@ -145,9 +167,11 @@ export default {
       adAddress:'',
       adPhone:'',
       switch1:'',
-
+      categories: [],
+      createdStatus: '',
+      dialog: false,
     },
-    items: ['Hage', 'Verktøy', 'Turutstyr', 'Klatring', 'Ski', 'Båt', 'Bil', 'Sykkel'],
+    //items: ['Hage', 'Verktøy', 'Turutstyr', 'Klatring', 'Ski', 'Båt', 'Bil', 'Sykkel'],
     rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
@@ -159,7 +183,7 @@ export default {
     ],
     rulesPhone: [
         value => !isNaN(value) || 'Må være tall.',
-        value => (value && !!(value.length == 8)) || 'Må være et gyldig telefonnummer.',
+        value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
     ]
   }),
   components:{
@@ -167,7 +191,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const alertCheck = false;
+
 
     const saveAd = () => {
       store.commit("SET_ADNAME", data.token);
@@ -175,11 +199,26 @@ export default {
     }
   },
   methods: {
-    saveAd(){
-      if(true){
-        alert('Annonsen ble lagret!');
-      }
+    getCategories(){
+      ListingsService.getCategories().then((response) => {
+        this.categories = response.data;
+      });
+    },
+    created() {
+      this.getCategories();
+    },
+    async saveAd(){
+      this.dialog = true
+      console.log("Listing was created.")
+      const listingCreated = {adName: this.adName, adDescription: this.adDescription, adAddress: this.adAddress, adPrice: this.adPrice, switch1: this.switch1, adPhone: this.adPhone, defaultCategory: this.defaultCategory};
 
+      await axios.post('http://localhost:8080/api/products/new', listingCreated).then(response => {
+        this.createdStatus = response.data
+      }).catch((error) => {
+        if(error.response){
+          this.createdStatus = error.response.data;
+        }
+      })
     },
   },
 }
