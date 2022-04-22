@@ -1,5 +1,8 @@
 <template>
-  <router-link to="/login">Login</router-link>
+<nav v-if="$store.state.loggedIn">
+  <Navbar />
+</nav>
+  
   <router-view></router-view>
 </template>
 
@@ -27,7 +30,8 @@ nav a.router-link-exact-active {
 </style>
 <script>
 import Login from "@/views/Login";
+import Navbar from "./components/Navbar.vue"
 export default {
-  components: {Login}
+  components: {Login, Navbar}
 }
 </script>
