@@ -52,15 +52,18 @@
           Mine anmeldelser komponent
         </v-window-item>
         <v-window-item value="settings">
-          Innstillinger komponent
+          <Settings />
         </v-window-item>
       </v-window>
     </v-card-text>
 </template>
 
 <script>
+import Settings from "@/components/Settings";
+import ListingView from "@/components/Listing/ListingView";
 export default {
     name: 'account',
+  components: {ListingView, Settings},
   data() {
     return {
       //TODO Hent rating fra backend
