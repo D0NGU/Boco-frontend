@@ -4,7 +4,7 @@
   <div>
     <div id="navBar">
       <router-link :to="{name: 'Home'}">Home</router-link>|
-      <router-link @click="token" :to="{name: 'Account'}">Account</router-link>|
+      <router-link :to="{name: 'Account'}">Account</router-link>|
       <router-link @click="logOut" :to="{name: 'Login'}">Log Out</router-link>
     </div>
   </div>
@@ -18,14 +18,7 @@ import LoginService from '../service/LoginService.js'
 
 export default {
 
-  data() {
-    return {
-      email: 'oskareid@stud.ntnu.no',
-      password: 'password',
-      token1: '',
-      error: ''
-    }
-  },
+  
 
 
   methods: {
@@ -33,29 +26,6 @@ export default {
     logOut() {
       this.$store.commit('setLogin')
     },
-
-    token() {
-
- return LoginService.getToken(this.email, this.password).
-            then(ans => {
-              this.token1 = ans.data
-              console.log(ans.data)
-
-
-
-            })
-            .catch(err => {
-              if(err.response) {
-                this.error = err.response.data;
-              } else {
-                this.error = err
-              }
-
-              console.log(err.response)
-
-            })
-
-    }
 
   }
 
