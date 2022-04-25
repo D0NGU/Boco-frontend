@@ -1,14 +1,17 @@
 <template>
-  <Listing />
+  <EditListing :adName="Hammer"/>
 </template>
 
 <script>
-import Listing from "@/components/Listing";
+import EditListing from "@/components/EditListing";
 
 export default {
   name: "AdEdit",
+  data: () => ({
+    text: "Hammer",
+  }),
   components: {
-    Listing
-  }
+    EditListing
+  },
 }
 </script>
