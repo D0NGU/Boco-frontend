@@ -1,7 +1,7 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
-  <v-card class="rounded-xl itemCard" @click="">
+  <v-card class="rounded-xl itemCard" :to="{ name: 'ListingDetails', params: { id: itemId }}">
     <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
     <v-divider vertical="" />
     <div class="itemDetail">
@@ -22,17 +22,17 @@ export default {
     itemPrice: Number,
     itemOwner: String,
     itemImage: Image,
-    itemId: String,
+    //itemId: Number,
   },
   data() {
     return {
-
+      itemId: 1
     }
-  }
+  },
 }
 </script>
 
-<style>
+<style scoped>
 .itemCard {
   height: 120px;
   display: flex;

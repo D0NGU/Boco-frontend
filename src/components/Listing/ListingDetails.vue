@@ -16,7 +16,7 @@
       <v-divider style="margin: 10px"/>
     </div>
     <div id="requestForm">
-      <v-alert type="error" v-if="invalidDate">Du må legge til en dato</v-alert>
+      <v-alert type="error" v-if="invalidDate" id="errorBox">Du må legge til en dato</v-alert>
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
       <Datepicker range v-model="date" :enableTimePicker="false" showNowButton></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
@@ -32,6 +32,10 @@ import { ref } from 'vue';
 export default {
   name: "ListingDetails",
   components: {Datepicker},
+  props: {
+    productId: Number,
+    userId: Number,
+  },
   data () {
     return {
       date: ref(),
