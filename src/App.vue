@@ -2,7 +2,7 @@
 <nav v-if="$store.state.loggedIn">
   <Navbar />
 </nav>
-  
+
   <router-view></router-view>
 </template>
 
@@ -16,7 +16,6 @@
 }
 
 nav {
-  padding: 30px;
   background-color: white;
 }
 

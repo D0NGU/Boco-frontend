@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import Landing from '../views/Landing.vue'
 import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
@@ -9,6 +10,11 @@ import ListingDetails from "@/components/Listing/ListingDetails";
 const routes = [
   {
     path: '/',
+    name: 'Landing',
+    component: Landing
+  },
+  {
+    path: '/Home',
     name: 'Home',
     component: Home
   },
