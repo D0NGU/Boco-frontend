@@ -6,16 +6,8 @@
         outlined
 
     >
-      <v-list-item two-line>
-        <v-list-item-content class="justify-center">
-          <v-list-item-title class="text-h8 mb-1">
-            Er du sikker på at du vil slette brukeren din?
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            Denne handlingen kan ikke angres.
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+     <v-card-header-text id="header">Er du sikker på at du vil slette brukeren din?</v-card-header-text>
+      <v-card-text>Denne handlingen kan ikke angres.</v-card-text>
 
       <v-card-actions class="justify-center">
         <v-btn
@@ -23,8 +15,8 @@
             rounded
             text
             color="red"
-            onclick="deleteUser(this.user)"
-            @click="clicked = true"
+            @click="deleteUser()"
+
         >
           Slett bruker
         </v-btn>
@@ -40,7 +32,7 @@
 
       <v-alert
           id="deletedAlert"
-          :dismissible="true"
+          dismissible
           type="success"
           max-width="300px"
           v-if="clicked ? 'true':''"
@@ -60,15 +52,21 @@ export default {
   data(){
     return{
       clicked: false,
+      userId: null,
+      fname: '',
+      lname: '',
+      email: '',
+      salt: '',
+      password: '',
     }
-    user: {}
   },
   methods: {
-    deleteUser(user){
-      clicked: true,
-      this.axios.delete("http://localhost:8080/api/user/delete").then((response)=>{
-        console.warn(response)
-        UserSettingService.delete(this.user)
+    async deleteUser(){
+      this.clicked = true;
+      await UserSettingService.delete(this.userId, this.fname, this.lname, this.email, this.salt, this.password).then(response => {
+        console.warn(response.data)
+      }).catch((error) => {
+        console.warn(error.response.data);
       })
     },
   }
@@ -76,8 +74,10 @@ export default {
 </script>
 
 <style scoped>
-  #deletedAlert{
-    margin-left: 1.5em;
+  #header{
+    margin: 1em;
   }
-
+  #deletedAlert{
+    margin: 1.5em;
+  }
 </style>
