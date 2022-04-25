@@ -17,7 +17,7 @@ export default {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: axios.stringify(data),
-            url: "http://localhost:8085/api/token"
+            url: CATEGORIES_API_BASE_URL
         };
 
         return axios(options)

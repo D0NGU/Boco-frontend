@@ -151,7 +151,6 @@
 </template>
 
 <script>
-import { useStore } from "vuex";
 import axios from "axios";
 import ListingsService from "@/service/ListingsService";
 
@@ -186,15 +185,6 @@ export default {
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
     ]
   }),
-  setup() {
-    const store = useStore();
-
-
-    const saveAd = () => {
-      store.commit("SET_ADNAME", data.token);
-
-    }
-  },
   methods: {
     getCategories(){
       ListingsService.getCategories().then((response) => {
