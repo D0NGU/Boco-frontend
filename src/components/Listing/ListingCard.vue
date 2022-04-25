@@ -29,11 +29,6 @@ export default {
       itemId: 1
     }
   },
-  methods: {
-    openDetails(){
-      // TODO Open listing details component
-    }
-  }
 }
 </script>
 
