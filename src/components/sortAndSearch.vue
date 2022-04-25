@@ -3,11 +3,10 @@
   <v-text-field
       v-model="searchBar"
       id="searchBar"
-      @keyup="updateSearchList"
+      @keyup="updateList(filteredList)"
       density="comfortable"
       color="primary"
       label="Søk..."
-      clearable
       variant="outlined"
       ></v-text-field>
 
@@ -93,8 +92,15 @@ export default {
     };
   },
   methods: {
-    updateSearchList(){
-      this.$emit('update', this.filteredList)
+    updateList(list){
+      this.$emit('update', list)
+    },
+    sorting(option){
+      if(option === "Pris lav-høy"){
+        this.activeProductList.sort((a, b) => a.price - b.price );
+      } else if(option === "Pris høy-lav"){
+        this.activeProductList.sort((a, b) => b.price - a.price );
+      }
     },
     getAllElements() {
       const products = getAllProducts()
@@ -113,12 +119,11 @@ export default {
         option.active = option.option === selectedOption;
       })
       setTimeout(() => this.sortByDialog = false, 300);
-
-      if(selectedOption === "Pris lav-høy"){
-        this.activeProductList.sort((a, b) => a.price - b.price );
-      } else if(selectedOption === "Pris høy-lav"){
-        this.activeProductList.sort((a, b) => b.price - a.price );
-      }
+        const search = this.searchBar;
+        this.searchBar = ""
+        this.sorting(selectedOption);
+        this.searchBar = search;
+        this.updateList(this.filteredList)
     },
 
     selectCategory(selectedCategory) {
@@ -181,6 +186,10 @@ export default {
   .filterButton{
     width: 100px;
     margin: 0 20px;
+  }
+  #sort-and-search-container {
+    margin: 10px;
+    padding: 20px;
   }
 }
 </style>
