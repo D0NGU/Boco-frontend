@@ -22,6 +22,12 @@ export default {
   components: {SortAndSearch, ListingCard},
   data () {
     return {
+      originalList: [//TEST LIST
+        {name: "Hammer", description: "Den hamrer bra", address: "Hakkebakkeskogen", price: 30, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
+        {name: "Sag", description: "Den sager bra", address: "Hakkebakkeskogen", price: 15, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
+        {name: "Målestokk", description: "Den måler bra", address: "Hakkebakkeskogen", price: 100, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
+        {name: "Hjelm", description: "Den hjelmer bra", address: "Hakkebakkeskogen", price: 67, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
+      ],
       activeProducts: [
           //TEST LIST
           {name: "Hammer", description: "Den hamrer bra", address: "Hakkebakkeskogen", price: 30, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
@@ -45,7 +51,11 @@ export default {
         category: product.category}))*/
     },
     updateList(list){
-      this.activeProducts = list;
+      if(list === "reset"){
+        this.activeProducts = this.originalList;
+      } else {
+        this.activeProducts = list;
+      }
     }
   },
   beforeMount() {
