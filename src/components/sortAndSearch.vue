@@ -1,74 +1,100 @@
 <template>
-<v-card id="sort-and-search-container" elevation="2">
-  <v-text-field
-      v-model="searchBar"
-      id="searchBar"
-      @keyup="updateList(filteredList)"
-      density="comfortable"
-      color="primary"
-      label="Søk..."
-      variant="outlined"
-      ></v-text-field>
+  <v-expansion-panels>
+    <v-expansion-panel>
+      <v-expansion-panel-title>
+        Filtrering
+      </v-expansion-panel-title>
+      <v-expansion-panel-text>
+        <v-card id="sort-and-search-container" elevation="2">
+          <v-text-field
+              v-model="searchBar"
+              id="searchBar"
+              @keyup="updateList(filteredList)"
+              density="comfortable"
+              color="primary"
+              label="Søk..."
+              variant="outlined"
+              ></v-text-field>
 
-<!--
-  PC Versjon?
-<div id="filteringButtons">
-    <v-select class="filterButton"
-              label="Filtrer"
-              variant="contained"
-              prepend-inner-icon="mdi-filter-outline"
-    ></v-select>
-    <v-select class="filterButton"
-              label="Sorter"
-              variant="contained"
-              prepend-inner-icon="mdi-sort"
-    ></v-select>
-  </div>
--->
-
-  <v-dialog v-model="filterDialog" id="filterDialog">
-    <template v-slot:activator="{ props }">
-      <v-btn v-bind="props" class="filterButton">
-        <v-icon>mdi-filter-outline</v-icon> Filtrer
-      </v-btn>
-    </template>
-    <v-card>
-      <v-item-group selected-class="bg-primary">
-        <v-item v-for="category in categories" >
-          <div
-              class= 'sortOption categoryOption'
-              @click="selectCategory(category.category)"
-          v-bind:style="category.active ? {'background-color' : 'lightblue'} : null">
-            <v-icon color="blue">{{category.icon}}</v-icon>
-            {{ category.category }}
+        <!--
+          PC Versjon?
+        <div id="filteringButtons">
+            <v-select class="filterButton"
+                      label="Filtrer"
+                      variant="contained"
+                      prepend-inner-icon="mdi-filter-outline"
+            ></v-select>
+            <v-select class="filterButton"
+                      label="Sorter"
+                      variant="contained"
+                      prepend-inner-icon="mdi-sort"
+            ></v-select>
           </div>
-          <v-divider />
-        </v-item>
-      </v-item-group>
-    </v-card>
-  </v-dialog>
+        -->
 
-  <v-dialog v-model="sortByDialog">
-    <template v-slot:activator="{ props }">
-      <v-btn v-bind="props" class="filterButton">
-        <v-icon>mdi-sort</v-icon> Sorter
-      </v-btn>
-    </template>
-    <v-card>
-      <v-item-group selected-class="bg-primary">
-        <v-item v-for="option in sortByOptions">
-          <div
-              class='sortOption sortByOption'
-              @click="selectSortByOption(option.option)"
-              v-bind:style="option.active ? {'background-color' : 'lightblue'} : null">
-            {{ option.option }}
-          </div>
-          <v-divider />
-        </v-item>
-      </v-item-group>
-    </v-card>
-  </v-dialog>
-</v-card>
+          <v-dialog v-model="filterDialog" id="filterDialog">
+            <template v-slot:activator="{ props }">
+              <v-btn v-bind="props" class="filterButton">
+                <v-icon>mdi-filter-outline</v-icon> Filtrer
+              </v-btn>
+            </template>
+            <v-card>
+              <v-item-group selected-class="bg-primary">
+                <v-item v-for="category in categories" >
+                  <div
+                      class= 'sortOption categoryOption'
+                      @click="selectCategory(category)"
+                  v-bind:style="category.active ? {'background-color' : 'lightblue'} : null">
+                    <v-icon color="blue">{{category.icon}}</v-icon>
+                    {{ category.category }}
+                  </div>
+                  <v-divider />
+                </v-item>
+              </v-item-group>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="sortByDialog">
+            <template v-slot:activator="{ props }">
+              <v-btn v-bind="props" class="filterButton">
+                <v-icon>mdi-sort</v-icon> Sorter
+              </v-btn>
+            </template>
+            <v-card>
+              <v-item-group selected-class="bg-primary">
+                <v-item v-for="option in sortByOptions">
+                  <div
+                      class='sortOption sortByOption'
+                      @click="selectSortByOption(option.option)"
+                      v-bind:style="option.active ? {'background-color' : 'lightblue'} : null">
+                    {{ option.option }}
+                  </div>
+                  <v-divider />
+                </v-item>
+              </v-item-group>
+            </v-card>
+          </v-dialog>
+
+          <v-container>
+            <v-row>
+              <v-col
+                  v-for="(category, i) in chosenCategories"
+                  :key="category.category"
+              >
+                <v-chip
+                    closable=""
+                    @click:close="chosenCategories.splice(i, 1)"
+                >
+                  <v-icon> {{category.icon}} </v-icon>
+                  {{ category.category }}
+                </v-chip>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script>
@@ -87,20 +113,14 @@ export default {
       searchBar: "",
       overlay: false,
       // TODO: Legg til disse listene automatisk?
-      sortByOptions: [{option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
+      sortByOptions: [{option: 'Mest relevant', active: false}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
       categories: [{icon: 'mdi-basketball', category: 'Sport', active: false}, {icon: 'mdi-flower', category: 'Hage', active: false}, {icon: 'mdi-sofa-single', category: 'Møbler', active: false}, {icon: 'mdi-hammer-wrench', category: 'Verktøy', active: false}],
+      chosenCategories: [],
     };
   },
   methods: {
     updateList(list){
       this.$emit('update', list)
-    },
-    sorting(option){
-      if(option === "Pris lav-høy"){
-        this.activeProductList.sort((a, b) => a.price - b.price );
-      } else if(option === "Pris høy-lav"){
-        this.activeProductList.sort((a, b) => b.price - a.price );
-      }
     },
     getAllElements() {
       const products = getAllProducts()
@@ -121,20 +141,22 @@ export default {
       setTimeout(() => this.sortByDialog = false, 300);
         const search = this.searchBar;
         this.searchBar = ""
-        this.sorting(selectedOption);
-        this.searchBar = search;
+      if(selectedOption === "Mest relevant"){
+        this.$emit('update', "reset")
+      }else if(selectedOption === "Pris lav-høy"){
+        this.activeProductList.sort((a, b) => a.price - b.price );
         this.updateList(this.filteredList)
+      } else if(selectedOption === "Pris høy-lav"){
+        this.activeProductList.sort((a, b) => b.price - a.price );
+        this.updateList(this.filteredList)
+      }
+      this.searchBar = search;
     },
 
     selectCategory(selectedCategory) {
-      this.categories.forEach((category) => {
-        category.active = category.category === selectedCategory;
-      })
-      setTimeout(() => this.filterDialog = false, 300);
-      setTimeout(() => this.filterDialog = false, 300);
+      this.chosenCategories.push(selectedCategory)
       this.activeProductList = [];
-
-      const newList = getProductsInCategory(selectedCategory)
+      const newList = getProductsInCategory(selectedCategory.category)
       newList.forEach(product => this.activeProductList.push({name: product.name,
         description: product.description,
         address: product.address,
@@ -190,6 +212,9 @@ export default {
   #sort-and-search-container {
     margin: 10px;
     padding: 20px;
+  }
+  >>>.v-expansion-panel-text__wrapper {
+    padding: 0;
   }
 }
 </style>
