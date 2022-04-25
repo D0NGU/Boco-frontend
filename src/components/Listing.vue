@@ -6,13 +6,14 @@
     <v-card class="container">
       <div>
         <v-text-field
+            data-testid="name-input"
+            type="text"
             v-model="adName"
             label="Navn på annonse"
             :rules="rules"
             hide-details="auto"
         ></v-text-field>
       </div>
-
       <div>
         <v-text-field
             v-model="adDescription"
@@ -21,20 +22,21 @@
             hide-details="auto"
         ></v-text-field>
       </div>
-
-      <div>
+     <div>
         <v-file-input
-            label="Last opp bildene"
-            hide-details="auto"
-            accept="image/*"
-            multiple
-            chips
-            prepend-icon="mdi-camera"
+          v-bind:value="adPicture"
+          v-on:input="adPicture = $event.target.value"
+          label="Last opp bildene"
+          hide-details="auto"
+          accept="image/*"
+          multiple
+          chips
+          prepend-icon="mdi-camera"
         />
       </div>
-
   <div>
     <v-select
+        v-model="adCategory"
         :items="items"
         label="Kategori"
         :rules="rulesSelect"
@@ -108,13 +110,13 @@
         :label="`Skjul annonse`"
     ></v-switch>
   </div>
-  <div>
-    <v-btn
-        id="createAdButton"
-        @click="saveAd()"
-    >Lag annonse
-    </v-btn>
-  </div>
+      <div>
+        <v-btn
+            id="createAdButton"
+            @click="saveAd()"
+        >Opprett annonse
+        </v-btn>
+      </div>
   <div>
     <v-btn
         id="cancelButton"
@@ -142,8 +144,7 @@ return: {
   fromDate:'',
   adAddress:'',
   adPhone:'',
-  switch1:'',
-
+  switch1:false,
 },
 
 items: ['Hage', 'Verktøy', 'Turutstyr', 'Klatring', 'Ski', 'Båt', 'Bil', 'Sykkel'],
@@ -172,7 +173,9 @@ const saveAd = () => {
 }
 },
 methods: {
-
+  saveAd(){
+    console.log(this.adName, this.adDescription, this.adPicture, this.adCategory, this.adPrice, this.pricePer, this.fromDate, this.adAddress, this.adPhone, this.switch1)
+  },
 },
 }
 </script>
@@ -181,9 +184,22 @@ methods: {
 .container {
 padding: 1em;
 }
+
 div{
 margin: 0.4em;
 }
+
+input[type=file]::file-selector-button {
+  border: 2px solid var(--bocoBlue);
+  padding: .3em .42em;
+  border-radius: .35em;
+  background-color: var(--bocoBlue);
+  color: white;
+  transition: 1s;
+  box-shadow: 1px 1px 2px 1px #45454b;
+  font-weight: bold;
+}
+
 #createAdButton{
 background-color: var(--bocoBlue);
 color: white;

@@ -1,32 +1,12 @@
 <template>
-<meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, minimum-scale=1.0, maximum-scale=1.0" />
-  <nav id="nav" v-if="isLoggedIn">
-    <Navbar />
-  </nav>
-  <router-view/>
+<nav v-if="$store.state.loggedIn">
+  <Navbar />
+</nav>
+
+  <router-view></router-view>
 </template>
 
-<script>
-
-import Navbar from './components/Navbar.vue'
-
-  export default {
-    components: {Navbar},
-
-    computed: {
-    isLoggedIn() {
-      return this.$store.state.loggedIn
-    }
-  }
-
-
-}
-</script>
-
 <style>
-
-
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -36,7 +16,7 @@ import Navbar from './components/Navbar.vue'
 }
 
 nav {
-  padding: 30px;
+  background-color: white;
 }
 
 nav a {
@@ -44,5 +24,14 @@ nav a {
   color: #2c3e50;
 }
 
-
+nav a.router-link-exact-active {
+  color: #42b983;
+}
 </style>
+<script>
+import Login from "@/views/Login";
+import Navbar from "./components/Navbar.vue"
+export default {
+  components: {Login, Navbar}
+}
+</script>
