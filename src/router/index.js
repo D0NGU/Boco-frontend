@@ -4,6 +4,8 @@ import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
 import Listing from '../views/Listing.vue'
+import Edit from "@/components/EditComponent";
+import EditListing from "@/views/EditListing"
 
 const routes = [
   {
@@ -25,6 +27,16 @@ const routes = [
     path: '/listing',
     name: 'Listing',
     component: Listing
+  },
+  {
+    path: '/edit',
+    name: 'Edit',
+    component: Edit
+  },
+  {
+    path: '/editListing',
+    name: 'EditListing',
+    component: EditListing
   },
   // Redirect any none-existing path to 404 page
   {

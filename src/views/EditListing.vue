@@ -1,5 +1,3 @@
-<!-- inneholder listing component -->
-
 <template>
   <Listing />
 </template>
@@ -8,13 +6,9 @@
 import Listing from "@/components/Listing";
 
 export default {
-  name: "AdPage",
+  name: "AdEdit",
   components: {
     Listing
-  },
+  }
 }
 </script>
-
-<style scoped>
-
-</style>
