@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import Settings from "@/components/Settings";
+import Settings from "@/components/Settings.vue";
 import ListingView from "@/components/Listing/ListingView";
 export default {
     name: 'account',
