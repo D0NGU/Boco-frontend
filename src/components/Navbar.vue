@@ -37,7 +37,7 @@ import LoginService from '../service/LoginService.js'
 export default {
   methods: {
     logOut() {
-      this.$store.commit('setLogin')
+      this.$store.commit('SET_STATUS', false)
     },
   }
 }

@@ -4,7 +4,7 @@ import store from '@/store'
 export default {
     getApiClient (token) {
         return axios.create({
-            baseURL: 'http://10.22.5.18:8085/api',
+            baseURL: 'http://10.22.5.18:8080/api',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ export default {
     }
 }
 export function getAllProducts(){
-    return axios.get('http://localhost:8085/api/products/', {
+    return axios.get('http://localhost:8080/api/products/', {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ export function getAllProducts(){
 }
 
 export function getProductsInCategory(category) {
-    return axios.get('http://localhost:8085/api/products/category/'+ category, {
+    return axios.get('http://localhost:8080/api/products/category/'+ category, {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export function getProductsInCategory(category) {
 }
 
 export function getProductById(id) {
-    return axios.get('http://localhost:8085/api/products/product/'+ id, {
+    return axios.get('http://localhost:8080/api/products/product/'+ id, {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
