@@ -6,4 +6,4 @@ describe('Title of listing', () => {
         const wrapper = mount(Listing)
         expect(true).toBe(true)
     })
-})
+}) //TODO Skriv ferdig test her

@@ -45,7 +45,6 @@
         prepend-icon="mdi-widgets"
     ></v-select>
   </div>
-
   <div>
     <v-text-field
         v-model="adPrice"
@@ -174,10 +173,12 @@ const saveAd = () => {
 },
 methods: {
   saveAd(){
-    console.log(this.adName, this.adDescription, this.adPicture, this.adCategory, this.adPrice, this.pricePer, this.fromDate, this.adAddress, this.adPhone, this.switch1)
+    console.log(this.adName, this.adDescription, this.adPicture, this.adCategory,
+        this.adPrice, this.pricePer, this.fromDate, this.adAddress, this.adPhone, this.switch1)
   },
 },
 }
+//TODO Få den valgte kategorien til å vises for bruker
 </script>
 
 <style scoped>
@@ -187,17 +188,6 @@ padding: 1em;
 
 div{
 margin: 0.4em;
-}
-
-input[type=file]::file-selector-button {
-  border: 2px solid var(--bocoBlue);
-  padding: .3em .42em;
-  border-radius: .35em;
-  background-color: var(--bocoBlue);
-  color: white;
-  transition: 1s;
-  box-shadow: 1px 1px 2px 1px #45454b;
-  font-weight: bold;
 }
 
 #createAdButton{
