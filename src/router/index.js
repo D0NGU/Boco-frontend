@@ -4,6 +4,7 @@ import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
 import RegisterForm from "@/components/RegisterForm";
+import ListingDetails from "@/components/Listing/ListingDetails";
 
 const routes = [
   {
@@ -27,6 +28,13 @@ const routes = [
     name: "RegisterForm",
     component: RegisterForm
   },
+
+  {
+    path: "/listing/:id",
+    name: "ListingDetails",
+    component: ListingDetails
+  },
+
   
   // Redirect any none-existing path to 404 page
   {
@@ -34,7 +42,6 @@ const routes = [
     name: 'NotFound',
     component: NotFound
   }
-
 ]
 
 const router = createRouter({
