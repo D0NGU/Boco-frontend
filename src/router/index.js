@@ -36,9 +36,10 @@ const routes = [
   },
 
   {
-    path: "/listing/:id",
+    path: "/listing/:itemId",
     name: "ListingDetails",
-    component: ListingDetails
+    component: ListingDetails,
+    props: true
   },
 
   

@@ -1,11 +1,11 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
-  <v-card class="rounded-xl itemCard" :to="{ name: 'ListingDetails', params: { id: itemId }}">
+  <v-card class="rounded-xl itemCard" :to="{ name: 'ListingDetails', params: { itemId: this.itemId }}">
     <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
     <v-divider vertical="" />
     <div class="itemDetail">
-      <p class="text-h5">{{ itemName }}</p>
+      <p class="text-subtitle-1">{{ itemName }}</p>
       <p class="text-caption">{{itemPrice}} kr/dag</p>
       <p class="text-overline" id="itemOwner">
         <v-avatar size="x-small">
@@ -20,13 +20,12 @@ export default {
   props: {
     itemName: String,
     itemPrice: Number,
-    itemOwner: String,
+    itemOwner: Number,
     itemImage: Image,
-    //itemId: Number,
+    itemId: Number,
   },
   data() {
     return {
-      itemId: 1
     }
   },
 }

@@ -40,7 +40,19 @@ export function getProductsInCategory(category) {
 }
 
 export function getProductById(id) {
-    return axios.get('http://localhost:8080/api/products/product/'+ id, {
+    return axios.get('http://localhost:8080/api/products/'+ id, {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization : 'Bearer ' + store.getters.token
+        }
+    })
+        .then((response) => {
+            return response.data;
+        });
+}
+export function getListing(id) {
+    return axios.get('http://localhost:8080/api/listing/'+ id, {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

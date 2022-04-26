@@ -9,7 +9,6 @@
           <v-text-field
               v-model="searchBar"
               id="searchBar"
-              @keyup="updateList(filteredList)"
               density="comfortable"
               color="primary"
               label="Søk..."
@@ -91,6 +90,7 @@
               </v-col>
             </v-row>
           </v-container>
+          <v-btn @click="handleSearchButton">Søk</v-btn>
         </v-card>
       </v-expansion-panel-text>
     </v-expansion-panel>
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import {getAllProducts, getProductsInCategory} from "@/service/ApiService";
+import {getAllProducts} from "@/service/ApiService";
 
 export default {
   name: "sortAndSearch",
@@ -107,20 +107,19 @@ export default {
   },
   data() {
     return {
-      activeProductList: [],
       sortByDialog: false,
       filterDialog: false,
       searchBar: "",
       overlay: false,
       // TODO: Legg til disse listene automatisk?
-      sortByOptions: [{option: 'Mest relevant', active: false}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
+      sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
       categories: [{icon: 'mdi-basketball', category: 'Sport', active: false}, {icon: 'mdi-flower', category: 'Hage', active: false}, {icon: 'mdi-sofa-single', category: 'Møbler', active: false}, {icon: 'mdi-hammer-wrench', category: 'Verktøy', active: false}],
       chosenCategories: [],
     };
   },
   methods: {
-    updateList(list){
-      this.$emit('update', list)
+    handleSearchButton(){
+      //TODO spør backend
     },
     getAllElements() {
       const products = getAllProducts()
@@ -134,46 +133,24 @@ export default {
         userId: product.userId,
         category: product.category}))
     },
+
     selectSortByOption(selectedOption) {
       this.sortByOptions.forEach((option) => {
         option.active = option.option === selectedOption;
       })
       setTimeout(() => this.sortByDialog = false, 300);
-        const search = this.searchBar;
-        this.searchBar = ""
-      if(selectedOption === "Mest relevant"){
-        this.$emit('update', "reset")
-      }else if(selectedOption === "Pris lav-høy"){
-        this.activeProductList.sort((a, b) => a.price - b.price );
-        this.updateList(this.filteredList)
-      } else if(selectedOption === "Pris høy-lav"){
-        this.activeProductList.sort((a, b) => b.price - a.price );
-        this.updateList(this.filteredList)
-      }
-      this.searchBar = search;
     },
 
     selectCategory(selectedCategory) {
+      if(!this.chosenCategories.includes(selectedCategory)){
       this.chosenCategories.push(selectedCategory)
-      this.activeProductList = [];
-      const newList = getProductsInCategory(selectedCategory.category)
-      newList.forEach(product => this.activeProductList.push({name: product.name,
-        description: product.description,
-        address: product.address,
-        price: product.price,
-        unlisted: product.unlisted,
-        availableFrom: product.availableFrom,
-        availableTo: product.availableTo,
-        userId: product.userId,
-        category: product.category}))
+      } else {
+        const index = this.chosenCategories.indexOf(selectedCategory);
+        if (index > -1) {
+          this.chosenCategories.splice(index, 1); // 2nd parameter means remove one item only
+        }
+      }
     }
-  },
-  computed: {
-    filteredList() {
-      return this.activeProductList.filter((product) => {
-        return product.name.toLowerCase().includes(this.searchBar.toLowerCase());
-      });
-    },
   },
   beforeMount() {
     this.activeProductList = this.products;
@@ -215,6 +192,13 @@ export default {
   }
   >>>.v-expansion-panel-text__wrapper {
     padding: 0;
+  }
+  .v-col {
+    padding: 0;
+    margin: 2px;
+  }
+  #sort-and-search-container[data-v-6fb11601] {
+    padding: 20px 8px
   }
 }
 </style>

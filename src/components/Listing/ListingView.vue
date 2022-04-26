@@ -5,9 +5,10 @@
   />
   <div v-for="product in activeProducts">
     <ListingCard
-        :item-name="product.name"
-        :item-owner="product.userId"
-        :item-price="product.price"
+        :itemName="product.name"
+        :itemOwner="product.userId"
+        :itemPrice="product.price"
+        :itemId="product.itemId"
     />
   </div>
 </template>
@@ -22,25 +23,14 @@ export default {
   components: {SortAndSearch, ListingCard},
   data () {
     return {
-      originalList: [//TEST LIST
-        {name: "Hammer", description: "Den hamrer bra", address: "Hakkebakkeskogen", price: 30, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-        {name: "Sag", description: "Den sager bra", address: "Hakkebakkeskogen", price: 15, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-        {name: "Målestokk", description: "Den måler bra", address: "Hakkebakkeskogen", price: 100, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-        {name: "Hjelm", description: "Den hjelmer bra", address: "Hakkebakkeskogen", price: 67, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-      ],
-      activeProducts: [
-          //TEST LIST
-          {name: "Hammer", description: "Den hamrer bra", address: "Hakkebakkeskogen", price: 30, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-          {name: "Sag", description: "Den sager bra", address: "Hakkebakkeskogen", price: 15, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-          {name: "Målestokk", description: "Den måler bra", address: "Hakkebakkeskogen", price: 100, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-          {name: "Hjelm", description: "Den hjelmer bra", address: "Hakkebakkeskogen", price: 67, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-      ],
+      activeProducts: []
     }
   },
   methods: {
-    getProducts() {
-      const products = getAllProducts()
-      /*products.forEach(product => this.activeProducts.push({name: product.name,
+    async getProducts() {
+      const products = await getAllProducts()
+      products.forEach(product => this.activeProducts.push({
+        name: product.title,
         description: product.description,
         address: product.address,
         price: product.price,
@@ -48,14 +38,12 @@ export default {
         availableFrom: product.availableFrom,
         availableTo: product.availableTo,
         userId: product.userId,
-        category: product.category}))*/
+        category: product.category,
+        itemId: product.productId
+      }))
     },
     updateList(list){
-      if(list === "reset"){
-        this.activeProducts = this.originalList;
-      } else {
-        this.activeProducts = list;
-      }
+      //TODO spør backend
     }
   },
   beforeMount() {
