@@ -6,7 +6,6 @@
     <v-card class="container">
       <div>
         <v-text-field
-            data-testid="name-input"
             type="text"
             v-model="adName"
             label="Navn på annonse"
@@ -135,7 +134,7 @@ export default {
   name: "AdPage",
   data() {
     return {
-      adName: '',
+      adName: 'Foobar',
       adDescription: '',
       adPrice: '',
       pricePer: '',
