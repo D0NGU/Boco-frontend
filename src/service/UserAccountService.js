@@ -15,8 +15,10 @@ export default {
     }
 }
 
-export function editPassword (newPassword) {
-    return axios.post('http://localhost:8080/api/user/edit', {
+export function editPassword (email, oldPassword, newPassword) {
+    const userDetails = {email: email, oldPassword: oldPassword, newPassword: newPassword}
+    return axios.put('http://localhost:8080/api/user/', {
+        userDetails,
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
