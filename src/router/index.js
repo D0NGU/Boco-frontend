@@ -5,10 +5,10 @@ import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
 import RegisterForm from "@/components/RegisterForm";
-import DeleteUser from "@/components/DeleteUser";
-import DeleteUserComp from "@/components/DeleteComponent";
+import DeleteUser from "@/components/UserProfile/DeleteUser";
+import DeleteUserComp from "@/components/UserProfile/DeleteComponent";
 import ListingDetails from "@/components/Listing/ListingDetails";
-import Listing from "@/components/Listing";
+import Listing from "@/components/Listing/Listing";
 
 const routes = [
   /*{

@@ -16,7 +16,7 @@
 <script>
 import { getAllProducts } from '@/service/ApiService.js'
 import ListingCard from "@/components/Listing/ListingCard";
-import SortAndSearch from "@/components/sortAndSearch";
+import SortAndSearch from "@/components/Misc/sortAndSearch";
 
 export default {
   name: "ListingView",

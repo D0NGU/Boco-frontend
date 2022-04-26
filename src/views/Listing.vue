@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Listing from "@/components/Listing";
+import Listing from "@/components/Listing/Listing";
 
 export default {
   components: {

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import EditListing from "@/components/EditListing";
+import EditListing from "@/components/Listing/EditListing";
 
 export default {
   name: "AdEdit",

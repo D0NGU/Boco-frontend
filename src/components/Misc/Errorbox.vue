@@ -20,7 +20,7 @@
 
 <script>
 
-import LoginService from '../service/LoginService.js'
+import LoginService from '../../service/LoginService.js'
 
 export default {
 

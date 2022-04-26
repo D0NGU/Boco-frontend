@@ -60,9 +60,9 @@
 </template>
 
 <script>
-import Settings from "@/components/Settings.vue";
+import Settings from "@/components/UserProfile/Settings.vue";
 import ListingView from "@/components/Listing/ListingView";
-import HistoryComponent from "@/components/HistoryComponent";
+import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 
 export default {
     name: 'account',

@@ -30,7 +30,7 @@ nav a.router-link-exact-active {
 </style>
 <script>
 import Login from "@/views/Login";
-import Navbar from "./components/Navbar.vue"
+import Navbar from "./components/Misc/Navbar.vue"
 export default {
   components: {Login, Navbar}
 }

@@ -1,4 +1,4 @@
-import Listing from '@/components/Listing'
+import Listing from '@/components/Listing/Listing'
 import { mount } from '@vue/test-utils'
 
 describe('Title of listing', () => {

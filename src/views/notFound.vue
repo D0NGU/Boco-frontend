@@ -5,7 +5,7 @@
 
 <script>
 
-import ErrorBox from '../components/Errorbox.vue'
+import ErrorBox from '../components/Misc/Errorbox.vue'
 
 export default {
     name: 'NotFound',
