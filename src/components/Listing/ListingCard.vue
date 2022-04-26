@@ -10,7 +10,7 @@
       <p class="text-overline" id="itemOwner">
         <v-avatar size="x-small">
         <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-      </v-avatar> Per Hansen</p>
+      </v-avatar> {{itemOwnerName}} </p>
     </div>
   </v-card>
 </template>
@@ -26,15 +26,23 @@ export default {
     itemImage: Image,
     itemId: Number,
   },
+  data () {
+    return {
+      itemOwnerName: '',
+    }
+  },
   methods: {
     redirect() {
-      if(this.itemOwner === 0){
+      if(this.itemOwner !== this.$store.state.myUserId){
         router.push({name: 'ListingDetails', params: { itemId: this.itemId }})
       } else {
         router.push({name: 'ListingEdit', params: { itemId: this.itemId }})
       }
     }
   },
+  beforeMount() {
+    //this.itemOwnerName
+  }
 }
 </script>
 

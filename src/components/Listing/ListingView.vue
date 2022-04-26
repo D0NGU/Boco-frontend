@@ -29,6 +29,7 @@ export default {
   },
   data () {
     return {
+      pageNumber: 1,
       activeProducts: []
     }
   },
@@ -36,10 +37,10 @@ export default {
     async getProducts() {
       var products = []
       if(this.ownerId === 0){
-        products = await getAllProducts()
+        products = await getAllProducts(this.pageNumber)
       } else {
         //TODO user id
-        products = await getProductsByUserId()
+        products = await getProductsByUserId(this.pageNumber)
       }
       products.forEach(product => this.activeProducts.push({
         name: product.title,

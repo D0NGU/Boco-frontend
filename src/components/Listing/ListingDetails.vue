@@ -26,6 +26,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
 import { getListing } from "@/service/ApiService";
+import ListingsService from "@/service/ListingsService";
 
 export default {
   name: "ListingDetails",
@@ -48,9 +49,11 @@ export default {
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
     },
-    sendRequest() {
+    async sendRequest() {
       if(this.date !== undefined && this.date !== null){
-        //TODO SEND FORESPØRSEL
+        const dateFrom = this.date[0].getYear()+"/"+this.date[0].getMonth()+"/"+this.date[0].getDay()
+        const dateTo = this.date[1].getYear()+"/"+this.date[1].getMonth()+"/"+this.date[1].getDay()
+        await ListingsService.newRental(dateFrom, dateTo, this.itemId, this.$store.state.myUserId)
       } else {
         this.invalidDate = true;
         setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 1);

@@ -6,7 +6,6 @@ import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
 import RegisterForm from "@/components/RegisterForm";
 import DeleteUser from "@/components/UserProfile/DeleteUser";
-import DeleteUserComp from "@/components/UserProfile/DeleteComponent";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
 import EditListing from "@/views/EditListing";
