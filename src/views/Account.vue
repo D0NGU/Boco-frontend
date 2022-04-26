@@ -47,7 +47,7 @@
           Mine annonser komponent
         </v-window-item>
         <v-window-item value="history">
-          <HistoryComponent></HistoryComponent>
+<!--          <HistoryComponent /> Noe gale med denne komponenten, breaker hele siden :/ -->
         </v-window-item>
         <v-window-item value="reviews">
           Mine anmeldelser komponent
@@ -60,22 +60,15 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import Settings from "@/components/Settings.vue";
 import ListingView from "@/components/Listing/ListingView";
-export default {
-    name: 'account',
-  components: {ListingView, Settings},
-=======
 import HistoryComponent from "@/components/HistoryComponent";
 
 export default {
     name: 'account',
-    components: {
-      HistoryComponent,
-    },
+  components: {ListingView, Settings, HistoryComponent},
 
->>>>>>> 7f69d9466ce76dc0a707f489ef6e684b0ce97649
+
   data() {
     return {
       //TODO Hent rating fra backend
