@@ -73,7 +73,6 @@ export default {
 
   methods: {
     async logInButton() {
-      this.dialog = true
       let tempStat = '';
       let userId = 0;
       if (this.$refs.loginform.validate()) {
@@ -94,8 +93,10 @@ export default {
         this.$store.commit('SET_MYUSERID', userId);
         await this.$router.push('/Home');
       } else if (tempStat === 403) {
+        this.dialog = true
         this.loginStatus = "Wrong password";
       } else if (tempStat === 404) {
+        this.dialog = true
         this.loginStatus = "User does not exist";
       }
     },
