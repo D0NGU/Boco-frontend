@@ -74,21 +74,26 @@ export default {
   methods: {
     async logInButton() {
       this.dialog = true
+      let tempStat = '';
       if (this.$refs.loginform.validate()) {
         console.log("Form is validated")
         await LoginService.handleClickSignIn(this.email, this.password).then(response => {
-          this.loginStatus = response.data
+          tempStat = response.status;
         }).catch((error) => {
           if (error.response) {
-            this.loginStatus = error.response.data;
+            tempStat = error.response.status;
           }
         })
       }
 
-      if (this.loginStatus === 'Successfull login'){
-        this.$store.commit('SET_STATUS', true)
+      if (tempStat === 200){
+        this.loginStatus = "Successfull login";
+        this.$store.commit('SET_STATUS', true);
         await this.$router.push('/Home');
-        console.log()
+      } else if (tempStat === 403) {
+        this.loginStatus = "Wrong password";
+      } else if (tempStat === 404) {
+        this.loginStatus = "User does not exist";
       }
     },
 

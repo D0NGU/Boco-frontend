@@ -112,17 +112,25 @@ export default {
 
   methods: {
     async submit() {
-      console.log("Register clicked")
+      let tempStat = '';
       this.dialog = true
       if (this.$refs.form.validate()) {
         console.log("Form is validated")
         await LoginService.handleClickSignUp(this.firstname, this.lastname, this.email, this.password).then(response => {
-          this.regisState = response.data
+          tempStat = response.status;
         }).catch((error) => {
           if (error.response) {
-            this.regisState = error.response.data
+            tempStat = error.response.status;
           }
         })
+      }
+
+      if (tempStat === 201){
+        this.regisState = "Registered successfully!";
+      } else if (tempStat === 409) {
+        this.regisState = "Email is already in use";
+      } else if (tempStat === 500) {
+        this.regisState = "An error occurred when registering. Try again";
       }
     },
 
