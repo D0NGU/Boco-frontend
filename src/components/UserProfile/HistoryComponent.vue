@@ -17,6 +17,7 @@
 
 <script>
 import ListingCard from "@/components/Listing/ListingCard";
+import axios from "axios";
 
 export default {
   name: "HistoryComponent",
@@ -27,16 +28,33 @@ export default {
 
   data () {
     return {
-      historyProducts: [
-        //TEST LIST
-        {name: "Hammer", description: "Den hamrer bra", address: "Hakkebakkeskogen", price: 30, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-        {name: "Sag", description: "Den sager bra", address: "Hakkebakkeskogen", price: 15, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-      ],
+      historyProducts: [],
+      rentalsProductID: [],
     }
   },
 
   methods: {
+    async getHistory() {
+      let list = [];
+      await axios.get('http://localhost:8080/api/rentals/user/1')
+          .then(res => list = res.data)
+          .catch((err) => console.log(err.response.status))
 
+      /*await axios.get('http://localhost:8080/api/products/{id}')
+          .then(res => )
+          .catch((err) => console.log(err.response.status))*/
+
+
+      list.forEach(rental => {
+        console.log(rental.productId);
+        this.rentalsProductID.push(rental.productId)
+
+      })
+    }
+  },
+
+  beforeMount() {
+    this.getHistory();
   }
 
 }
