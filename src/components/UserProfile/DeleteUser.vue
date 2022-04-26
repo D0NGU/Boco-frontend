@@ -52,20 +52,17 @@ export default {
   data(){
     return{
       clicked: false,
-      userId: null,
-      fname: '',
-      lname: '',
-      email: '',
       password: '',
     }
   },
   methods: {
     async deleteUser(){
+      // TODO Get user info and send with delete
       this.clicked = true;
       await UserSettingService.delete(this.fname, this.lname, this.email, this.password).then(response => {
-        console.warn(response.data)
+        console.warn(response)
       }).catch((error) => {
-        console.warn(error.response.data);
+        console.warn(error.response);
       })
       this.$store.commit('SET_STATUS', false)
     },

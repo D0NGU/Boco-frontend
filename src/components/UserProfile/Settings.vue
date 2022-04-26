@@ -23,8 +23,8 @@ export default {
   data () {
     return {
       // TODO Få verdier fra backend/store
-      name: "Per Hansen",
-      email: "per.h@test.no",
+      name: "",
+      email: "",
       oldPassword: "",
       newPassword: "",
       newPasswordRepeat: "",
