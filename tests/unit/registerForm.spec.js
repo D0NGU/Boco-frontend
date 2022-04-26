@@ -8,7 +8,7 @@ describe('RegisterForm.vue', () => {
         expect(wrapper.find("#title").exists()).toBe(true);
         const title = wrapper.find("#title");
 
-        expect(title.element.textContent).toBe('Register')
+        expect(title.text()).toBe('Register')
     });
 
     it('Test if all labels renders', () => {
@@ -23,10 +23,10 @@ describe('RegisterForm.vue', () => {
         const emLab = wrapper.find("#emLab");
         const passLab = wrapper.find("#passLab");
 
-        expect(fnL.element.textContent).toBe('First Name:');
-        expect(lnL.element.textContent).toBe('Last Name:');
-        expect(emLab.element.textContent).toBe('Email:');
-        expect(passLab.element.textContent).toBe('Password:');
+        expect(fnL.text()).toBe('First Name:');
+        expect(lnL.text()).toBe('Last Name:');
+        expect(emLab.text()).toBe('Email:');
+        expect(passLab.text()).toBe('Password:');
     });
 
     it('Test if input field renders', () => {
@@ -41,10 +41,10 @@ describe('RegisterForm.vue', () => {
         const email = wrapper.find("#email");
         const password = wrapper.find("#password");
 
-        expect(firstname.element.textContent).toBe('')
-        expect(lastname.element.textContent).toBe('')
-        expect(email.element.textContent).toBe('')
-        expect(password.element.textContent).toBe('')
+        expect(firstname.text()).toBe('')
+        expect(lastname.text()).toBe('')
+        expect(email.text()).toBe('')
+        expect(password.text()).toBe('')
 
 
     });
@@ -54,8 +54,6 @@ describe('RegisterForm.vue', () => {
         expect(wrapper.find("#rBtn").exists()).toBe(true);
 
         const registerButton = wrapper.find("#rBtn");
-        expect(registerButton.element.textContent).toBe('Register')
+        expect(registerButton.text()).toBe('Register')
     });
-
-
 })
