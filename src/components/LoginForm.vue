@@ -60,7 +60,7 @@
       <v-btn
           id="regBtn"
           color="primary"
-          onclick="location.href='register'"
+          @click="goToRegisterPage"
       >Register new user</v-btn>
     </div>
   </v-form>
@@ -91,6 +91,10 @@ export default {
         console.log()
       }
     },
+
+    goToRegisterPage() {
+      this.$router.push('/register');
+    }
   },
 
   data() {

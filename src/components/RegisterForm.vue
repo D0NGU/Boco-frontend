@@ -52,7 +52,7 @@
             @click.stop="submit"
         >Register</v-btn>
 
-        <v-dialog v-model="dialog">
+        <v-dialog id="popOut" v-model="dialog">
           <v-card>
             <v-card-title class="text-h5" v-if="regisState ==='Registered successfully!'"> Registered! </v-card-title>
             <v-card-title class="text-h5" v-if="regisState !=='Registered successfully!'"> Registering failed </v-card-title>
@@ -73,11 +73,21 @@
       </v-row>
     </div>
 
+    <div id="back">
+      <v-btn
+          @click="goToLoginPage"
+          class="ma-2"
+          color="grey darken-2"
+          dark>
+        <v-icon dark left>
+          mdi-arrow-left
+        </v-icon>Back to Login
+      </v-btn>
+    </div>
   </v-form>
 </template>
 
 <script>
-//import axios from "axios";
 import LoginService from '../service/LoginService'
 export default {
   data() {
@@ -102,6 +112,7 @@ export default {
 
   methods: {
     async submit() {
+      console.log("Register clicked")
       this.dialog = true
       if (this.$refs.form.validate()) {
         console.log("Form is validated")
@@ -121,6 +132,10 @@ export default {
       this.$refs.form.resetValidation()
     },
 
+    goToLoginPage() {
+      this.$router.push('/login');
+    }
+
   }
 }
 </script>
@@ -136,6 +151,10 @@ export default {
 
 #test {
   width: 300px;
+}
+
+#back {
+  padding: 15px;
 }
 
 </style>
