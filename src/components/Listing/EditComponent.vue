@@ -1,5 +1,6 @@
 <template>
   <v-icon
+      class="target"
       onclick="location.href='/editListing'"
   >
     mdi-border-color

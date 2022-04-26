@@ -9,6 +9,7 @@
               v-model="adName"
               readonly
               label="Navn på annonse"
+              data-test="adNameTest"
               hide-details="auto"
           ></v-text-field>
         </div>
@@ -194,7 +195,7 @@ export default {
     async updateAd(){
       this.dialog = true;
       this.createdStatus = true;
-      console.log("Listing was created.")
+      console.log("Listing was updated.")
       const listingUpdated = {adName: this.adName, adDescription: this.adDescription, adAddress: this.adAddress, adPrice: this.adPrice, switch1: this.switch1, adPhone: this.adPhone, defaultCategory: this.defaultCategory};
 
       await axios.post('http://localhost:8080/api/products/edit/1', listingUpdated).then(response => {
