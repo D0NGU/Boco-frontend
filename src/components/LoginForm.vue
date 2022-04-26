@@ -32,7 +32,7 @@
             id="loginBtn"
             :disabled="!valid"
             dark
-            color="green"
+            color="#CFD8DC"
             @click="logInButton()"
         >Log in</v-btn>
 
@@ -59,7 +59,7 @@
     <div class="text-center">
       <v-btn
           id="regBtn"
-          color="primary"
+          color="grey"
           @click="goToRegisterPage"
       >Register new user</v-btn>
     </div>

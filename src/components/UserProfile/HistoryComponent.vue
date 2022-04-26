@@ -2,13 +2,18 @@
   <div>
    <h3>My history</h3>
 
-    <div v-for="product in historyProducts">
+    <div v-if="!noRentals" v-for="rental in historyRentedProducts">
       <ListingCard
-          :itemName="product.name"
-          :itemOwner="product.userId"
-          :itemPrice="product.price"
-          :itemId="product.itemId"
+          :itemName="rental.title"
+          :itemOwner="rental.userId"
+          :itemPrice="rental.price"
+          :itemId="rental.productId"
       />
+    </div>
+
+    <div v-if="noRentals">
+      <p v-if="!error"> You have not yet rented any products </p>
+      <p v-else> {{ error }}</p>
     </div>
 
   </div>
@@ -17,7 +22,7 @@
 
 <script>
 import ListingCard from "@/components/Listing/ListingCard";
-import axios from "axios";
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
   name: "HistoryComponent",
@@ -28,31 +33,28 @@ export default {
 
   data () {
     return {
-      historyProducts: [],
-      rentalsProductID: [],
+      historyRentedProducts: [],
+      noRentals: true,
+      error: '',
     }
   },
 
   methods: {
     async getHistory() {
-      let list = [];
-      await axios.get('http://localhost:8080/api/rentals/user/1')
-          .then(res => list = res.data)
-          .catch((err) => console.log(err.response.status))
+      let myUserId = this.$store.state.myUserId;
+      await UserAccountService.getUserRentalHistory(myUserId)
+          .then(res => this.historyRentedProducts = res.data)
+          .catch((err) => {
+            this.error = "An error has occurred"
+          })
 
-      /*await axios.get('http://localhost:8080/api/products/{id}')
-          .then(res => )
-          .catch((err) => console.log(err.response.status))*/
-
-
-      list.forEach(rental => {
-        console.log(rental.productId);
-        this.rentalsProductID.push(rental.productId)
-
-      })
-    }
+      if (!this.historyRentedProducts.length){
+        this.noRentals = true;
+      } else {
+        this.noRentals = false
+      }
+    },
   },
-
   beforeMount() {
     this.getHistory();
   }
