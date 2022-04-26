@@ -216,33 +216,4 @@ font-weight: bold;
 color: var(--bocoBlue);
 font-weight: bold;
 }
-.input-field {
-margin-top: 30px;
-position: relative;
-}
-#adName {
-background: var(--bocoBlue);
-border-radius: 5px;
-padding: 0.5em;
-}
-#adDescription {
-border: 2px solid var(--bocoBlue);
-border-radius: 5px;
-padding: 0.5em;
-}
-#adPrice {
-border: 2px solid var(--bocoBlue);
-border-radius: 5px;
-padding: 0.5em;
-}
-#adAddress {
-border: 2px solid var(--bocoBlue);
-border-radius: 5px;
-padding: 0.5em;
-}
-#adPhone {
-border: 2px solid var(--bocoBlue);
-border-radius: 5px;
-padding: 0.5em;
-}
 </style>
