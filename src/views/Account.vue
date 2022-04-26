@@ -134,4 +134,7 @@ export default {
   z-index: 10;
   display: flex;
 }
+.v-card-text {
+  padding: 0;
+}
 </style>

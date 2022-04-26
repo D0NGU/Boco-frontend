@@ -13,8 +13,8 @@ export default {
         })
     }
 }
-export function getAllProducts(){
-    return axios.get('http://localhost:8080/api/products/', {
+export function getAllProducts(pageNumber){
+    return axios.get('http://localhost:8080/api/products?page=' + pageNumber, {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export function getProductsInCategory(category) {
         });
 }
 
-export function getProductById(id) {
+export function getProductById(id, pageNumber) {
     return axios.get('http://localhost:8080/api/products/'+ id, {
         headers: {
             Accept: 'application/json',
@@ -65,7 +65,7 @@ export function getListing(id) {
 }
 
 export function getProductsByUserId(id){
-    return axios.get('http://localhost:8080/api/products/user'+ id, {
+    return axios.get('http://localhost:8080/api/products/user/'+ id, {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
