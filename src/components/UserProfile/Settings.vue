@@ -6,6 +6,7 @@
   <v-text-field type="password" label="Gjenta passord"></v-text-field>
   <v-switch inset="" color="success" label="Offentlig kjøpshistorikk" v-model="hideHistory"></v-switch>
   <v-btn @click="handleSaveClick" id="saveBtn">Lagre</v-btn>
+  <v-btn id="deleteUser" color="error" :to="{name: 'DeleteUser'}"> Slett bruker</v-btn>
   <v-snackbar
       color="success"
       :timeout="3000"
