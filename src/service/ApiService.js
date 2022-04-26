@@ -63,3 +63,16 @@ export function getListing(id) {
             return response.data;
         });
 }
+
+export function getProductsByUserId(id){
+    return axios.get('http://localhost:8080/api/products/user'+ id, {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization : 'Bearer ' + store.getters.token
+        }
+    })
+        .then((response) => {
+            return response.data;
+        });
+}

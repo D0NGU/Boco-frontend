@@ -1,7 +1,7 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
-  <v-card class="rounded-xl itemCard" :to="{ name: 'ListingDetails', params: { itemId: this.itemId }}">
+  <v-card class="rounded-xl itemCard" @click="redirect">
     <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
     <v-divider vertical="" />
     <div class="itemDetail">
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   props: {
     itemName: String,
@@ -24,8 +26,13 @@ export default {
     itemImage: Image,
     itemId: Number,
   },
-  data() {
-    return {
+  methods: {
+    redirect() {
+      if(this.itemOwner === 0){
+        router.push({name: 'ListingDetails', params: { itemId: this.itemId }})
+      } else {
+        router.push({name: 'ListingEdit', params: { itemId: this.itemId }})
+      }
     }
   },
 }

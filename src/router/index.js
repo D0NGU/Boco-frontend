@@ -9,6 +9,7 @@ import DeleteUser from "@/components/UserProfile/DeleteUser";
 import DeleteUserComp from "@/components/UserProfile/DeleteComponent";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
+import EditListing from "@/views/EditListing";
 
 const routes = [
   /*{
@@ -53,6 +54,11 @@ const routes = [
     path: "/listing",
     name: "Listing",
     component: Listing
+  },
+  {
+    path: "/listing/edit/:itemId",
+    name: "ListingEdit",
+    component: EditListing,
   },
   // Redirect any none-existing path to 404 page
   {

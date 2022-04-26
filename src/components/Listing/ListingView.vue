@@ -14,13 +14,19 @@
 </template>
 
 <script>
-import { getAllProducts } from '@/service/ApiService.js'
+import {getAllProducts, getProductsByUserId} from '@/service/ApiService.js'
 import ListingCard from "@/components/Listing/ListingCard";
 import SortAndSearch from "@/components/Misc/sortAndSearch";
 
 export default {
   name: "ListingView",
   components: {SortAndSearch, ListingCard},
+  props: {
+    ownerId: {
+      default: 0,
+      type: Number,
+    },
+  },
   data () {
     return {
       activeProducts: []
@@ -28,7 +34,13 @@ export default {
   },
   methods: {
     async getProducts() {
-      const products = await getAllProducts()
+      var products = []
+      if(this.ownerId === 0){
+        products = await getAllProducts()
+      } else {
+        //TODO user id
+        products = await getProductsByUserId()
+      }
       products.forEach(product => this.activeProducts.push({
         name: product.title,
         description: product.description,

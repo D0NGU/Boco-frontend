@@ -44,7 +44,8 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          Mine annonser komponent
+          <!-- TODO User id -->
+          <ListingView :ownerId="1"/>
         </v-window-item>
         <v-window-item value="history">
 <!--          <HistoryComponent /> Noe gale med denne komponenten, breaker hele siden :/ -->
