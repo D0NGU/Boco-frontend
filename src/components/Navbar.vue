@@ -18,6 +18,13 @@
       </router-link>
       </div>
       <div class="navItem">
+        <router-link :to="{name: 'Listing'}">
+          <div>
+            <v-icon> mdi-plus-circle</v-icon> <p>Ny annonse</p>
+          </div>
+        </router-link>
+      </div>
+      <div class="navItem">
       <router-link @click="logOut" :to="{name: 'Login'}">
         <div>
           <v-icon> mdi-logout</v-icon> <p>Logg ut</p>
