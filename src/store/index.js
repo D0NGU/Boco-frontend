@@ -3,6 +3,8 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     loggedIn: true,
+    token: ''
+
   },
   getters: {
   },
@@ -10,7 +12,8 @@ export default createStore({
     setLogin(state) {
       state.loggedIn = !state.loggedIn
     },
-    
+
+
   },
   actions: {
   },

@@ -1,20 +1,23 @@
 <!-- inneholder listing component -->
 
 <template>
-  <Listing />
+  <div id="listingPage">
+    <Listing></Listing>
+  </div>
 </template>
 
 <script>
 import Listing from "@/components/Listing";
 
 export default {
-  name: "AdPage",
   components: {
-    Listing
+    Listing,
   },
 }
 </script>
 
-<style scoped>
-
+<style>
+#listingPage {
+  justify-content: center;
+}
 </style>

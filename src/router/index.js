@@ -1,15 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
+//import Landing from '../views/Landing.vue'
 import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
-import Listing from '../views/Listing.vue'
-import Edit from "@/components/EditComponent";
-import EditListing from "@/views/EditListing"
+import RegisterForm from "@/components/RegisterForm";
+import ListingDetails from "@/components/Listing/ListingDetails";
+import Listing from "@/components/Listing";
 
 const routes = [
-  {
+  /*{
     path: '/',
+    name: 'Landing',
+    component: Landing
+  },
+*/
+  {
+    path: '/Home',
     name: 'Home',
     component: Home
   },
@@ -23,20 +30,22 @@ const routes = [
     name: 'Login',
     component: Login
   },
+
   {
-    path: '/listing',
-    name: 'Listing',
+    path: "/register",
+    name: "RegisterForm",
+    component: RegisterForm
+  },
+
+  {
+    path: "/listing/:id",
+    name: "ListingDetails",
+    component: ListingDetails
+  },
+  {
+    path: "/listing",
+    name: "Listing",
     component: Listing
-  },
-  {
-    path: '/edit',
-    name: 'Edit',
-    component: Edit
-  },
-  {
-    path: '/editListing',
-    name: 'EditListing',
-    component: EditListing
   },
   // Redirect any none-existing path to 404 page
   {
@@ -44,7 +53,6 @@ const routes = [
     name: 'NotFound',
     component: NotFound
   }
-
 ]
 
 const router = createRouter({
