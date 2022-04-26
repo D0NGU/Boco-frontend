@@ -16,7 +16,7 @@ export default {
 }
 
 export function editPassword (newPassword) {
-    return axios.post('http://localhost:8085/api/user/edit', {
+    return axios.post('http://localhost:8080/api/user/edit', {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

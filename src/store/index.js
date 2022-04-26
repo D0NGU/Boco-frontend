@@ -9,10 +9,9 @@ export default createStore({
   getters: {
   },
   mutations: {
-    setLogin(state) {
-      state.loggedIn = !state.loggedIn
+    SET_STATUS(state, status) {
+      state.loggedIn = status;
     },
-
 
   },
   actions: {

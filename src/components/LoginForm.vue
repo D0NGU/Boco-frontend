@@ -89,7 +89,9 @@ export default {
       }
 
       if (this.loginStatus === 'Successfull login'){
-        await this.$router.push('/');
+        this.$store.commit('SET_STATUS', true)
+        await this.$router.push('/Home');
+        console.log()
       }
     },
   },
