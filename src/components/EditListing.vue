@@ -1,17 +1,17 @@
 <template>
-  <h1 id="createListingHeadline">Endre på eksisterende annonse</h1>
+  <h1 id="createListingHeadline">Oppdater annonse</h1>
   <div class="flex-column mb-6">
     <v-card class="container">
       <v-form v-model="isFormValid">
         <div>
           <v-text-field
+              id="adName"
               v-model="adName"
+              readonly
               label="Navn på annonse"
-              :rules="rules"
               hide-details="auto"
           ></v-text-field>
         </div>
-
         <div>
           <v-text-field
               v-model="adDescription"
@@ -112,15 +112,15 @@
         <v-btn
             id="createAdButton"
             :diabled="!isFormValid"
-            @click="saveAd()"
+            @click="updateAd()"
 
-        >Lag annonse
+        >Oppdater annonse
         </v-btn>
 
         <v-dialog v-model="dialog">
           <v-card>
-            <v-card-title class="text-h5" v-if="createdStatus !== 'Listing was successfully created'"> Listing was not created... </v-card-title>
-            <v-card-title class="text-h5" v-if="createdStatus === 'Listing was successfully created'"> Listing was successful! </v-card-title>
+            <v-card-title class="text-h5" v-if="createdStatus ? '':'true'"> Listing was not created... </v-card-title>
+            <v-card-title class="text-h5" v-if="createdStatus ? 'true':''"> Listing was successful! </v-card-title>
             <v-card-text> {{ createdStatus }}</v-card-text>
 
             <v-card-actions>
@@ -152,9 +152,11 @@ import axios from "axios";
 import ListingsService from "@/service/ListingsService";
 
 export default {
-  name: "AdPage",
-  data: () => ({
-    return: {
+  name: "AdEditPage",
+  data () {
+    return {
+      //TODO: Få produktinformasjon fra backend
+      adName: "Hammer",
       adDescription:'',
       adPrice:'',
       pricePer:'',
@@ -163,32 +165,23 @@ export default {
       adPhone:'',
       switch1:'',
       categories: [],
-      createdStatus: '',
+      createdStatus: false,
       dialog: false,
-    },
-    props: {
-      adName: {
-        type: String,
-        default: "DEFAULT"
-      }
-    },
+      rules: [
+        value => !!value || 'Påkrevd.',
+        value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
 
-
-    //items: ['Hage', 'Verktøy', 'Turutstyr', 'Klatring', 'Ski', 'Båt', 'Bil', 'Sykkel'],
-    rules: [
-      value => !!value || 'Påkrevd.',
-      value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
-
-    ],
-    rulesNumber: [
-      value => !isNaN(value) || 'Må være tall.',
-      value => !!value || 'Påkrevd.',
-    ],
-    rulesPhone: [
-      value => !isNaN(value) || 'Må være tall.',
-      value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
-    ]
-  }),
+      ],
+      rulesNumber: [
+        value => !isNaN(value) || 'Må være tall.',
+        value => !!value || 'Påkrevd.',
+      ],
+      rulesPhone: [
+        value => !isNaN(value) || 'Må være tall.',
+        value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
+      ],
+    }
+  },
   methods: {
     getCategories(){
       ListingsService.getCategories().then((response) => {
@@ -198,12 +191,13 @@ export default {
     created() {
       this.getCategories();
     },
-    async saveAd(){
+    async updateAd(){
       this.dialog = true;
+      this.createdStatus = true;
       console.log("Listing was created.")
-      const listingCreated = {adName: this.adName, adDescription: this.adDescription, adAddress: this.adAddress, adPrice: this.adPrice, switch1: this.switch1, adPhone: this.adPhone, defaultCategory: this.defaultCategory};
+      const listingUpdated = {adName: this.adName, adDescription: this.adDescription, adAddress: this.adAddress, adPrice: this.adPrice, switch1: this.switch1, adPhone: this.adPhone, defaultCategory: this.defaultCategory};
 
-      await axios.post('http://localhost:8080/api/products/new', listingCreated).then(response => {
+      await axios.post('http://localhost:8080/api/products/edit/1', listingUpdated).then(response => {
         this.createdStatus = response.data
       }).catch((error) => {
         if(error.response){

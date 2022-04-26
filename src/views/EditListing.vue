@@ -1,5 +1,5 @@
 <template>
-  <EditListing :adName="Hammer"/>
+  <EditListing/>
 </template>
 
 <script>
@@ -7,9 +7,6 @@ import EditListing from "@/components/EditListing";
 
 export default {
   name: "AdEdit",
-  data: () => ({
-    text: "Hammer",
-  }),
   components: {
     EditListing
   },

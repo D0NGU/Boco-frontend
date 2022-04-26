@@ -122,16 +122,15 @@
 
         <v-dialog v-model="dialog">
           <v-card>
-            <v-card-title class="text-h5" v-if="createdStatus !== 'Listing was sucessfully created'"> Listing was not created... </v-card-title>
-            <v-card-title class="text-h5" v-if="createdStatus === 'Listing was sucessfully created'"> Listing was successful! </v-card-title>
-            <v-card-text> {{ createdStatus }}</v-card-text>
-
+            <v-card-title class="text-h5" v-if="createdStatus ? '':'true'"> Listing was not created... </v-card-title>
+            <v-card-title class="text-h5" v-if="createdStatus ? 'true':''"> Listing was successful! </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
                   color="red"
                   text
                   @click="dialog = false"
+                  onclick="location.href='/account'"
               >
                 Close
               </v-btn>
@@ -156,8 +155,8 @@ import ListingsService from "@/service/ListingsService";
 
 export default {
   name: "AdPage",
-  data: () => ({
-    return: {
+  data () {
+    return {
       adName:'',
       adDescription:'',
       adPrice:'',
@@ -167,24 +166,24 @@ export default {
       adPhone:'',
       switch1:'',
       categories: [],
-      createdStatus: '',
+      createdStatus: false,
       dialog: false,
-    },
-    //items: ['Hage', 'Verktøy', 'Turutstyr', 'Klatring', 'Ski', 'Båt', 'Bil', 'Sykkel'],
-    rules: [
-      value => !!value || 'Påkrevd.',
-      value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
+      rules: [
+        value => !!value || 'Påkrevd.',
+        value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
 
-    ],
-    rulesNumber: [
-      value => !isNaN(value) || 'Må være tall.',
-      value => !!value || 'Påkrevd.',
-    ],
-    rulesPhone: [
-      value => !isNaN(value) || 'Må være tall.',
-      value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
-    ]
-  }),
+      ],
+      rulesNumber: [
+        value => !isNaN(value) || 'Må være tall.',
+        value => !!value || 'Påkrevd.',
+      ],
+      rulesPhone: [
+        value => !isNaN(value) || 'Må være tall.',
+        value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
+      ],
+    }
+
+  },
   methods: {
     getCategories(){
       ListingsService.getCategories().then((response) => {
@@ -196,6 +195,7 @@ export default {
     },
     async saveAd(){
       this.dialog = true;
+      this.createdStatus = true;
       console.log("Listing was created.")
       const listingCreated = {adName: this.adName, adDescription: this.adDescription, adAddress: this.adAddress, adPrice: this.adPrice, switch1: this.switch1, adPhone: this.adPhone, defaultCategory: this.defaultCategory};
 
