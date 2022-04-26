@@ -5,29 +5,33 @@
           @submit.prevent="submit"
           v-model="valid"
           lazy-validation>
-    <h1>Register</h1>
+    <h1 id="title">Register</h1>
 
     <div id="test">
-      <label>First Name:</label>
+      <label id="fnL">First Name:</label>
       <v-text-field
+          id="firstname"
           :rules="rulesApplyToAll"
           v-model="firstname">
       </v-text-field>
 
-      <label>Last Name: </label>
+      <label id="lnL">Last Name:</label>
       <v-text-field
+          id="lastname"
           :rules="rulesApplyToAll"
           v-model="lastname">
       </v-text-field>
 
-      <label>Email:</label>
+      <label id="emLab">Email:</label>
       <v-text-field
+          id="email"
           :rules="emailRules"
           v-model="email">
       </v-text-field>
 
-      <label>Password: </label>
+      <label id="passLab">Password:</label>
       <v-text-field
+          id="password"
           :rules="rulesApplyToAll"
           v-model="password"
           :type="show ?'text': 'password'"
@@ -40,14 +44,13 @@
 
       <v-row justify="center">
         <v-btn
+            id="rBtn"
             :disabled="!valid"
             type="button"
             color="#CFD8DC"
             dark
             @click.stop="submit"
-        >
-          Register
-        </v-btn>
+        >Register</v-btn>
 
         <v-dialog v-model="dialog">
           <v-card>

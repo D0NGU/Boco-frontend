@@ -7,7 +7,7 @@
     <h2 id="loginTitle">Login</h2>
 
     <div>
-      <label>Email:</label>
+      <label id="emL">Email:</label>
       <v-text-field
           :rules="emailRules"
           id="email"
@@ -16,7 +16,7 @@
     </div>
 
     <div>
-      <label>Password: </label>
+      <label id="passL">Password:</label>
       <v-text-field
           :rules="rulesApplyToAll"
           id="password"
@@ -29,13 +29,12 @@
     <div id="loginButton" class="text-center">
       <v-row justify="center">
         <v-btn
+            id="loginBtn"
             :disabled="!valid"
             dark
             color="green"
             @click="logInButton()"
-        >
-          Log in
-        </v-btn>
+        >Log in</v-btn>
 
         <v-dialog v-model="dialog">
           <v-card>
@@ -59,10 +58,10 @@
 
     <div class="text-center">
       <v-btn
+          id="regBtn"
           color="primary"
-          onclick="location.href='register'">
-        Register new user
-      </v-btn>
+          onclick="location.href='register'"
+      >Register new user</v-btn>
     </div>
   </v-form>
 

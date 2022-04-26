@@ -4,9 +4,10 @@
 
     <div v-for="product in historyProducts">
       <ListingCard
-          :item-name="product.name"
-          :item-owner="product.userId"
-          :item-price="product.price"
+          :itemName="product.name"
+          :itemOwner="product.userId"
+          :itemPrice="product.price"
+          :itemId="product.itemId"
       />
     </div>
 
