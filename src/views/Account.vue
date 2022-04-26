@@ -46,7 +46,7 @@
           Mine annonser komponent
         </v-window-item>
         <v-window-item value="history">
-          Min historikk komponent
+          <HistoryComponent></HistoryComponent>
         </v-window-item>
         <v-window-item value="reviews">
           Mine anmeldelser komponent
@@ -59,8 +59,14 @@
 </template>
 
 <script>
+import HistoryComponent from "@/components/HistoryComponent";
+
 export default {
     name: 'account',
+    components: {
+      HistoryComponent,
+    },
+
   data() {
     return {
       //TODO Hent rating fra backend

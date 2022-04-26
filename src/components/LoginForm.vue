@@ -4,7 +4,7 @@
   <v-form ref="loginform" id="LoginForm" @submit.prevent="logInButton"
           v-model="valid"
           lazy-validation>
-    <h2 id="login">Login</h2>
+    <h2 id="loginTitle">Login</h2>
 
     <div>
       <label>Email:</label>
@@ -25,8 +25,6 @@
           @click:append="show=!show">
       </v-text-field>
     </div>
-
-    <!--<v-btn @click="getToken"> get token </v-btn>-->
 
     <div id="loginButton" class="text-center">
       <v-row justify="center">
