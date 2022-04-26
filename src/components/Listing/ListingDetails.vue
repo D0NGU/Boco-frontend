@@ -51,8 +51,8 @@ export default {
     },
     async sendRequest() {
       if(this.date !== undefined && this.date !== null){
-        const dateFrom = this.date[0].getYear()+"/"+this.date[0].getMonth()+"/"+this.date[0].getDay()
-        const dateTo = this.date[1].getYear()+"/"+this.date[1].getMonth()+"/"+this.date[1].getDay()
+        const dateFrom = new Date(this.date[0].getFullYear()+"/"+(this.date[0].getMonth()+1)+"/"+this.date[0].getDate());
+        const dateTo = new Date(this.date[1].getFullYear()+"/"+(this.date[1].getMonth()+1)+"/"+this.date[1].getDate());
         await ListingsService.newRental(dateFrom, dateTo, this.itemId, this.$store.state.myUserId)
       } else {
         this.invalidDate = true;
