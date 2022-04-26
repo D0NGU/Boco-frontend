@@ -145,6 +145,13 @@
         </v-btn>
       </div>
     </v-card>
+    <div>
+      <button @click="getCategory">Get categories</button>
+      <ul>
+        <li>Here</li>
+        <li v-for="category in categories" :key="category.id">{{ category.name }}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -181,7 +188,13 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
+
     }
+  },
+  async created(){
+    const res = await axios.get('http://localhost:3000/categories');
+
+    this.categories = res.data;
   },
   methods: {
     getCategories(){
@@ -189,9 +202,9 @@ export default {
         this.categories = response.data;
       });
     },
-    created() {
+    /*created() {
       this.getCategories();
-    },
+    },*/
     async updateAd(){
       this.dialog = true;
       this.createdStatus = true;

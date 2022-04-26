@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const EDIT_USER_API_BASE_URL = 'http://localhost:8080/api/products/product/{productid}/edit';
-const CATEGORIES_API_BASE_URL = 'http://localhost:8080/api/products/category';
+const CATEGORIES_API_BASE_URL = 'http://127.0.0.1:8080/categories';
 
 export default {
     getCategories() {

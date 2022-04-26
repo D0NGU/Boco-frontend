@@ -124,6 +124,10 @@
         </v-btn>
       </div>
     </v-card>
+    <div>
+      <ul id="categories">
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -159,8 +163,16 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
-    }
+    };
 
+  },
+  async created(){
+    try{
+      const res = await axios.post('http://127.0.0.1:8080/categories');
+      this.categories = res.data;
+    }catch(e){
+      console.error(e);
+    }
   },
   methods: {
     getCategories() {
@@ -168,9 +180,9 @@ export default {
         this.categories = response.data;
       });
     },
-    created() {
+    /*created() {
       this.getCategories();
-    },
+    },*/
     async saveAd() {
       this.dialog = true;
       this.createdStatus = true;
