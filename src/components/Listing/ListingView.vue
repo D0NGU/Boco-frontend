@@ -1,20 +1,20 @@
 <template>
   <sort-and-search
       :products="activeProducts"
-      @update="updateList"
+      @search="updateList"
   />
   <div v-for="product in activeProducts">
     <ListingCard
-        :itemName="product.name"
+        :itemName="product.title"
         :itemOwner="product.userId"
         :itemPrice="product.price"
-        :itemId="product.itemId"
+        :itemId="product.productId"
     />
   </div>
 </template>
 
 <script>
-import {getAllProducts, getProductsByUserId} from '@/service/ApiService.js'
+import {getProducts, getProductsByUserId} from '@/service/ApiService.js'
 import ListingCard from "@/components/Listing/ListingCard";
 import SortAndSearch from "@/components/Misc/sortAndSearch";
 
@@ -35,28 +35,15 @@ export default {
   },
   methods: {
     async getProducts() {
-      var products = []
       if(this.ownerId === 0){
-        products = await getAllProducts(this.pageNumber)
+        this.activeProducts = await getProducts(null, null, this.pageNumber, "product_id", true)
       } else {
         //TODO user id
-        products = await getProductsByUserId(this.pageNumber)
+        this.activeProducts = await getProductsByUserId(this.pageNumber)
       }
-      products.forEach(product => this.activeProducts.push({
-        name: product.title,
-        description: product.description,
-        address: product.address,
-        price: product.price,
-        unlisted: product.unlisted,
-        availableFrom: product.availableFrom,
-        availableTo: product.availableTo,
-        userId: product.userId,
-        category: product.category,
-        itemId: product.productId
-      }))
     },
-    updateList(list){
-      //TODO spør backend
+    async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
+      this.activeProducts = await getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)
     }
   },
   beforeMount() {

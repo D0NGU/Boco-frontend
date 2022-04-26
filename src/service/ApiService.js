@@ -13,31 +13,6 @@ export default {
         })
     }
 }
-export function getAllProducts(pageNumber){
-    return axios.get('http://localhost:8080/api/products?page=' + pageNumber, {
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + store.getters.token
-        }
-    })
-        .then((response) => {
-            return response.data;
-        });
-}
-
-export function getProductsInCategory(category) {
-    return axios.get('http://localhost:8080/api/products/category/'+ category, {
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization : 'Bearer ' + store.getters.token
-        }
-    })
-        .then((response) => {
-            return response.data;
-        });
-}
 
 export function getProductById(id, pageNumber) {
     return axios.get('http://localhost:8080/api/products/'+ id, {
@@ -66,6 +41,26 @@ export function getListing(id) {
 
 export function getProductsByUserId(id){
     return axios.get('http://localhost:8080/api/products/user/'+ id, {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization : 'Bearer ' + store.getters.token
+        }
+    })
+        .then((response) => {
+            return response.data;
+        });
+}
+
+export function getProducts(searchWord, category, pageNumber, sortBy, ascending){
+    return axios.get('http://localhost:8080/api/products/search/', {
+        params: {
+            q: searchWord,
+            category: category,
+            page: pageNumber,
+            sortBy: sortBy,
+            ascending: ascending
+        },
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

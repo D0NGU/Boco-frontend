@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import {getAllProducts} from "@/service/ApiService";
 
 export default {
   name: "sortAndSearch",
@@ -113,31 +112,32 @@ export default {
       overlay: false,
       // TODO: Legg til disse listene automatisk?
       sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
+      chosenSortBy: 'product_id',
+      ascending: true,
       categories: [{icon: 'mdi-basketball', category: 'Sport', active: false}, {icon: 'mdi-flower', category: 'Hage', active: false}, {icon: 'mdi-sofa-single', category: 'Møbler', active: false}, {icon: 'mdi-hammer-wrench', category: 'Verktøy', active: false}],
-      chosenCategories: [],
+      //TODO fiks dette når backend støtter flere kategorier
+      chosenCategories: null,
     };
   },
   methods: {
     handleSearchButton(){
-      //TODO spør backend
-    },
-    getAllElements() {
-      const products = getAllProducts()
-      products.forEach(product => this.products.push({name: product.name,
-        description: product.description,
-        address: product.address,
-        price: product.price,
-        unlisted: product.unlisted,
-        availableFrom: product.availableFrom,
-        availableTo: product.availableTo,
-        userId: product.userId,
-        category: product.category}))
+      this.$emit('search', this.searchBar, this.chosenCategories, this.chosenSortBy, this.ascending)
     },
 
     selectSortByOption(selectedOption) {
       this.sortByOptions.forEach((option) => {
         option.active = option.option === selectedOption;
       })
+      if(selectedOption === "Pris lav-høy") {
+        this.chosenSortBy = "price";
+        this.ascending = true;
+      } else if(selectedOption === "Pris høy-lav"){
+        this.chosenSortBy = "price";
+        this.ascending = false;
+      } else {
+        this.chosenSortBy = "product_id"
+        this.ascending = true;
+      }
       setTimeout(() => this.sortByDialog = false, 300);
     },
 
@@ -152,10 +152,6 @@ export default {
       }
     }
   },
-  beforeMount() {
-    this.activeProductList = this.products;
-  }
-
 }
 </script>
 
