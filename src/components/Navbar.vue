@@ -3,9 +3,27 @@
 <template>
   <div>
     <div id="navBar">
-      <router-link :to="{name: 'Home'}">Home</router-link>|
-      <router-link :to="{name: 'Account'}">Account</router-link>|
-      <router-link @click="logOut" :to="{name: 'Login'}">Log Out</router-link>
+      <div class="navItem">
+      <router-link :to="{name: 'Home'}">
+        <div class="navLink">
+          <v-icon>mdi-home</v-icon> <p>Hjem</p>
+        </div>
+      </router-link>
+      </div>
+      <div class="navItem">
+      <router-link :to="{name: 'Account'}">
+        <div>
+          <v-icon> mdi-account</v-icon> <p>Profil</p>
+        </div>
+      </router-link>
+      </div>
+      <div class="navItem">
+      <router-link @click="logOut" :to="{name: 'Login'}">
+        <div>
+          <v-icon> mdi-logout</v-icon> <p>Logg ut</p>
+        </div>
+      </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -13,16 +31,15 @@
 
 <script>
 
+
+import LoginService from '../service/LoginService.js'
+
 export default {
-
   methods: {
-    
     logOut() {
-      this.$store.commit('setLogin')
-    }
-
+      this.$store.commit('SET_STATUS', false)
+    },
   }
-
 }
 </script>
 
@@ -31,21 +48,24 @@ export default {
 * {
   --bocoBlue: #004aab
 }
-
+#navBar {
+  display: flex;
+  flex-direction: row;
+  background-color: #454655;
+}
 #navBar a {
-  font-weight: bold;
-  color: #2c3e50;
+  color: white;
   text-decoration: none;
-  padding: 10px;
   border-radius: 4px;
 }
 
 #navBar a.router-link-active {
-  color: white;
-  background: var(--bocoBlue);
+  color: #2ce7ff;
 }
 
-
-
+.navItem {
+  width: 30%;
+  flex-grow: 1;
+}
 
 </style>

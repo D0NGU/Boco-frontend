@@ -1,6 +1,6 @@
 <template>
   <h1>404</h1>
-  <ErrorBox />
+  <ErrorBox :message='message'/>
 </template>
 
 <script>
@@ -13,14 +13,14 @@ export default {
 
     data() {
       return {
-
+       message: 'No Such Page'
       }
     },
-
+/*
     mounted() { // runs when view is mounted to the DOM
         this.$store.commit('setErrorMsg', 'No such page')
     }
-
+*/
 
 }
 </script>

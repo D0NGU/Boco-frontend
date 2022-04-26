@@ -1,44 +1,99 @@
 <!-- Login form -->
 
 <template>
-  <div id="LoginForm">
-    <h2 id="logfail" v-if="fail">Login failed!</h2>
-    <h2 id="login" v-else>Login</h2>
+  <v-form ref="loginform" id="LoginForm" @submit.prevent="logInButton"
+          v-model="valid"
+          lazy-validation>
+    <h2 id="login">Login</h2>
 
     <div>
       <label>Email:</label>
-      <v-text-field id="email" v-model="email"></v-text-field>
+      <v-text-field
+          :rules="emailRules"
+          id="email"
+          v-model="email">
+      </v-text-field>
     </div>
 
     <div>
       <label>Password: </label>
-      <v-text-field v-model="password"></v-text-field>
+      <v-text-field
+          :rules="rulesApplyToAll"
+          id="password"
+          v-model="password"
+          :type="show ?'text': 'password'"
+          @click:append="show=!show">
+      </v-text-field>
     </div>
 
-    <div id="log">
-      <v-btn v-on:click="handleClickSignIn(this.username, this.password)">Log in</v-btn>
+    <!--<v-btn @click="getToken"> get token </v-btn>-->
+
+    <div id="loginButton" class="text-center">
+      <v-row justify="center">
+        <v-btn
+            :disabled="!valid"
+            dark
+            color="green"
+            @click="logInButton()"
+        >
+          Log in
+        </v-btn>
+
+        <v-dialog v-model="dialog">
+          <v-card>
+            <v-card-title class="text-h5" v-if="loginStatus !=='Successfull login'"> Login failed! </v-card-title>
+            <v-card-text id="loginStatusLabel"> {{loginStatus}} </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                  color="red"
+                  text
+                  @click="dialog = false"
+              >
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </div>
 
-    <div>
-      <v-btn onclick="location.href = 'register'">Register new user</v-btn>
+    <div class="text-center">
+      <v-btn
+          color="primary"
+          onclick="location.href='register'">
+        Register new user
+      </v-btn>
     </div>
-  </div>
+  </v-form>
 
 </template>
 
 <script>
-
+import LoginService from '@/service/LoginService'
 export default {
+
   methods: {
-    async handleClickSignIn (username, password) {
-      console.log("Sign in button clicked!")
-      const loginRequest = { username: username, password: password };
+    async logInButton() {
+      this.dialog = true
+      if (this.$refs.loginform.validate()) {
+        console.log("Form is validated")
+        await LoginService.handleClickSignIn(this.email, this.password).then(response => {
+          this.loginStatus = response.data
+        }).catch((error) => {
+          if (error.response) {
+            this.loginStatus = error.response.data;
+          }
+        })
+      }
+
+      if (this.loginStatus === 'Successfull login'){
+        this.$store.commit('SET_STATUS', true)
+        await this.$router.push('/Home');
+        console.log()
+      }
     },
-
-    goToRegisterForm() {
-
-    }
-
   },
 
   data() {
@@ -46,26 +101,30 @@ export default {
       email: '',
       password: '',
       loginStatus: '',
+      token1: '',
+      error: '',
+      rulesApplyToAll: [
+        value => !!value || 'Required.',
+      ],
+      emailRules: [
+        v => !!v || 'Required',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+      ],
+      show: false,
+      dialog: false,
+      valid: true,
     }
   },
-
-  computed: {
-    fail() {
-      return false
-    },
-  }
 
 }
 </script>
 
 <style scoped>
 
-
 #LoginForm {
   display: grid;
   justify-content: center;
   padding: 20px;
-
 }
 
 label {
@@ -80,8 +139,8 @@ h2 {
   margin-bottom: 30px;
 }
 
-#log {
-  margin-bottom: 20px;
+#loginButton {
+  padding: 20px;
 }
 
 </style>
