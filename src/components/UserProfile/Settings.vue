@@ -2,10 +2,12 @@
   <h1>Innstillinger</h1>
   <v-text-field id="name" v-model="name" readonly label="Navn"></v-text-field>
   <v-text-field id="email" v-model="email" readonly label="E-post"></v-text-field>
-  <v-text-field type="password" label="Nytt passord"></v-text-field>
-  <v-text-field type="password" label="Gjenta passord"></v-text-field>
+  <v-text-field type="password" label="Gammelt passord" v-model="oldPassword"></v-text-field>
+  <v-text-field type="password" label="Nytt passord" v-model="newPassword"></v-text-field>
+  <v-text-field type="password" label="Gjenta passord" v-model="newPasswordRepeat"></v-text-field>
   <v-switch inset="" color="success" label="Offentlig kjøpshistorikk" v-model="hideHistory"></v-switch>
   <v-btn @click="handleSaveClick" id="saveBtn">Lagre</v-btn>
+  <v-btn id="deleteUser" color="error" :to="{name: 'DeleteUser'}"> Slett bruker</v-btn>
   <v-snackbar
       color="success"
       :timeout="3000"
@@ -23,6 +25,7 @@ export default {
       // TODO Få verdier fra backend/store
       name: "Per Hansen",
       email: "per.h@test.no",
+      oldPassword: "",
       newPassword: "",
       newPasswordRepeat: "",
       hideHistory: false,
@@ -32,7 +35,7 @@ export default {
   methods: {
     handleSaveClick(){
       if(this.newPassword === this.newPasswordRepeat){
-        editPassword(this.newPassword);
+        editPassword(this.email, this.oldPassword, this.newPassword);
         this.confirmationSnackBar = true;
       }
     },

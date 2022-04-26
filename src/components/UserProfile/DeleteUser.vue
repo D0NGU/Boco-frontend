@@ -8,7 +8,7 @@
     >
      <v-card-header-text id="header">Er du sikker på at du vil slette brukeren din?</v-card-header-text>
       <v-card-text>Denne handlingen kan ikke angres.</v-card-text>
-
+      <v-text-field type="password" label="Tast inn passord for å slette bruker" v-model="password" ></v-text-field>
       <v-card-actions class="justify-center">
         <v-btn
             outlined
@@ -56,18 +56,18 @@ export default {
       fname: '',
       lname: '',
       email: '',
-      salt: '',
       password: '',
     }
   },
   methods: {
     async deleteUser(){
       this.clicked = true;
-      await UserSettingService.delete(this.userId, this.fname, this.lname, this.email, this.salt, this.password).then(response => {
+      await UserSettingService.delete(this.fname, this.lname, this.email, this.password).then(response => {
         console.warn(response.data)
       }).catch((error) => {
         console.warn(error.response.data);
       })
+      this.$store.commit('SET_STATUS', false)
     },
   }
 }
@@ -79,5 +79,8 @@ export default {
   }
   #deletedAlert{
     margin: 1.5em;
+  }
+  .v-text-field {
+    margin: 10px;
   }
 </style>
