@@ -5,6 +5,8 @@ import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
 import RegisterForm from "@/components/RegisterForm";
+import DeleteUser from "@/components/DeleteUser";
+import DeleteUserComp from "@/components/DeleteComponent";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing";
 
@@ -36,7 +38,11 @@ const routes = [
     name: "RegisterForm",
     component: RegisterForm
   },
-
+  {
+    path: "/deleteUser",
+    name: "DeleteUser",
+    component: DeleteUser
+  },
   {
     path: "/listing/:id",
     name: "ListingDetails",
