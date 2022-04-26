@@ -1,18 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Landing from '../views/Landing.vue'
+//import Landing from '../views/Landing.vue'
 import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
 import NotFound from '../views/notFound.vue'
 import Login from '../views/Login'
 import RegisterForm from "@/components/RegisterForm";
 import ListingDetails from "@/components/Listing/ListingDetails";
+import Listing from "@/components/Listing";
 
 const routes = [
-  {
+  /*{
     path: '/',
     name: 'Landing',
     component: Landing
   },
+*/
   {
     path: '/Home',
     name: 'Home',
@@ -41,8 +43,11 @@ const routes = [
     component: ListingDetails,
     props: true
   },
-
-  
+  {
+    path: "/listing",
+    name: "Listing",
+    component: Listing
+  },
   // Redirect any none-existing path to 404 page
   {
     path: '/:catchAll(.*)',
