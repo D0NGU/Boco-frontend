@@ -1,6 +1,6 @@
 <template>
   <div>
-   <h3>My history</h3>
+   <h3>Min historikk</h3>
 
     <div v-if="!noRentals" v-for="rental in historyRentedProducts">
       <ListingCard
@@ -12,7 +12,7 @@
     </div>
 
     <div v-if="noRentals">
-      <p v-if="!error">You have not yet rented any products</p>
+      <p v-if="!error">Du har ingen leid produkter</p>
       <p v-else> {{ error }} </p>
       <v-btn
           color="blue-grey"
