@@ -101,9 +101,6 @@
 
 export default {
   name: "sortAndSearch",
-  props: {
-    products: Array,
-  },
   data() {
     return {
       sortByDialog: false,

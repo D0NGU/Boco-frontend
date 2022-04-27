@@ -13,6 +13,7 @@ export default {
         return axios.put(EDIT_USER_API_BASE_URL, productId, productToEdit);
     },
     newRental(dateFrom, dateTo, productId, userId) {
+        console.log(dateFrom, dateTo, productId, userId)
         const rental = {dateFrom: dateFrom, dateTo: dateTo, accepted: false, productId: productId, userId: userId}
         return axios.post(NEW_RENTAL_API_BASE_URL, rental)
     }

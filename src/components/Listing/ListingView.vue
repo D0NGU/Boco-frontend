@@ -1,6 +1,5 @@
 <template>
   <sort-and-search
-      :products="activeProducts"
       @search="updateList"
   />
   <div v-for="product in activeProducts">
@@ -36,10 +35,9 @@ export default {
   methods: {
     async getProducts() {
       if(this.ownerId === 0){
-        this.activeProducts = await getProducts(null, null, this.pageNumber, "product_id", true)
+        this.activeProducts = (await getProducts(null, null, this.pageNumber, "product_id", true))
       } else {
-        //TODO user id
-        this.activeProducts = await getProductsByUserId(this.pageNumber)
+        this.activeProducts = (await getProductsByUserId(this.ownerId, this.pageNumber)).products
       }
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){

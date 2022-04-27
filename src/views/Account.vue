@@ -44,8 +44,7 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <!-- TODO User id -->
-          <ListingView :ownerId="1"/>
+          <ListingView :ownerId="$store.state.myUserId"/>
         </v-window-item>
         <v-window-item value="history">
       <!--    <HistoryComponent /> Noe gale med denne komponenten, breaker hele siden -->
@@ -68,7 +67,6 @@ import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 export default {
     name: 'account',
   components: {ListingView, Settings, HistoryComponent},
-
 
   data() {
     return {
