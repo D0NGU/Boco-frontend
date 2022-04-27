@@ -17,15 +17,13 @@
 </template>
 
 <script>
-import userAccountService from "@/service/UserAccountService";
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
   name: "Settings",
   data () {
     return {
-      // TODO Få verdier fra backend/store
-      name: "",
-      email: "",
+      userInfo: '',
       oldPassword: "",
       newPassword: "",
       newPasswordRepeat: "",
@@ -36,7 +34,8 @@ export default {
   methods: {
     handleSaveClick(){
       if(this.newPassword === this.newPasswordRepeat){
-        userAccountService.editPassword(this.email, this.oldPassword, this.newPassword);
+        this.userInfo = UserAccountService.getUser(this.$store.state.myUserId)
+        UserAccountService.editPassword(this.userInfo.email, this.oldPassword, this.newPassword);
         this.confirmationSnackBar = true;
       }
     },

@@ -23,8 +23,7 @@
           <v-avatar size="x-large">
             <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
           </v-avatar>
-          <!-- TODO: Legg til navn og beskrivelse fra backend -->
-          <p class="text-button">Per Hansen</p>
+          <p class="text-button"> {{userInfo.fname}} {{userInfo.lname}} </p>
           <div>
             <p class="text-body-1">En veldig snill kar som liker å låne bort gjenstander :)</p>
           </div>
@@ -51,7 +50,6 @@
         </v-window-item>
         <v-window-item value="reviews">
           Mine anmeldelser komponent
-          <RentalRequest />
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
@@ -64,11 +62,11 @@
 import Settings from "@/components/UserProfile/Settings.vue";
 import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
-import RentalRequest from "@/components/Listing/RentalRequest";
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
     name: 'account',
-  components: {RentalRequest, ListingView, Settings, HistoryComponent},
+  components: { ListingView, Settings, HistoryComponent},
 
   data() {
     return {
@@ -77,12 +75,11 @@ export default {
       ratingRenter: 5,
       reviewsCount: '',
       tab: null,
+      userInfo: '',
     }
   },
-  methods: {
-      getRating(){
-        // TODO kjørt GET user også legg inn details
-      }
+  beforeMount() {
+      this.userInfo = UserAccountService.getUser(this.$store.state.myUserId)
   }
 }
 </script>

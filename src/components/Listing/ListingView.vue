@@ -16,7 +16,6 @@
 import ProductService from "@/service/ProductService";
 import ListingCard from "@/components/Listing/ListingCard";
 import SortAndSearch from "@/components/Misc/sortAndSearch";
-import {getProduct} from "@/service/ProductService";
 
 export default {
   name: "ListingView",
@@ -36,7 +35,7 @@ export default {
   methods: {
     async getProducts() {
       if(this.ownerId === 0){
-        this.activeProducts = (await getProduct(null, null, this.pageNumber, "product_id", true))
+        this.activeProducts = (await ProductService.getProducts(null, null, this.pageNumber, "product_id", true))
       } else {
         this.activeProducts = (await ProductService.getProductsByUserId(this.ownerId, this.pageNumber)).products
       }
