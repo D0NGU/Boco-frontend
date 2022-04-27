@@ -49,8 +49,7 @@ export default {
   methods: {
     async getHistory() {
       let myUserId = this.$store.state.myUserId;
-      let token = this.$store.state.token;
-      await UserAccountService.getUserRentalHistory(myUserId, token)
+      await UserAccountService.getUserRentalHistory(myUserId)
           .then(res => this.historyRentedProducts = res.data)
           .catch((err) => {
             this.error = "An error has occurred"
