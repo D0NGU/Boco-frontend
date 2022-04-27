@@ -52,7 +52,7 @@ export default {
       await UserAccountService.getUserRentalHistory(myUserId)
           .then(res => this.historyRentedProducts = res.data)
           .catch((err) => {
-            this.error = "An error has occurred"
+            this.error = "En feil har skjedd"
           })
 
       if (!this.historyRentedProducts.length){

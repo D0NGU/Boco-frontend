@@ -7,7 +7,7 @@ describe('testing UserAccountService.js', () => {
     it('test axios get for getUserRentalHistory api call', () => {
         jest.spyOn(axios, "get");
         //UserAccountService.getUserRentalHistory(3);  //does not work through ApiService
-        axios.get("http://localhost:8080/api/products/user/" + 3 + "/history")
+        axios.get("http://localhost:8080/api/products/user/" + "3" + "/history")
         expect(axios.get).toHaveBeenCalledTimes(1)
         expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/api/products/user/" + 3 + "/history")
         jest.clearAllMocks()

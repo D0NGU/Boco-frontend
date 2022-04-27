@@ -34,4 +34,5 @@ describe('LoginForm.vue', () => {
         expect(loginButton.element.textContent).toBe('Logg inn')
         expect(registerButton.element.textContent).toBe('Opprett ny bruker')
     });
+
 })
