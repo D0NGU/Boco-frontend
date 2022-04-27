@@ -1,13 +1,5 @@
 import LoginForm from "@/components/LoginForm";
 import { mount } from "@vue/test-utils";
-import axios from 'axios';
-
-jest.mock('vue', () => ({
-    axios: {
-        post: jest.fn()
-    },
-}));
-
 
 describe('LoginForm.vue', () => {
 
@@ -54,18 +46,4 @@ describe('LoginForm.vue', () => {
         expect(loginButton.element.textContent).toBe('Log in')
         expect(registerButton.element.textContent).toBe('Register new user')
     });
-
-    /*it('Trigger log in button', async () => {
-        const wrapper = mount(LoginForm);
-        jest.spyOn(axios, 'post');
-
-        expect(wrapper.find("#loginBtn").exists()).toBe(true);
-
-        const loginButton = wrapper.find("#loginBtn");
-
-        await loginButton.trigger("click");
-        expect(axios.post).toHaveBeenCalledTimes(1);
-
-    });*/
-
 })
