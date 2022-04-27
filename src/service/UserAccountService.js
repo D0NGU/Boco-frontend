@@ -2,7 +2,7 @@ import {getApiClient} from "@/service/ApiService";
 
 export default {
     getUserRentalHistory(myUserId) {
-        return getApiClient('products/user/' + myUserId + "/history")
+        return getApiClient.get("products/user/" + myUserId + "/history")
     },
 
     delete(userId, fname, lname, email, password){
