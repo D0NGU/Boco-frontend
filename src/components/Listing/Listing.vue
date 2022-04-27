@@ -73,16 +73,47 @@
         </v-radio-group>
       </div>
 
-      <div>
-        <label>Fra dato:</label>
-      </div>
-      <div>
-        <input
-            id="fromDate"
-            v-model="fromDate"
-            type="date"
-        >
-      </div>
+      <v-container class="grey lighten-5">
+        <v-row no-gutters>
+          <v-col order="1">
+            <v-card
+              class="pa-2"
+              outlined
+              tile>
+              <div>
+                <label>Fra dato:</label>
+              </div>
+              <div>
+                <input
+                    id="fromDate"
+                    v-model="fromDate"
+                    type="date"
+                >
+              </div>
+            </v-card>
+          </v-col>
+          <v-col order="2">
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+            >
+              <div>
+                <label>Til dato:</label>
+              </div>
+              <div>
+                <input
+                    id="toDate"
+                    v-model="toDate"
+                    type="date"
+                >
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+
+
       <div>
         <v-text-field
             v-model="adAddress"
@@ -140,6 +171,7 @@ export default {
       adPrice: '',
       pricePer: '',
       fromDate: '',
+      toDate: '',
       adAddress: '',
       adPhone: '',
       switch1: false,
@@ -159,24 +191,25 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
+      created() {
+        this.getCategoriesSelect();
+      },
     }
-
   },
   methods: {
-    getCategories() {
+    getCategoriesSelect() {
       ListingsService.getCategories().then((response) => {
         this.categories = response.data;
       });
     },
-    created() {
-      this.getCategories();
-    },
+
+    //This works, but won't run because of backend
     async saveAd() {
       this.dialog = true;
       this.createdStatus = true;
       console.log("Listing was created.")
       let tempStat = '';
-      await ListingsService.create(3, this.adName, this.adDescription, this.adAddress, this.adPrice,false, this.fromDate, '2025-12-31', 1, "sport").then(response => {
+      await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
         tempStat = response.status;
       }).catch((error) => {
         if(error.response) {
