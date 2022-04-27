@@ -27,6 +27,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
 import ListingsService from "@/service/ListingsService";
+import RentalService from "@/service/RentalService";
 
 export default {
   name: "ListingDetails",
@@ -54,7 +55,7 @@ export default {
       if(this.date !== undefined && this.date !== null){
         const dateFrom = new Date(this.date[0].getFullYear()+"/"+(this.date[0].getMonth()+1)+"/"+this.date[0].getDate());
         const dateTo = new Date(this.date[1].getFullYear()+"/"+(this.date[1].getMonth()+1)+"/"+this.date[1].getDate());
-        await ListingsService.newRental(dateFrom, dateTo, this.itemId, this.$store.state.myUserId)
+        await RentalService.newRental(dateFrom, dateTo, this.itemId, this.$store.state.myUserId)
       } else {
         this.invalidDate = true;
         setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 1);

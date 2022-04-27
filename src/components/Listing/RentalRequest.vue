@@ -5,15 +5,30 @@
       <p>Renter Name</p>
       <p>Dato</p>
       <p>Totalpris?</p>
-      <v-btn color="success" class="rentalButton">Godkjenn</v-btn>
-      <v-btn color="error" class="rentalButton">Avslå</v-btn>
+      <v-btn color="success" class="rentalButton" @click="acceptRental">Godkjenn</v-btn>
+      <v-btn color="error" class="rentalButton" @click="denyRental">Avslå</v-btn>
     </div>
   </v-card>
 </template>
 
 <script>
+import RentalService from "@/service/RentalService";
+
 export default {
-  name: "RentalRequest"
+  name: "RentalRequest",
+  props: {
+    rentalId: Number,
+    name: '',
+    date: '',
+  },
+  methods: {
+    acceptRental(){
+      RentalService.accept(this.rentalId)
+    },
+    denyRental(){
+      RentalService.deny(this.rentalId)
+    }
+  },
 }
 </script>
 
