@@ -33,18 +33,19 @@ describe('ListingDetails.vue', () => {
         console.log = jest.fn();
         const wrapper = shallowMount(ListingDetails);
         const store = createVuexStore()
-        store.commit('SET_MYUSERID', 2)
+        store.commit('SET_MYUSERID', 6)
         var date = new Date();
 
-        expect(store.state.myUserId).toBe(2)
+        expect(store.state.myUserId).toBe(6)
         await wrapper.setData({date: [{date}, {date}]})
         await wrapper.setProps({itemId: '1'})
         const button = wrapper.find('v-btn')
 
-        expect(wrapper.vm.itemId).toBe(1)
+        expect(wrapper.vm.itemId).toBe('1')
 
         expect(wrapper.find('#requestSent').exists()).toBe(false);
         await button.trigger('click')
+        // This does not work and I am getting angry
         expect(wrapper.find('#requestSent').exists()).toBe(true);
     })
 })

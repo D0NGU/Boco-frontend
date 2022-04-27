@@ -4,7 +4,7 @@ export default createStore({
   state: {
     loggedIn: false,
     token: '',
-    myUserId: 2,
+    myUserId: '',
   },
   getters: {
   },
