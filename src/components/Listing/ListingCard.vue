@@ -7,10 +7,12 @@
     <div class="itemDetail">
       <p class="text-subtitle-1">{{ itemName }}</p>
       <p class="text-caption">{{itemPrice}} kr/dag</p>
+      <!-- HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
       <p class="text-overline" id="itemOwner">
         <v-avatar size="x-small">
         <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
       </v-avatar> {{itemOwnerName}} </p>
+
     </div>
   </v-card>
 </template>
@@ -41,7 +43,7 @@ export default {
     }
   },
   beforeMount() {
-    //this.itemOwnerName
+    // TODO this.itemOwnerName
   }
 }
 </script>

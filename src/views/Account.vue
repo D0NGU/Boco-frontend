@@ -44,14 +44,14 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <!-- TODO User id -->
-          <ListingView :ownerId="1"/>
+          <ListingView :ownerId="$store.state.myUserId"/>
         </v-window-item>
         <v-window-item value="history">
           <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
           Mine anmeldelser komponent
+          <RentalRequest />
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
@@ -64,11 +64,11 @@
 import Settings from "@/components/UserProfile/Settings.vue";
 import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
+import RentalRequest from "@/components/Listing/RentalRequest";
 
 export default {
     name: 'account',
-  components: {ListingView, Settings, HistoryComponent},
-
+  components: {RentalRequest, ListingView, Settings, HistoryComponent},
 
   data() {
     return {

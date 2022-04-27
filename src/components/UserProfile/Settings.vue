@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import { editPassword } from '@/service/UserAccountService.js'
+import userAccountService from "@/service/UserAccountService";
+
 export default {
   name: "Settings",
   data () {
@@ -35,7 +36,7 @@ export default {
   methods: {
     handleSaveClick(){
       if(this.newPassword === this.newPasswordRepeat){
-        editPassword(this.email, this.oldPassword, this.newPassword);
+        userAccountService.editPassword(this.email, this.oldPassword, this.newPassword);
         this.confirmationSnackBar = true;
       }
     },

@@ -74,12 +74,14 @@ export default {
   methods: {
     async logInButton() {
       let tempStat = '';
-      let userId = 0;
+      let userId = '';
+      let token = '';
       if (this.$refs.loginform.validate()) {
         console.log("Form is validated")
         await LoginService.handleClickSignIn(this.email, this.password).then(response => {
           tempStat = response.status;
-          userId = response.data;
+          userId = response.data.id;
+          token = response.data.token;
         }).catch((error) => {
           if (error.response) {
             tempStat = error.response.status;
@@ -89,8 +91,7 @@ export default {
 
       if (tempStat === 200){
         this.loginStatus = "Successfull login";
-        this.$store.commit('SET_STATUS', true);
-        this.$store.commit('SET_MYUSERID', userId);
+        this.$store.dispatch("login", {token: token, userID: userId,});
         await this.$router.push('/Home');
       } else if (tempStat === 403) {
         this.dialog = true

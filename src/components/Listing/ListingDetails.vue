@@ -14,6 +14,7 @@
     </div>
     <div id="requestForm">
       <v-alert type="error" v-if="invalidDate" id="errorBox">Du må legge til en dato</v-alert>
+      <v-alert type="success" v-if="requestSent" id="requestSent">Forespørselen ble sendt!</v-alert>
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
       <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :min-date="productInfo.availableFrom" :max-date="productInfo.availableTo"></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
@@ -25,7 +26,6 @@
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
-import { getListing } from "@/service/ApiService";
 import ListingsService from "@/service/ListingsService";
 
 export default {
@@ -39,13 +39,14 @@ export default {
     return {
       date: ref(),
       invalidDate: false,
+      requestSent: false,
       productInfo: '',
       ownerInfo: '',
     }
   },
   methods: {
     async getListingInfo(){
-      const product = await getListing(this.itemId)
+      const product = await ListingsService.getListing(this.itemId)
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
     },
