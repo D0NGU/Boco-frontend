@@ -14,11 +14,17 @@ export default {
         return apiService.getApiClient(token).get(`/user/${email}`);
     },
 
-    getUserRentalHistory(myUserId) {
-        return axios.get("http://localhost:8080/api/products/user/" + myUserId + "/history")
+    getUserRentalHistory(myUserId, tok) {
+        const url = "http://localhost:8080/api/products/user/" + myUserId + "/history"
+        const token = tok;
+        return axios.get(url, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'Bearer ' + token
+            }
+        })
     }
-
-
 }
 
 export function editPassword (email, oldPassword, newPassword) {

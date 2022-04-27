@@ -23,7 +23,6 @@
       </v-btn>
     </div>
 
-
   </div>
 </template>
 
@@ -50,7 +49,8 @@ export default {
   methods: {
     async getHistory() {
       let myUserId = this.$store.state.myUserId;
-      await UserAccountService.getUserRentalHistory(myUserId)
+      let token = this.$store.state.token;
+      await UserAccountService.getUserRentalHistory(myUserId, token)
           .then(res => this.historyRentedProducts = res.data)
           .catch((err) => {
             this.error = "An error has occurred"
@@ -67,10 +67,6 @@ export default {
       this.getHistory();
     }
   },
-  /*beforeMount() {
-    this.getHistory()
-  }*/
-
 }
 </script>
 
