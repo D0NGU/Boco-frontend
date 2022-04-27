@@ -142,7 +142,7 @@ export default {
       fromDate: '',
       adAddress: '',
       adPhone: '',
-      switch1: '',
+      switch1: false,
       categories: [],
       createdStatus: false,
       dialog: false,
@@ -175,23 +175,17 @@ export default {
       this.dialog = true;
       this.createdStatus = true;
       console.log("Listing was created.")
-      const listingCreated = {
-        adName: this.adName,
-        adDescription: this.adDescription,
-        adAddress: this.adAddress,
-        adPrice: this.adPrice,
-        switch1: this.switch1,
-        adPhone: this.adPhone,
-        defaultCategory: this.defaultCategory
-      };
-
-      await axios.post('http://localhost:8080/api/products/new', listingCreated).then(response => {
-        this.createdStatus = response.data
+      let tempStat = '';
+      await ListingsService.create(3, this.adName, this.adDescription, this.adAddress, this.adPrice,false, this.fromDate, '2025-12-31', 1, "sport").then(response => {
+        tempStat = response.status;
       }).catch((error) => {
-        if (error.response) {
-          this.createdStatus = error.response.data;
+        if(error.response) {
+          tempStat = error.response.status;
         }
       })
+      if(tempStat === 201){
+        this.createdStatus = true;
+      }
     },
   },
 }
