@@ -12,9 +12,17 @@
     </div>
 
     <div v-if="noRentals">
-      <p v-if="!error"> You have not yet rented any products </p>
-      <p v-else> {{ error }}</p>
+      <p v-if="!error">You have not yet rented any products</p>
+      <p v-else> {{ error }} </p>
+      <v-btn
+          color="blue-grey"
+          class="ma-2 white--text"
+          @click="refresh"
+      >Refresh
+        <v-icon left dark>mdi-cached</v-icon>
+      </v-btn>
     </div>
+
 
   </div>
 </template>
@@ -54,10 +62,14 @@ export default {
         this.noRentals = false
       }
     },
+
+    refresh() {
+      this.getHistory();
+    }
   },
-  beforeMount() {
-    this.getHistory();
-  }
+  /*beforeMount() {
+    this.getHistory()
+  }*/
 
 }
 </script>
