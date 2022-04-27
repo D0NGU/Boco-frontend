@@ -1,7 +1,4 @@
-//import { getApiClient } from "@/service/ApiService";
-import ApiService from "@/service/ApiService";
-import axios from "axios";
-import store from "@/store";
+import { getApiClient } from "@/service/ApiService";
 
 export default {
     getProductById(id, pageNumber) {
@@ -13,15 +10,10 @@ export default {
         return getApiClient.get('products/user/'+id)
     },
 
-    /*getProducts(searchWord, category, pageNumber, sortBy, ascending) {
+    getProducts(searchWord, category, pageNumber, sortBy, ascending) {
         const searchParams = {q: searchWord, category: category, page: pageNumber, sortBy: sortBy, ascending: ascending}
         return getApiClient.get('products/search/', {
             params: {searchParams}
         })
-    },*/
-    searchForProducts(token, page, sortBy) {
-
-        return ApiService.getApiClient(token).get(`/products/search?page=${page}&sortBy=${sortBy}&ascending=false`);
-
-    }
+    },
 }
