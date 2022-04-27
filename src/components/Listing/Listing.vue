@@ -207,7 +207,6 @@ export default {
     //This works, but won't run because of backend
     async saveAd() {
       this.dialog = true;
-      this.createdStatus = true;
       console.log("Listing was created.")
       let tempStat = '';
       await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
@@ -219,6 +218,11 @@ export default {
       })
       if(tempStat === 201){
         this.createdStatus = true;
+        this.$store.commit('SET_MYLISTINGNAME', this.adName)
+        this.$store.commit('SET_MYLISTINGDES', this.adDescription)
+        this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
+        this.$store.commit('SET_MYADDRESS', this.adAddress)
+        this.$store.commit('SET_MYPHONE', this.adPhone)
       }
     },
   },
