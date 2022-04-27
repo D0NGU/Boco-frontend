@@ -26,7 +26,6 @@
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
-import { getListing } from "@/service/ApiService";
 import ListingsService from "@/service/ListingsService";
 
 export default {
@@ -47,7 +46,7 @@ export default {
   },
   methods: {
     async getListingInfo(){
-      const product = await getListing(this.itemId)
+      const product = await ListingsService.getListing(this.itemId)
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
     },

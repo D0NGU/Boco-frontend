@@ -1,38 +1,22 @@
-import apiService from "@/service/ApiService";
-import axios from "axios";
-import store from "@/store";
+import {getApiClient} from "@/service/ApiService";
 
 export default {
-   
-    /**
-     * Gets the user details of the user associated with the given email
-     *
-     * @param email
-     * @returns {Promise<AxiosResponse<any>>}
-     */
-    getUserAccountDetails(email, token) {
-        return apiService.getApiClient(token).get(`/user/${email}`);
+    getUserRentalHistory(myUserId) {
+        return getApiClient('products/user/' + myUserId + "/history")
     },
 
-    getUserRentalHistory(myUserId) {
-        return axios.get("http://localhost:8080/api/products/user/" + myUserId + "/history")
+    delete(userId, fname, lname, email, password){
+        const userToDelete = {  fname: fname, lname: lname, email: email, password: password };
+        return getApiClient.delete('user/', {
+            params: {userToDelete}
+        })
+    },
+
+    editPassword (email, oldPassword, newPassword) {
+        const userDetails = {email: email, oldPassword: oldPassword, newPassword: newPassword}
+        return getApiClient.put('user/', { userDetails })
+
     }
-
-
 }
 
-export function editPassword (email, oldPassword, newPassword) {
-    const userDetails = {email: email, oldPassword: oldPassword, newPassword: newPassword}
-    return axios.put('http://localhost:8080/api/user/', {
-        userDetails,
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + store.getters.token
-        }
-    })
-        .then((response) => {
-            return response.data;
-        });
-}
 

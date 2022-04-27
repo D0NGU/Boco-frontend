@@ -43,7 +43,7 @@ export default {
     }
   },
   beforeMount() {
-    //this.itemOwnerName
+    // TODO this.itemOwnerName
   }
 }
 </script>
