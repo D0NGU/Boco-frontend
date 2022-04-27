@@ -24,7 +24,7 @@ export default {
     itemPrice: Number,
     itemOwner: Number,
     itemImage: Image,
-    itemId: Number,
+    itemId: [Number, String],
   },
   data () {
     return {

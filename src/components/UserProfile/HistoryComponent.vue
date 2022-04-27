@@ -2,14 +2,27 @@
   <div>
    <h3>My history</h3>
 
-    <div v-for="product in historyProducts">
+    <div v-if="!noRentals" v-for="rental in historyRentedProducts">
       <ListingCard
-          :itemName="product.name"
-          :itemOwner="product.userId"
-          :itemPrice="product.price"
-          :itemId="product.itemId"
+          :itemName="rental.title"
+          :itemOwner="rental.userId"
+          :itemPrice="rental.price"
+          :itemId="rental.productId"
       />
     </div>
+
+    <div v-if="noRentals">
+      <p v-if="!error">You have not yet rented any products</p>
+      <p v-else> {{ error }} </p>
+      <v-btn
+          color="blue-grey"
+          class="ma-2 white--text"
+          @click="refresh"
+      >Refresh
+        <v-icon left dark>mdi-cached</v-icon>
+      </v-btn>
+    </div>
+
 
   </div>
 </template>
@@ -17,6 +30,7 @@
 
 <script>
 import ListingCard from "@/components/Listing/ListingCard";
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
   name: "HistoryComponent",
@@ -27,17 +41,35 @@ export default {
 
   data () {
     return {
-      historyProducts: [
-        //TEST LIST
-        {name: "Hammer", description: "Den hamrer bra", address: "Hakkebakkeskogen", price: 30, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-        {name: "Sag", description: "Den sager bra", address: "Hakkebakkeskogen", price: 15, unlisted: false, availableFrom: "24-01-2023", availableTo: "22-03-2023", userId: "1", category: "Verktøy"},
-      ],
+      historyRentedProducts: [],
+      noRentals: true,
+      error: '',
     }
   },
 
   methods: {
+    async getHistory() {
+      let myUserId = this.$store.state.myUserId;
+      await UserAccountService.getUserRentalHistory(myUserId)
+          .then(res => this.historyRentedProducts = res.data)
+          .catch((err) => {
+            this.error = "An error has occurred"
+          })
 
-  }
+      if (!this.historyRentedProducts.length){
+        this.noRentals = true;
+      } else {
+        this.noRentals = false
+      }
+    },
+
+    refresh() {
+      this.getHistory();
+    }
+  },
+  /*beforeMount() {
+    this.getHistory()
+  }*/
 
 }
 </script>

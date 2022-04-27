@@ -12,7 +12,13 @@ export default {
      */
     getUserAccountDetails(email, token) {
         return apiService.getApiClient(token).get(`/user/${email}`);
+    },
+
+    getUserRentalHistory(myUserId) {
+        return axios.get("http://localhost:8080/api/products/user/" + myUserId + "/history")
     }
+
+
 }
 
 export function editPassword (email, oldPassword, newPassword) {

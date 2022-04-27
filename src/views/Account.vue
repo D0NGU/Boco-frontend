@@ -47,7 +47,7 @@
           <ListingView :ownerId="$store.state.myUserId"/>
         </v-window-item>
         <v-window-item value="history">
-      <!--    <HistoryComponent /> Noe gale med denne komponenten, breaker hele siden -->
+          <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
           Mine anmeldelser komponent
