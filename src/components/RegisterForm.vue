@@ -5,36 +5,36 @@
           @submit.prevent="submit"
           v-model="valid"
           lazy-validation>
-    <h1 id="title">Register</h1>
+    <h1 id="title">Opprett bruker</h1>
 
     <div id="test">
-      <label id="fnL">First Name:</label>
       <v-text-field
           id="firstname"
           :rules="rulesApplyToAll"
-          v-model="firstname">
+          v-model="firstname"
+          label="Fornavn">
       </v-text-field>
 
-      <label id="lnL">Last Name:</label>
       <v-text-field
           id="lastname"
           :rules="rulesApplyToAll"
-          v-model="lastname">
+          v-model="lastname"
+          label="Etternavn">
       </v-text-field>
 
-      <label id="emLab">Email:</label>
       <v-text-field
           id="email"
           :rules="emailRules"
-          v-model="email">
+          v-model="email"
+          label="E-postadresse">
       </v-text-field>
 
-      <label id="passLab">Password:</label>
       <v-text-field
           id="password"
           :rules="rulesApplyToAll"
           v-model="password"
           :type="show ?'text': 'password'"
+          label="Passord"
           @click:append="show=!show">
       </v-text-field>
 
@@ -50,7 +50,7 @@
             color="#CFD8DC"
             dark
             @click.stop="submit"
-        >Register</v-btn>
+        >Opprett bruker</v-btn>
 
         <v-dialog id="popOut" v-model="dialog">
           <v-card>
@@ -65,7 +65,7 @@
                   text
                   @click=close()
               >
-                Close
+                Lukk
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -76,12 +76,13 @@
     <div id="back">
       <v-btn
           @click="goToLoginPage"
+          id="backToLoginButton"
           class="ma-2"
           color="grey darken-2"
           dark>
         <v-icon dark left>
           mdi-arrow-left
-        </v-icon>Back to Login
+        </v-icon>Logg inn
       </v-btn>
     </div>
   </v-form>
@@ -157,12 +158,28 @@ export default {
   margin-top: 30px;
 }
 
+h1 {
+  margin-bottom: 30px;
+}
+
 #test {
   width: 300px;
 }
 
 #back {
   padding: 15px;
+}
+
+#rBtn {
+  background-color: var(--bocoBlue) !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+#backToLoginButton {
+  background-color: white !important;
+  color: var(--bocoBlue) !important;
+  font-weight: bold;
 }
 
 </style>
