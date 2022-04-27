@@ -79,7 +79,8 @@
             <v-card
               class="pa-2"
               outlined
-              tile>
+              tile
+            >
               <div>
                 <label>Fra dato:</label>
               </div>
