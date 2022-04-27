@@ -6,6 +6,6 @@ export const getApiClient = axios.create({
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + store.getters.token
+        Authorization: `Bearer ${store.getters.token}`
     }
 })
