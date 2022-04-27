@@ -163,7 +163,7 @@ h1 {
 }
 
 #test {
-  width: 300px;
+  width: 350px;
 }
 
 #back {

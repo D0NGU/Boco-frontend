@@ -142,7 +142,7 @@ export default {
 }
 
 #inputWrapper {
-  width: 300px;
+  width: 350px;
 }
 
 label {
