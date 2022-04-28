@@ -71,16 +71,46 @@
           </v-radio-group>
         </div>
 
-        <div>
-          <label>Fra dato:</label>
-        </div>
-        <div>
-          <input
-              id="fromDate"
-              v-model="fromDate"
-              type="date"
-          />
-        </div>
+        <v-container class="grey lighten-5">
+          <v-row no-gutters>
+            <v-col order="1">
+              <v-card
+                  class="pa-2"
+                  outlined
+                  tile
+              >
+                <div>
+                  <label>Fra dato:</label>
+                </div>
+                <div>
+                  <input
+                      id="fromDate"
+                      v-model="fromDate"
+                      type="date"
+                  >
+                </div>
+              </v-card>
+            </v-col>
+            <v-col order="2">
+              <v-card
+                  class="pa-2"
+                  outlined
+                  tile
+              >
+                <div>
+                  <label>Til dato:</label>
+                </div>
+                <div>
+                  <input
+                      id="toDate"
+                      v-model="toDate"
+                      type="date"
+                  >
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
         <div>
           <v-text-field
               v-model="adAddress"
@@ -156,14 +186,15 @@ export default {
   data () {
     return {
       //TODO: Få produktinformasjon fra backend
-      adName: "Hammer",
-      adDescription:'',
-      adPrice:'',
+      adName: this.$store.state.myListingName,
+      adDescription:this.$store.state.myListingDes,
+      adPrice:this.$store.state.myListingPrice,
       pricePer:'',
       fromDate:'',
-      adAddress:'',
-      adPhone:'',
-      switch1:'',
+      toDate: '',
+      adAddress:this.$store.state.myAddress,
+      adPhone:this.$store.state.myPhone,
+      switch1:this.$store.state.unlisted,
       categories: [],
       createdStatus: false,
       dialog: false,
@@ -180,6 +211,9 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
+      created() {
+        this.getCategories();
+      },
     }
   },
   methods: {
@@ -188,22 +222,27 @@ export default {
         this.categories = response.data;
       });
     },
-    created() {
-      this.getCategories();
-    },
     async updateAd(){
+      let tempStat;
       this.dialog = true;
       this.createdStatus = true;
-      console.log("Listing was created.")
-      const listingUpdated = {adName: this.adName, adDescription: this.adDescription, adAddress: this.adAddress, adPrice: this.adPrice, switch1: this.switch1, adPhone: this.adPhone, defaultCategory: this.defaultCategory};
-
-      await axios.post('http://localhost:8080/api/products/edit/1', listingUpdated).then(response => {
-        this.createdStatus = response.data
+      console.log("Listing was updated.")
+      await ListingsService.edit(null, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
+        tempStat = response.data
       }).catch((error) => {
         if(error.response){
-          this.createdStatus = error.response.data;
+          tempStat = error.response.data;
         }
       })
+      if(tempStat === 201){
+        this.createdStatus = true;
+        this.$store.commit('SET_MYLISTINGNAME', this.adName)
+        this.$store.commit('SET_MYLISTINGDES', this.adDescription)
+        this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
+        this.$store.commit('SET_MYADDRESS', this.adAddress)
+        this.$store.commit('SET_MYPHONE', this.adPhone)
+        this.$store.commit('SET_UNLISTED', this.switch1)
+      }
     },
   },
 }

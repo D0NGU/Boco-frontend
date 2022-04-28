@@ -73,16 +73,48 @@
         </v-radio-group>
       </div>
 
-      <div>
-        <label>Fra dato:</label>
-      </div>
-      <div>
-        <input
-            id="fromDate"
-            v-model="fromDate"
-            type="date"
-        >
-      </div>
+      <v-container class="grey lighten-5">
+        <v-row no-gutters>
+          <v-col order="1">
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+            >
+              <div>
+                <label>Fra dato:</label>
+              </div>
+              <div>
+                <input
+                    id="fromDate"
+                    v-model="fromDate"
+                    type="date"
+                >
+              </div>
+            </v-card>
+          </v-col>
+          <v-col order="2">
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+            >
+              <div>
+                <label>Til dato:</label>
+              </div>
+              <div>
+                <input
+                    id="toDate"
+                    v-model="toDate"
+                    type="date"
+                >
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+
+
       <div>
         <v-text-field
             v-model="adAddress"
@@ -140,9 +172,10 @@ export default {
       adPrice: '',
       pricePer: '',
       fromDate: '',
+      toDate: '',
       adAddress: '',
       adPhone: '',
-      switch1: '',
+      switch1: false,
       categories: [],
       createdStatus: false,
       dialog: false,
@@ -159,39 +192,39 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
+      created() {
+        this.getCategoriesSelect();
+      },
     }
-
   },
   methods: {
-    getCategories() {
+    getCategoriesSelect() {
       ListingsService.getCategories().then((response) => {
         this.categories = response.data;
       });
     },
-    created() {
-      this.getCategories();
-    },
+
+    //This works, but won't run because of backend
     async saveAd() {
       this.dialog = true;
-      this.createdStatus = true;
       console.log("Listing was created.")
-      const listingCreated = {
-        adName: this.adName,
-        adDescription: this.adDescription,
-        adAddress: this.adAddress,
-        adPrice: this.adPrice,
-        switch1: this.switch1,
-        adPhone: this.adPhone,
-        defaultCategory: this.defaultCategory
-      };
-
-      await axios.post('http://localhost:8080/api/products/new', listingCreated).then(response => {
-        this.createdStatus = response.data
+      let tempStat = '';
+      await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
+        tempStat = response.status;
       }).catch((error) => {
-        if (error.response) {
-          this.createdStatus = error.response.data;
+        if(error.response) {
+          tempStat = error.response.status;
         }
       })
+      if(tempStat === 201){
+        this.createdStatus = true;
+        this.$store.commit('SET_MYLISTINGNAME', this.adName)
+        this.$store.commit('SET_MYLISTINGDES', this.adDescription)
+        this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
+        this.$store.commit('SET_MYADDRESS', this.adAddress)
+        this.$store.commit('SET_MYPHONE', this.adPhone)
+        this.$store.commit('SET_UNLISTED', this.switch1)
+      }
     },
   },
 }
