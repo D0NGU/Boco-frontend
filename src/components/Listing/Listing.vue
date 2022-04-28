@@ -213,15 +213,6 @@ export default {
           tempStat = error.response.status;
         }
       })
-      if(tempStat === 201){
-        this.createdStatus = true;
-        this.$store.commit('SET_MYLISTINGNAME', this.adName)
-        this.$store.commit('SET_MYLISTINGDES', this.adDescription)
-        this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
-        this.$store.commit('SET_MYADDRESS', this.adAddress)
-        this.$store.commit('SET_MYPHONE', this.adPhone)
-        this.$store.commit('SET_UNLISTED', this.switch1)
-      }
     },
   },
    beforeMount(){

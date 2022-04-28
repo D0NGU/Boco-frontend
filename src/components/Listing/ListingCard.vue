@@ -19,6 +19,7 @@
 
 <script>
 import router from "@/router";
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
   props: {
@@ -42,8 +43,9 @@ export default {
       }
     }
   },
-  beforeMount() {
-    // TODO this.itemOwnerName
+  async beforeMount() {
+    const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
+    this.itemOwnerName = userInfo.fname + " " + userInfo.lname
   }
 }
 </script>

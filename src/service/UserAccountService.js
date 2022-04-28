@@ -15,7 +15,7 @@ export default {
 
     editPassword (email, oldPassword, newPassword) {
         const userDetails = {email: email, oldPassword: oldPassword, newPassword: newPassword}
-        return getApiClient.put('user/', { userDetails })
+        return getApiClient.post('user/edit/', userDetails )
     },
 
     getUser(userId) {

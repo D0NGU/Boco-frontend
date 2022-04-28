@@ -168,7 +168,7 @@
       <div>
         <v-btn
             id="cancelButton"
-            onclick="location.href='/'"
+            onclick="router.push({name: 'Account'})"
         >Avbryt
         </v-btn>
       </div>
