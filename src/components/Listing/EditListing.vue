@@ -21,7 +21,7 @@
           ></v-text-field>
         </div>
 
-        <div>
+<!--        <div>
           <v-file-input
               label="Last opp bildene"
               hide-details="auto"
@@ -30,14 +30,13 @@
               chips
               prepend-icon="mdi-camera"
           />
-        </div>
+        </div>-->
 
         <div>
           <v-select
-              v-model="categories"
+              v-model="selectedCategory"
               :items="categories"
               label="Kategori"
-              hide-details="auto"
               outlined
               prepend-icon="mdi-widgets"
           ></v-select>
@@ -196,6 +195,7 @@ export default {
       adPhone:this.$store.state.myPhone,
       switch1:this.$store.state.unlisted,
       categories: [],
+      selectedCategory: '',
       createdStatus: false,
       dialog: false,
       rules: [
@@ -211,16 +211,14 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
-      created() {
-        this.getCategories();
-      },
     }
   },
   methods: {
-    getCategories(){
-      ListingsService.getCategories().then((response) => {
-        this.categories = response.data;
-      });
+    async getCategories(){
+      const categories = (await ListingsService.getCategories()).data
+      categories.forEach(cat => {
+        this.categories.push(cat.category)
+      })
     },
     async updateAd(){
       let tempStat;
@@ -245,6 +243,9 @@ export default {
       }
     },
   },
+  beforeMount() {
+    this.getCategories();
+  }
 }
 </script>
 

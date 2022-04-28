@@ -23,7 +23,7 @@
         ></v-text-field>
       </div>
       <div>
-        <v-file-input
+<!--        <v-file-input
             v-bind:value="adPicture"
             v-on:input="adPicture = $event.target.value"
             label="Last opp bildene"
@@ -32,15 +32,13 @@
             multiple
             chips
             prepend-icon="mdi-camera"
-        />
+        />-->
       </div>
       <div>
         <v-select
             v-model="adCategory"
-            :items="items"
+            :items="categories"
             label="Kategori"
-            :rules="rulesSelect"
-            hide-details="auto"
             outlined
             prepend-icon="mdi-widgets"
         ></v-select>
@@ -167,6 +165,7 @@ export default {
   name: "AdPage",
   data() {
     return {
+      adCategory: '',
       adName: '',
       adDescription: '',
       adPrice: '',
@@ -192,16 +191,14 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
-      created() {
-        this.getCategoriesSelect();
-      },
     }
   },
   methods: {
-    getCategoriesSelect() {
-      ListingsService.getCategories().then((response) => {
-        this.categories = response.data;
-      });
+    async getCategoriesSelect() {
+      const categories = (await ListingsService.getCategories()).data
+      categories.forEach(cat => {
+        this.categories.push(cat.category)
+      })
     },
 
     //This works, but won't run because of backend
@@ -227,6 +224,9 @@ export default {
       }
     },
   },
+   beforeMount(){
+    this.getCategoriesSelect();
+  }
 }
 //TODO Få den valgte kategorien til å vises for bruker
 </script>
