@@ -233,11 +233,20 @@ export default {
 
 <style scoped>
 .container {
-padding: 1em;
+  box-shadow: none;
+  margin: 0 auto;
+  width: 350px;
 }
 
-div{
-margin: 0.4em;
+
+
+.v-text-field, .v-file-input {
+  margin-bottom: 22px;
+}
+
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 #createAdButton{
@@ -248,5 +257,9 @@ font-weight: bold;
 #cancelButton{
 color: var(--bocoBlue);
 font-weight: bold;
+}
+
+#createAdButton {
+  margin-bottom: 10px;
 }
 </style>

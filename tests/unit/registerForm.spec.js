@@ -8,25 +8,7 @@ describe('RegisterForm.vue', () => {
         expect(wrapper.find("#title").exists()).toBe(true);
         const title = wrapper.find("#title");
 
-        expect(title.text()).toBe('Register')
-    });
-
-    it('Test if all labels renders', () => {
-        const wrapper = mount(RegisterForm);
-        expect(wrapper.find("#fnL").exists()).toBe(true);
-        expect(wrapper.find("#lnL").exists()).toBe(true);
-        expect(wrapper.find("#emLab").exists()).toBe(true);
-        expect(wrapper.find("#passLab").exists()).toBe(true);
-
-        const fnL = wrapper.find("#fnL");
-        const lnL = wrapper.find("#lnL");
-        const emLab = wrapper.find("#emLab");
-        const passLab = wrapper.find("#passLab");
-
-        expect(fnL.text()).toBe('First Name:');
-        expect(lnL.text()).toBe('Last Name:');
-        expect(emLab.text()).toBe('Email:');
-        expect(passLab.text()).toBe('Password:');
+        expect(title.text()).toBe('Opprett bruker')
     });
 
     it('Test if input field renders', () => {
@@ -49,11 +31,15 @@ describe('RegisterForm.vue', () => {
 
     });
 
-    it('Test if register button renders', () => {
+    it('Test if buttons renders', () => {
         const wrapper = mount(RegisterForm);
         expect(wrapper.find("#rBtn").exists()).toBe(true);
+        expect(wrapper.find("#backToLoginButton").exists()).toBe(true);
 
         const registerButton = wrapper.find("#rBtn");
-        expect(registerButton.text()).toBe('Register')
+        const backToLoginBtn = wrapper.find("#backToLoginButton");
+
+        expect(registerButton.text()).toBe('Opprett bruker')
+        expect(backToLoginBtn.text()).toContain('Logg inn')
     });
 })

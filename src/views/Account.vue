@@ -23,8 +23,7 @@
           <v-avatar size="x-large">
             <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
           </v-avatar>
-          <!-- TODO: Legg til navn og beskrivelse fra backend -->
-          <p class="text-button">Per Hansen</p>
+          <p class="text-button"> {{name}} </p>
           <div>
             <p class="text-body-1">En veldig snill kar som liker å låne bort gjenstander :)</p>
           </div>
@@ -44,8 +43,7 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <!-- TODO User id -->
-          <ListingView :ownerId="1"/>
+          <ListingView :ownerId="$store.state.myUserId"/>
         </v-window-item>
         <v-window-item value="history">
           <HistoryComponent/>
@@ -64,25 +62,26 @@
 import Settings from "@/components/UserProfile/Settings.vue";
 import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
     name: 'account',
-  components: {ListingView, Settings, HistoryComponent},
-
+  components: { ListingView, Settings, HistoryComponent},
 
   data() {
     return {
       //TODO Hent rating fra backend
+      name: '',
       ratingSeller: 5,
       ratingRenter: 5,
       reviewsCount: '',
       tab: null,
+      userInfo: '',
     }
   },
-  methods: {
-      getRating(){
-        // TODO kjørt GET user også legg inn details
-      }
+  async beforeMount() {
+    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
+    this.name = userInfo.data.fname + " " + userInfo.data.lname
   }
 }
 </script>

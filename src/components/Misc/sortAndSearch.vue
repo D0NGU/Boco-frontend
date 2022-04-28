@@ -99,11 +99,10 @@
 
 <script>
 
+import ListingsService from "@/service/ListingsService";
+
 export default {
   name: "sortAndSearch",
-  props: {
-    products: Array,
-  },
   data() {
     return {
       sortByDialog: false,
@@ -152,6 +151,9 @@ export default {
       }
     }
   },
+  async beforeMount() {
+    this.categories = (await ListingsService.getCategories()).data
+  }
 }
 </script>
 

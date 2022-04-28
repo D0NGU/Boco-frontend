@@ -1,6 +1,6 @@
 <template>
   <div>
-   <h3>My history</h3>
+   <h3>Min historikk</h3>
 
     <div v-if="!noRentals" v-for="rental in historyRentedProducts">
       <ListingCard
@@ -12,8 +12,15 @@
     </div>
 
     <div v-if="noRentals">
-      <p v-if="!error"> You have not yet rented any products </p>
-      <p v-else> {{ error }}</p>
+      <p v-if="!error">Du har ingen leid produkter</p>
+      <p v-else> {{ error }} </p>
+      <v-btn
+          color="blue-grey"
+          class="ma-2 white--text"
+          @click="refresh"
+      >Refresh
+        <v-icon left dark>mdi-cached</v-icon>
+      </v-btn>
     </div>
 
   </div>
@@ -45,7 +52,7 @@ export default {
       await UserAccountService.getUserRentalHistory(myUserId)
           .then(res => this.historyRentedProducts = res.data)
           .catch((err) => {
-            this.error = "An error has occurred"
+            this.error = "En feil har skjedd"
           })
 
       if (!this.historyRentedProducts.length){
@@ -54,11 +61,11 @@ export default {
         this.noRentals = false
       }
     },
-  },
-  beforeMount() {
-    this.getHistory();
-  }
 
+    refresh() {
+      this.getHistory();
+    }
+  },
 }
 </script>
 

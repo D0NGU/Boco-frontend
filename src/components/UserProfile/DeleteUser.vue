@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import UserSettingService from "@/service/UserSettingService";
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
   name: "DeleteUser",
@@ -53,13 +53,14 @@ export default {
     return{
       clicked: false,
       password: '',
+      userInfo: '',
     }
   },
   methods: {
     async deleteUser(){
-      // TODO Get user info and send with delete
+      this.userInfo = UserAccountService.getUser(this.$store.state.myUserId)
       this.clicked = true;
-      await UserSettingService.delete(this.fname, this.lname, this.email, this.password).then(response => {
+      await UserAccountService.delete(this.userInfo.fname, this.userInfo.lname, this.userInfo.email, this.password).then(response => {
         console.warn(response)
       }).catch((error) => {
         console.warn(error.response);

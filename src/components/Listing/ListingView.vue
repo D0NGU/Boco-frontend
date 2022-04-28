@@ -1,6 +1,5 @@
 <template>
   <sort-and-search
-      :products="activeProducts"
       @search="updateList"
   />
   <div v-for="product in activeProducts">
@@ -14,7 +13,7 @@
 </template>
 
 <script>
-import {getProducts, getProductsByUserId} from '@/service/ApiService.js'
+import ProductService from "@/service/ProductService";
 import ListingCard from "@/components/Listing/ListingCard";
 import SortAndSearch from "@/components/Misc/sortAndSearch";
 
@@ -36,14 +35,13 @@ export default {
   methods: {
     async getProducts() {
       if(this.ownerId === 0){
-        this.activeProducts = await getProducts(null, null, this.pageNumber, "product_id", true)
+        this.activeProducts = (await ProductService.getProducts(null, null, this.pageNumber, "product_id", true))
       } else {
-        //TODO user id
-        this.activeProducts = await getProductsByUserId(this.pageNumber)
+        this.activeProducts = (await ProductService.getProductsByUserId(this.ownerId, this.pageNumber)).products
       }
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
-      this.activeProducts = await getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)
+      this.activeProducts = await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)
     }
   },
   beforeMount() {

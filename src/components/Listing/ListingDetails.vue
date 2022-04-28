@@ -14,6 +14,7 @@
     </div>
     <div id="requestForm">
       <v-alert type="error" v-if="invalidDate" id="errorBox">Du må legge til en dato</v-alert>
+      <v-alert type="success" v-if="requestSent" id="requestSent">Forespørselen ble sendt!</v-alert>
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
       <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :min-date="productInfo.availableFrom" :max-date="productInfo.availableTo"></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
@@ -25,8 +26,8 @@
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
-import { getListing } from "@/service/ApiService";
 import ListingsService from "@/service/ListingsService";
+import RentalService from "@/service/RentalService";
 
 export default {
   name: "ListingDetails",
@@ -39,13 +40,14 @@ export default {
     return {
       date: ref(),
       invalidDate: false,
+      requestSent: false,
       productInfo: '',
       ownerInfo: '',
     }
   },
   methods: {
     async getListingInfo(){
-      const product = await getListing(this.itemId)
+      const product = await ListingsService.getListing(this.itemId)
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
     },
@@ -53,7 +55,7 @@ export default {
       if(this.date !== undefined && this.date !== null){
         const dateFrom = new Date(this.date[0].getFullYear()+"/"+(this.date[0].getMonth()+1)+"/"+this.date[0].getDate());
         const dateTo = new Date(this.date[1].getFullYear()+"/"+(this.date[1].getMonth()+1)+"/"+this.date[1].getDate());
-        await ListingsService.newRental(dateFrom, dateTo, this.itemId, this.$store.state.myUserId)
+        await RentalService.newRental(dateFrom, dateTo, this.itemId, this.$store.state.myUserId)
       } else {
         this.invalidDate = true;
         setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 1);

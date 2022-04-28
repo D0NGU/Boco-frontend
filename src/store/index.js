@@ -13,6 +13,9 @@ export default createStore({
     unlisted: false,
   },
   getters: {
+    token: function (state) {
+      return state.token;
+    }
   },
   mutations: {
     SET_STATUS(state, status) {
@@ -37,10 +40,18 @@ export default createStore({
       state.myPhone = phone;
     },
     SET_UNLISTED(state, status) {
-      state.unlisted = status;
+        state.unlisted = status;
+    },
+    SET_TOKEN(state, token) {
+      state.token = token;
     },
   },
   actions: {
+      login(context, {token, userID }) {
+          context.commit("SET_STATUS", true);
+          context.commit("SET_TOKEN", token);
+          context.commit("SET_MYUSERID", userID);
+      },
   },
   modules: {
   }

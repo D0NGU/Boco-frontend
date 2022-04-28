@@ -4,26 +4,28 @@
   <v-form ref="loginform" id="LoginForm" @submit.prevent="logInButton"
           v-model="valid"
           lazy-validation>
-    <h2 id="loginTitle">Login</h2>
+    <h1 id="loginTitle">Logg inn</h1>
 
+    <div id="inputWrapper">
     <div>
-      <label id="emL">Email:</label>
       <v-text-field
           :rules="emailRules"
           id="email"
-          v-model="email">
+          v-model="email"
+          label="E-postadresse">
       </v-text-field>
     </div>
 
     <div>
-      <label id="passL">Password:</label>
       <v-text-field
           :rules="rulesApplyToAll"
           id="password"
           v-model="password"
           :type="show ?'text': 'password'"
-          @click:append="show=!show">
+          @click:append="show=!show"
+          label="Passord">
       </v-text-field>
+    </div>
     </div>
 
     <div id="loginButton" class="text-center">
@@ -34,7 +36,7 @@
             dark
             color="#CFD8DC"
             @click="logInButton()"
-        >Log in</v-btn>
+        >Logg inn</v-btn>
 
         <v-dialog v-model="dialog">
           <v-card>
@@ -48,7 +50,7 @@
                   text
                   @click="dialog = false"
               >
-                Close
+                Lukk
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -61,7 +63,7 @@
           id="regBtn"
           color="grey"
           @click="goToRegisterPage"
-      >Register new user</v-btn>
+      >Opprett ny bruker</v-btn>
     </div>
   </v-form>
 
@@ -74,12 +76,14 @@ export default {
   methods: {
     async logInButton() {
       let tempStat = '';
-      let userId = 0;
+      let userId = '';
+      let token = '';
       if (this.$refs.loginform.validate()) {
         console.log("Form is validated")
         await LoginService.handleClickSignIn(this.email, this.password).then(response => {
           tempStat = response.status;
-          userId = response.data;
+          userId = response.data.id;
+          token = response.data.token;
         }).catch((error) => {
           if (error.response) {
             tempStat = error.response.status;
@@ -89,8 +93,7 @@ export default {
 
       if (tempStat === 200){
         this.loginStatus = "Successfull login";
-        this.$store.commit('SET_STATUS', true);
-        this.$store.commit('SET_MYUSERID', userId);
+        this.$store.dispatch("login", {token: token, userID: userId,});
         await this.$router.push('/Home');
       } else if (tempStat === 403) {
         this.dialog = true
@@ -135,6 +138,11 @@ export default {
   display: grid;
   justify-content: center;
   padding: 20px;
+  margin-top: 30px;
+}
+
+#inputWrapper {
+  width: 350px;
 }
 
 label {
@@ -145,12 +153,24 @@ v-btn {
   padding: 10px;
 }
 
-h2 {
+h1 {
   margin-bottom: 30px;
 }
 
 #loginButton {
   padding: 20px;
+}
+
+#loginBtn {
+  background-color: var(--bocoBlue) !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+#regBtn {
+  background-color: white !important;
+  color: var(--bocoBlue) !important;
+  font-weight: bold;
 }
 
 </style>
