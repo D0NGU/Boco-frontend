@@ -223,6 +223,7 @@ export default {
         this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
         this.$store.commit('SET_MYADDRESS', this.adAddress)
         this.$store.commit('SET_MYPHONE', this.adPhone)
+        this.$store.commit('SET_UNLISTED', this.switch1)
       }
     },
   },

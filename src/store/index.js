@@ -10,6 +10,7 @@ export default createStore({
     myListingPrice: '',
     myAddress: '',
     myPhone: '',
+    unlisted: false,
   },
   getters: {
   },
@@ -34,6 +35,9 @@ export default createStore({
     },
     SET_MYPHONE(state, phone) {
       state.myPhone = phone;
+    },
+    SET_UNLISTED(state, status) {
+      state.unlisted = status;
     },
   },
   actions: {

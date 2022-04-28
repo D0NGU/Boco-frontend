@@ -190,8 +190,8 @@ export default {
       adDescription:this.$store.state.myListingDes,
       adPrice:this.$store.state.myListingPrice,
       pricePer:'',
-      fromDate:this.$store.state.fromDate,
-      toDate: this.$store.state.toDate,
+      fromDate:'',
+      toDate: '',
       adAddress:this.$store.state.myAddress,
       adPhone:this.$store.state.myPhone,
       switch1:this.$store.state.unlisted,
@@ -223,16 +223,26 @@ export default {
       });
     },
     async updateAd(){
+      let tempStat;
       this.dialog = true;
       this.createdStatus = true;
       console.log("Listing was updated.")
-      await ListingsService.edit(this.$store.state.myProductId, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
-        this.createdStatus = response.data
+      await ListingsService.edit(null, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
+        tempStat = response.data
       }).catch((error) => {
         if(error.response){
-          this.createdStatus = error.response.data;
+          tempStat = error.response.data;
         }
       })
+      if(tempStat === 201){
+        this.createdStatus = true;
+        this.$store.commit('SET_MYLISTINGNAME', this.adName)
+        this.$store.commit('SET_MYLISTINGDES', this.adDescription)
+        this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
+        this.$store.commit('SET_MYADDRESS', this.adAddress)
+        this.$store.commit('SET_MYPHONE', this.adPhone)
+        this.$store.commit('SET_UNLISTED', this.switch1)
+      }
     },
   },
 }
