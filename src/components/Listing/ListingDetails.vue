@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     async getListingInfo(){
-      const product = await ListingsService.getListing(this.itemId)
+      const product = (await ListingsService.getListing(this.itemId)).data
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
     },
