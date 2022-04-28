@@ -12,8 +12,8 @@ export default {
 
     getProducts(searchWord, category, pageNumber, sortBy, ascending) {
         const searchParams = {q: searchWord, category: category, page: pageNumber, sortBy: sortBy, ascending: ascending}
-        return getApiClient.get('products/search/', {
-            params: {searchParams}
+        return getApiClient.get('products/search?q='+searchWord+'&category='+category+'&page='+pageNumber+'&ascending='+ascending+'&sortBy='+sortBy, {
+            //params: {searchParams}
         })
     },
 }
