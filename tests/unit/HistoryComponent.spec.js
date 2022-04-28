@@ -18,4 +18,11 @@ describe('HistoryComponent.vue', () => {
 
         expect(title.text()).toBe('Du har ingen leid produkter')
     });
+    it('Test if refresh button renders', () => {
+        const wrapper = mount(HistoryComponent);
+        expect(wrapper.find("v-btn").exists()).toBe(true);
+        const refresh = wrapper.find("v-btn");
+
+        expect(refresh.text()).toBe('Refresh mdi-cached');
+    });
 })

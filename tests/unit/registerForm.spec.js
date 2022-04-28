@@ -1,5 +1,20 @@
-import {mount} from "@vue/test-utils";
 import RegisterForm from "@/components/RegisterForm";
+import App from "@/App";
+import { createStore } from 'vuex'
+import { mount, flushPromises } from "@vue/test-utils";
+import { createRouter, createWebHistory } from 'vue-router';
+import { routes } from "@/router";
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes: routes,
+})
+
+const store = createStore({
+    state: {
+        loggedIn: false,
+    },
+})
 
 describe('RegisterForm.vue', () => {
 
@@ -42,4 +57,30 @@ describe('RegisterForm.vue', () => {
         expect(registerButton.text()).toBe('Opprett bruker')
         expect(backToLoginBtn.text()).toContain('Logg inn')
     });
+    it('Test for disabled "Opprett bruker" button', () => {
+        const wrapper = mount(RegisterForm);
+        expect(wrapper.find("#rBtn").exists()).toBe(true);
+        const registerBtn = wrapper.find("#rBtn");
+        expect(registerBtn.attributes()).toHaveProperty('disabled');
+
+    });
+
+    it('Testing routing from RegisterForm.vue to LoginForm.vue', async () => {
+
+        await router.push('/register')
+        await router.isReady()
+
+        const wrapper = mount(App, {
+            global: {
+                plugins: [router, store],
+            }
+        });
+
+        expect(wrapper.html()).toContain('Opprett bruker');
+        await wrapper.find("#backToLoginButton").trigger('click');
+        await flushPromises();
+        expect(wrapper.html()).toContain('Logg inn');
+
+    });
+
 })
