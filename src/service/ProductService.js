@@ -1,10 +1,8 @@
 import { getApiClient } from "@/service/ApiService";
 
 export default {
-    getProductById(id, pageNumber) {
-        return getApiClient.get('products/'+id, {
-            params: {pageNumber}
-        })
+    getProductById(id) {
+        return getApiClient.get('products/'+id, )
     },
     getProductsByUserId(id){
         return getApiClient.get('products/user/'+id)

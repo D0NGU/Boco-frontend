@@ -13,7 +13,6 @@ export default {
   async beforeMount() {
     const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
     this.$store.commit("SET_MYUSERID", userInfo.id)
-    console.log(this.$store.state.myUserId)
   }
 }
 </script>

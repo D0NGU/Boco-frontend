@@ -172,9 +172,11 @@
         >Avbryt
         </v-btn>
       </div>
+    </v-card>
+    <v-card>
       <div>
         <RentalRequestView
-            :productId="2"/>
+          :product-id="itemId" />
       </div>
     </v-card>
   </div>
@@ -183,23 +185,27 @@
 <script>
 import axios from "axios";
 import ListingsService from "@/service/ListingsService";
+import RentalRequestView from "@/components/Listing/RentalRequestView";
+import ProductService from "@/service/ProductService";
 
 export default {
   name: "AdEditPage",
-  components: {},
-  props: {productId: Number},
+  components: {RentalRequestView},
+  props: {
+    itemId: Number
+  },
   data () {
     return {
       //TODO: Få produktinformasjon fra backend
-      adName: this.$store.state.myListingName,
-      adDescription:this.$store.state.myListingDes,
-      adPrice:this.$store.state.myListingPrice,
+      adName: '',
+      adDescription: '',
+      adPrice:'',
       pricePer:'',
       fromDate:'',
       toDate: '',
-      adAddress:this.$store.state.myAddress,
-      adPhone:this.$store.state.myPhone,
-      switch1:this.$store.state.unlisted,
+      adAddress:'',
+      adPhone:'',
+      switch1:'',
       categories: [],
       selectedCategory: '',
       createdStatus: false,
@@ -220,11 +226,17 @@ export default {
     }
   },
   methods: {
-    async getCategories(){
+    async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
         this.categories.push(cat.category)
       })
+      const productInfo = (await ProductService.getProductById(this.itemId)).data
+      this.adName = productInfo.title;
+      this.adDescription = productInfo.description;
+      this.adPrice = productInfo.price;
+      this.adAddress = productInfo.address;
+      this.selectedCategory = productInfo.category
     },
     async updateAd(){
       let tempStat;
@@ -238,19 +250,10 @@ export default {
           tempStat = error.response.data;
         }
       })
-      if(tempStat === 201){
-        this.createdStatus = true;
-        this.$store.commit('SET_MYLISTINGNAME', this.adName)
-        this.$store.commit('SET_MYLISTINGDES', this.adDescription)
-        this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
-        this.$store.commit('SET_MYADDRESS', this.adAddress)
-        this.$store.commit('SET_MYPHONE', this.adPhone)
-        this.$store.commit('SET_UNLISTED', this.switch1)
-      }
     },
   },
   beforeMount() {
-    this.getCategories();
+    this.getInfo();
   }
 }
 </script>

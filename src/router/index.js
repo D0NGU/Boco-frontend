@@ -58,6 +58,7 @@ const routes = [
     path: "/listing/edit/:itemId",
     name: "ListingEdit",
     component: EditListing,
+    props: true,
   },
   // Redirect any none-existing path to 404 page
   {

@@ -2,7 +2,7 @@
   <div v-for="(rental, i) in rentalList" :key="i">
     <RentalRequest
         :id="rental.rentalId"
-        :name="ownerInfo[i].fname + ' ' + ownerInfo[i].fname"
+        :renter="rental.userId"
         :date="rental.dateFrom + ' - ' + rental.dateTo"
     />
   </div>
@@ -20,14 +20,10 @@ export default {
   data () {
     return {
       rentalList: [],
-      ownerInfo: []
     }
   },
-  beforeMount() {
-    this.rentalList = RentalService.getRentals(this.productId)
-    this.rentalList.forEach(rental =>{
-      this.ownerInfo.push(UserAccountService.getUser(rental.userId))
-    })
+  async beforeMount() {
+    this.rentalList = (await RentalService.getRentals(this.productId)).data
   }
 }
 </script>
