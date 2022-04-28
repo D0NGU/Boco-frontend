@@ -44,9 +44,9 @@ export default {
     },
   },
   async beforeMount() {
-    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
-    this.name = userInfo.data.fname + " " + userInfo.data.lname
-    this.email = userInfo.data.email
+    const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
+    this.name = userInfo.fname + " " + userInfo.lname
+    this.email = userInfo.email
   }
 }
 </script>

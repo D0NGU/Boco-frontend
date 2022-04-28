@@ -71,6 +71,7 @@
 
 <script>
 import LoginService from '@/service/LoginService'
+import UserAccountService from "@/service/UserAccountService";
 export default {
 
   methods: {
@@ -82,7 +83,7 @@ export default {
         console.log("Form is validated")
         await LoginService.handleClickSignIn(this.email, this.password).then(response => {
           tempStat = response.status;
-          userId = response.data.id;
+          //userId = response.data.id;
           token = response.data.access_token;
         }).catch((error) => {
           if (error.response) {
@@ -93,7 +94,7 @@ export default {
 
       if (tempStat === 200){
         this.loginStatus = "Successfull login";
-        this.$store.dispatch("login", {token: token, userID: userId,});
+        this.$store.dispatch("login", {token: token, email: this.email,});
         await this.$router.push('/Home');
       } else if (tempStat === 403) {
         this.dialog = true

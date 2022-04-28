@@ -1,4 +1,5 @@
 import {getApiClient} from "@/service/ApiService";
+import axios from "axios";
 
 export default {
     getUserRentalHistory(myUserId) {
@@ -19,6 +20,10 @@ export default {
 
     getUser(userId) {
         return getApiClient.get('user/get/', {params: {userId}})
+    },
+
+    getUserId(email){
+        return getApiClient.get(`user/get/`+email)
     }
 }
 

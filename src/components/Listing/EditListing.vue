@@ -172,6 +172,10 @@
         >Avbryt
         </v-btn>
       </div>
+      <div>
+        <RentalRequestView
+            :productId="2"/>
+      </div>
     </v-card>
   </div>
 </template>
@@ -182,6 +186,8 @@ import ListingsService from "@/service/ListingsService";
 
 export default {
   name: "AdEditPage",
+  components: {},
+  props: {productId: Number},
   data () {
     return {
       //TODO: Få produktinformasjon fra backend

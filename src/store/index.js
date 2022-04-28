@@ -5,6 +5,7 @@ export default createStore({
     loggedIn: false,
     token: '',
     myUserId: '',
+    email: '',
     myListingName: '',
     myListingDes: '',
     myListingPrice: '',
@@ -45,12 +46,16 @@ export default createStore({
     SET_TOKEN(state, token) {
       state.token = token;
     },
+    SET_EMAIL(state, email){
+      state.email = email
+    }
   },
   actions: {
-      login(context, {token, userID }) {
+      login(context, {token, email }) {
           context.commit("SET_STATUS", true);
           context.commit("SET_TOKEN", token);
-          context.commit("SET_MYUSERID", userID);
+          context.commit("SET_EMAIL", email);
+         // context.commit("SET_MYUSERID", userID);
       },
   },
   modules: {

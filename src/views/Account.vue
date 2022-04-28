@@ -80,7 +80,7 @@ export default {
     }
   },
   async beforeMount() {
-    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
+    const userInfo = await UserAccountService.getUserId(this.$store.state.email)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
   }
 }
