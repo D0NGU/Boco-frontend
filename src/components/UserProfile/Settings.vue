@@ -26,7 +26,8 @@ export default {
   name: "Settings",
   data () {
     return {
-      userInfo: '',
+      name: '',
+      email: '',
       oldPassword: "",
       newPassword: "",
       newPasswordRepeat: "",
@@ -37,11 +38,15 @@ export default {
   methods: {
     handleSaveClick(){
       if(this.newPassword === this.newPasswordRepeat){
-        this.userInfo = UserAccountService.getUser(this.$store.state.myUserId)
-        UserAccountService.editPassword(this.userInfo.email, this.oldPassword, this.newPassword);
+        UserAccountService.editPassword(this.email, this.oldPassword, this.newPassword);
         this.confirmationSnackBar = true;
       }
     },
+  },
+  async beforeMount() {
+    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
+    this.name = userInfo.data.fname + " " + userInfo.data.lname
+    this.email = userInfo.data.email
   }
 }
 </script>

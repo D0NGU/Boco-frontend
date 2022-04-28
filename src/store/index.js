@@ -7,6 +7,24 @@ export const mutations = {
   SET_MYUSERID(state, id) {
     state.myUserId = id;
   },
+  SET_MYLISTINGNAME(state, name) {
+    state.myListingName = name;
+  },
+  SET_MYLISTINGDES(state, description) {
+    state.myListingDes = description;
+  },
+  SET_MYLISTINGPRICE(state, price) {
+    state.myListingPrice = price;
+  },
+  SET_MYADDRESS(state, address) {
+    state.myAddress = address;
+  },
+  SET_MYPHONE(state, phone) {
+    state.myPhone = phone;
+  },
+  SET_UNLISTED(state, status) {
+    state.unlisted = status;
+  },
   SET_TOKEN(state, token) {
     state.token = token;
   },
@@ -34,6 +52,12 @@ export default createStore({
     loggedIn: false,
     token: '',
     myUserId: '',
+    myListingName: '',
+    myListingDes: '',
+    myListingPrice: '',
+    myAddress: '',
+    myPhone: '',
+    unlisted: false,
   },
   getters: getters,
   mutations: mutations,
@@ -41,5 +65,3 @@ export default createStore({
   modules: {
   }
 })
-
-

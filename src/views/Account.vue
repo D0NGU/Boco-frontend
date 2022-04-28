@@ -23,7 +23,7 @@
           <v-avatar size="x-large">
             <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
           </v-avatar>
-          <p class="text-button"> {{userInfo.fname}} {{userInfo.lname}} </p>
+          <p class="text-button"> {{name}} </p>
           <div>
             <p class="text-body-1">En veldig snill kar som liker å låne bort gjenstander :)</p>
           </div>
@@ -71,6 +71,7 @@ export default {
   data() {
     return {
       //TODO Hent rating fra backend
+      name: '',
       ratingSeller: 5,
       ratingRenter: 5,
       reviewsCount: '',
@@ -78,8 +79,9 @@ export default {
       userInfo: '',
     }
   },
-  beforeMount() {
-      this.userInfo = UserAccountService.getUser(this.$store.state.myUserId)
+  async beforeMount() {
+    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
+    this.name = userInfo.data.fname + " " + userInfo.data.lname
   }
 }
 </script>
