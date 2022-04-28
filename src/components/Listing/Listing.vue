@@ -130,6 +130,7 @@
 <script>
 import axios from "axios";
 import ListingsService from "@/service/ListingsService";
+import store from "@/store";
 
 export default {
   name: "AdPage",
@@ -176,16 +177,21 @@ export default {
       this.createdStatus = true;
       console.log("Listing was created.")
       const listingCreated = {
-        adName: this.adName,
-        adDescription: this.adDescription,
-        adAddress: this.adAddress,
-        adPrice: this.adPrice,
+        title: this.adName,
+        description: this.adDescription,
+        address: this.adAddress,
+        price: this.adPrice,
         switch1: this.switch1,
         adPhone: this.adPhone,
         defaultCategory: this.defaultCategory
       };
 
-      await axios.post('http://localhost:8080/api/products/new', listingCreated).then(response => {
+      await axios.post('http://localhost:8080/api/products', listingCreated, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${store.getters.token}`
+        }}).then(response => {
         this.createdStatus = response.data
       }).catch((error) => {
         if (error.response) {

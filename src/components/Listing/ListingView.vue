@@ -37,7 +37,8 @@ export default {
       if(this.ownerId === 0){
         this.activeProducts = ((await ProductService.getProducts(null, null, this.pageNumber, "product_id", true)).data)
       } else {
-        this.activeProducts = ((await ProductService.getProductsByUserId(this.ownerId, this.pageNumber)).data)
+        this.activeProducts = ((await ProductService.getProductsByUserId(this.ownerId, this.pageNumber)).data.products)
+        console.log(this.activeProducts.products)
       }
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
