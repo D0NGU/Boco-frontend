@@ -35,13 +35,13 @@ export default {
   methods: {
     async getProducts() {
       if(this.ownerId === 0){
-        this.activeProducts = (await ProductService.getProducts(null, null, this.pageNumber, "product_id", true))
+        this.activeProducts = ((await ProductService.getProducts(null, null, this.pageNumber, "product_id", true)).data)
       } else {
-        this.activeProducts = (await ProductService.getProductsByUserId(this.ownerId, this.pageNumber)).products
+        this.activeProducts = ((await ProductService.getProductsByUserId(this.ownerId, this.pageNumber)).data)
       }
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
-      this.activeProducts = await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)
+      this.activeProducts = (await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)).data
     }
   },
   beforeMount() {

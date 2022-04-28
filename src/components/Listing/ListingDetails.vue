@@ -48,8 +48,8 @@ export default {
   methods: {
     async getListingInfo(){
       const product = await ListingsService.getListing(this.itemId)
-      this.productInfo = product.product;
-      this.ownerInfo = product.owner;
+      this.productInfo = product.data.product;
+      this.ownerInfo = product.data.owner;
     },
     async sendRequest() {
       if(this.date !== undefined && this.date !== null){

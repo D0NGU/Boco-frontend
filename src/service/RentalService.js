@@ -6,9 +6,7 @@ export default {
     },
     newRental(dateFrom, dateTo, productId, userId) {
         const rental = {dateFrom: dateFrom, dateTo: dateTo, accepted: false, productId: productId, userId: userId}
-        return getApiClient.get("rentals", {
-            params: {rental}
-        })
+        return getApiClient.post("rentals", rental)
     },
     accept(id){
         return getApiClient.put('rentals/accept/'+id)

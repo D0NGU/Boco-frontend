@@ -7,9 +7,7 @@ export default {
 
     delete(userId, fname, lname, email, password){
         const userToDelete = {  fname: fname, lname: lname, email: email, password: password };
-        return getApiClient.delete('user/', {
-            params: {userToDelete}
-        })
+        return getApiClient.delete('user/?fname='+fname+"&lname="+lname+"&email="+email+"&password"+password)
     },
 
     editPassword (email, oldPassword, newPassword) {
@@ -18,7 +16,7 @@ export default {
     },
 
     getUser(userId) {
-        return getApiClient.get('user/get/', {params: {userId}})
+        return getApiClient.get('user/get/?userId='+userId)
     }
 }
 

@@ -84,6 +84,7 @@ export default {
           tempStat = response.status;
           userId = response.data.id;
           token = response.data.token;
+          console.log(token)
         }).catch((error) => {
           if (error.response) {
             tempStat = error.response.status;
@@ -94,6 +95,7 @@ export default {
       if (tempStat === 200){
         this.loginStatus = "Successfull login";
         this.$store.dispatch("login", {token: token, userID: userId,});
+        console.log(this.$store.getters.token);
         await this.$router.push('/Home');
       } else if (tempStat === 403) {
         this.dialog = true
