@@ -74,22 +74,21 @@
             </v-card>
           </v-dialog>
 
-<!--          <v-container>
+          <v-container>
             <v-row>
-              <v-col
-                  v-for="(category, i) in chosenCategories"
-                  :key="category.category"
-              >
-                <v-chip
+              <v-col>
+<!--
+ v-for="(category, i) in chosenCategories"
+                  :key="category.category"<v-chip
                     closable=""
                     @click:close="chosenCategories.splice(i, 1)"
                 >
-&lt;!&ndash;                  <v-icon> {{category.icon}} </v-icon>&ndash;&gt;
+                  <v-icon> {{category.icon}} </v-icon>
                   {{ category.category }}
-                </v-chip>
+                </v-chip>-->
               </v-col>
             </v-row>
-          </v-container>-->
+          </v-container>
           <v-btn @click="handleSearchButton">Søk</v-btn>
         </v-card>
       </v-expansion-panel-text>
@@ -143,6 +142,7 @@ export default {
 
     selectCategory(selectedCategory) {
       this.chosenCategories = selectedCategory;
+      setTimeout(() => this.sortByDialog = false, 300);
       /*if(!this.chosenCategories.includes(selectedCategory)){
       this.chosenCategories.push(selectedCategory)
       } else {
@@ -156,12 +156,7 @@ export default {
   async beforeMount() {
     const categories = (await ListingsService.getCategories()).data
     categories.forEach(cat => {
-      console.log(cat.mainCategory)
-      console.log("skdfjal?: " + cat.mainCategory === null)
-      console.log("includes?: " +!this.chosenCategories.includes(cat.mainCategory))
-      if(cat.mainCategory !== null && !(this.chosenCategories.includes(cat.mainCategory))){
-        this.categories.push(cat.mainCategory)
-      }
+      this.categories.push(cat.category)
     })
   }
 }
