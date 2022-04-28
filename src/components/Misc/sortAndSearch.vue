@@ -99,6 +99,8 @@
 
 <script>
 
+import ListingsService from "@/service/ListingsService";
+
 export default {
   name: "sortAndSearch",
   data() {
@@ -149,6 +151,9 @@ export default {
       }
     }
   },
+  async beforeMount() {
+    this.categories = (await ListingsService.getCategories()).data
+  }
 }
 </script>
 
