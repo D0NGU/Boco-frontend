@@ -13,9 +13,9 @@ export default {
 
     handleClickSignUp(firstname, lastname, email, password) {
         const registerNewUserRequest = {fname: firstname, lname: lastname, email: email, password: password};
-        return axios.post(`http://localhost:8080/api/signup`, registerNewUserRequest,
+        return axios.post(`http://localhost:8080/api/user/save`, registerNewUserRequest,
             {headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             }});
     },
 }
