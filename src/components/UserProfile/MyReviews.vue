@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ReviewCard from "@/components/ReviewCard";
+import ReviewCard from "@/components/UserProfile/ReviewCard";
 import ReviewService from "@/service/ReviewService";
 
 export default {

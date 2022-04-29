@@ -63,7 +63,7 @@ import Settings from "@/components/UserProfile/Settings.vue";
 import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
-import MyReviews from "@/components/MyReviews";
+import MyReviews from "@/components/UserProfile/MyReviews";
 
 export default {
     name: 'account',
