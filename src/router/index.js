@@ -77,11 +77,9 @@ const router = createRouter({
 getApiClient.interceptors.response.use(null, error => {
   let path = '/error';
   switch (error.response.status) {
-    case 403: path = '/login'; break;
-    case 404: path = '/login'; break;
+    case 403: path =   router.push('/login');  return Promise.reject(error);
+      break;
   }
-
-  router.push(path);
   return Promise.reject(error);
 })
 
