@@ -6,8 +6,9 @@
     <v-divider vertical="" />
     <div class="itemDetail">
       <p class="text-subtitle-1">{{ itemName }}</p>
-      <p class="text-caption">{{itemPrice}} kr/dag</p>
-      <!-- HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
+      <!--<p class="text-caption" >{{itemPrice}} kr/dag</p>-->
+      <v-btn prepend-icon="mdi-message-draw">Skriv anmeldelse</v-btn>
+      <!-- TODO HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
       <p class="text-overline" id="itemOwner">
         <v-avatar size="x-small">
         <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
@@ -28,6 +29,8 @@ export default {
     itemOwner: Number,
     itemImage: Image,
     itemId: [Number, String],
+    ifHistory: Boolean,
+    ifReviewed: Boolean,
   },
   data () {
     return {
