@@ -19,7 +19,7 @@
 
           <v-card>
             <v-card-text>
-              <Review :item-name="itemName" :product-id="itemId"/>
+              <Review :item-name="itemName" :owner-id="itemOwner"/>
             </v-card-text>
             <v-card-actions>
               <v-btn
