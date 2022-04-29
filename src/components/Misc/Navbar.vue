@@ -37,7 +37,11 @@
               <NotificationView />
             </v-card-text>
             <v-card-actions>
-              <v-btn block @click="dialog = false">Lukk</v-btn>
+              <v-btn
+                  id="closeButton"
+                  block="" @click="dialog = false"
+              >Lukk
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -79,7 +83,8 @@ export default {
 <style>
 
 * {
-  --bocoBlue: #004aab
+  --bocoBlue: #004aab;
+  --backgroundBlue: #edf1f5
 }
 #navBar {
   display: flex;
@@ -103,5 +108,9 @@ export default {
 }
 #notificationDialog {
   background-color: #edf1f5;
+}
+#closeButton {
+  color: var(--bocoBlue);
+  font-weight: bold;
 }
 </style>
