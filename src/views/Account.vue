@@ -49,7 +49,7 @@
           <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
-          Mine anmeldelser komponent
+          <MyReviews />
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
@@ -63,10 +63,11 @@ import Settings from "@/components/UserProfile/Settings.vue";
 import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
+import MyReviews from "@/components/UserProfile/MyReviews";
 
 export default {
     name: 'account',
-  components: { ListingView, Settings, HistoryComponent},
+  components: {MyReviews, ListingView, Settings, HistoryComponent},
 
   data() {
     return {

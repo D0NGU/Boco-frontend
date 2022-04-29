@@ -10,7 +10,7 @@
   </div>
 
   <v-btn @click="handleSaveClick" class="settingsButtons">Lagre</v-btn>
-  <v-btn id="logOut" color="error" :to="{name: 'Login'}" class="settingsButtons" @click="logOut()"> Logg ut</v-btn>
+  <v-btn id="logOut" color="error" :to="{name: 'Login'}" class="settingsButtons"> Logg ut</v-btn>
   <v-spacer>
     <v-btn id="deleteUser" color="error" :to="{name: 'DeleteUser'}" class="settingsButtons"> Slett bruker</v-btn>
   </v-spacer>
@@ -47,12 +47,12 @@ export default {
       }
     },
     logOut() {
-      console.log("Oskar er en grise gutt")
       this.$store.commit('SET_STATUS', false);
       cookies.set('token', "", { path: '/' });
     },
   },
   async beforeMount() {
+    const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
     this.name = userInfo.fname + " " + userInfo.lname
     this.email = userInfo.email
   }
