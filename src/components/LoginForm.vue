@@ -21,6 +21,7 @@
           :rules="rulesApplyToAll"
           id="password"
           v-model="password"
+          v-on:keyup.enter="logInButton()"
           :type="show ?'text': 'password'"
           @click:append="show=!show"
           label="Passord">
