@@ -7,34 +7,19 @@ export const mutations = {
   SET_MYUSERID(state, id) {
     state.myUserId = id;
   },
-  SET_MYLISTINGNAME(state, name) {
-    state.myListingName = name;
-  },
-  SET_MYLISTINGDES(state, description) {
-    state.myListingDes = description;
-  },
-  SET_MYLISTINGPRICE(state, price) {
-    state.myListingPrice = price;
-  },
-  SET_MYADDRESS(state, address) {
-    state.myAddress = address;
-  },
-  SET_MYPHONE(state, phone) {
-    state.myPhone = phone;
-  },
-  SET_UNLISTED(state, status) {
-    state.unlisted = status;
-  },
   SET_TOKEN(state, token) {
     state.token = token;
+  },
+  SET_EMAIL(state, email) {
+    state.email = email;
   },
 };
 
 export const actions = {
-  login(context, {token, userID }) {
+  login(context, {token, email }) {
     context.commit("SET_STATUS", true);
     context.commit("SET_TOKEN", token);
-    context.commit("SET_MYUSERID", userID);
+    context.commit("SET_EMAIL", email);
   },
 };
 
@@ -52,12 +37,7 @@ export default createStore({
     loggedIn: false,
     token: '',
     myUserId: '',
-    myListingName: '',
-    myListingDes: '',
-    myListingPrice: '',
-    myAddress: '',
-    myPhone: '',
-    unlisted: false,
+    email: '',
   },
   getters: getters,
   mutations: mutations,
