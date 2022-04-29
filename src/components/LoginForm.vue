@@ -68,12 +68,16 @@
     </div>
   </v-form>
 
+ <!-- <Map /> -->
+
 </template>
 
 <script>
 import LoginService from '@/service/LoginService'
 import UserAccountService from "@/service/UserAccountService";
+import Map from './Map'
 export default {
+  components: {Map},
 
   methods: {
     async logInButton() {

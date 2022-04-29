@@ -18,6 +18,10 @@
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
       <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :min-date="productInfo.availableFrom" :max-date="productInfo.availableTo"></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
+      <v-btn id="mapBtn" @click="mapClick"> Map </v-btn>
+      <div v-if="this.showMap">
+        <Map :address1="productInfo.address" @closeMap="mapClick"  />
+      </div>
     </div>
   </div>
 </template>
@@ -28,10 +32,11 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
 import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
+import Map from "@/components/Map";
 
 export default {
   name: "ListingDetails",
-  components: {Datepicker},
+  components: {Map, Datepicker},
   props: {
     itemId: Number,
     userId: Number,
@@ -43,6 +48,7 @@ export default {
       requestSent: false,
       productInfo: '',
       ownerInfo: '',
+      showMap: false,
     }
   },
   methods: {
@@ -50,6 +56,7 @@ export default {
       const product = (await ListingsService.getListing(this.itemId)).data
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
+      console.log(product.owner)
     },
     async sendRequest() {
       if(this.date !== undefined && this.date !== null){
@@ -61,6 +68,10 @@ export default {
         setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 1);
       }
     },
+
+    mapClick() {
+      this.showMap = !this.showMap
+    }
   },
   beforeMount() {
     this.getListingInfo()
@@ -78,5 +89,9 @@ export default {
 }
 #requestForm > *{
   padding: 10px;
+}
+
+#mapBtn {
+  margin: 0 auto 20px auto;
 }
 </style>

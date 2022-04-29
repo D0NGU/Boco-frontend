@@ -38,6 +38,7 @@ export default createStore({
     token: '',
     myUserId: '',
     email: '',
+
   },
   getters: getters,
   mutations: mutations,
