@@ -30,19 +30,15 @@
             fullscreen=""
         >
           <template v-slot:activator="{ props }">
-            <v-btn
-                v-bind="props"
-            >
-              <v-icon> mdi-bell </v-icon>
-            </v-btn>
+              <v-icon color="white" v-bind="props"> mdi-bell </v-icon>
           </template>
 
-          <v-card>
+          <v-card id="notificationDialog">
             <v-card-text>
               <NotificationView />
             </v-card-text>
             <v-card-actions>
-              <v-btn color="primary" block @click="dialog = false">Close Dialog</v-btn>
+              <v-btn block @click="dialog = false">Lukk</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -90,7 +86,6 @@ export default {
   height: 40px;
 }
 #notificationDialog {
-  height: 100%;
-  width: 100%;
+  background-color: #edf1f5;
 }
 </style>

@@ -13,6 +13,7 @@
       sm="4"
       md="8">
         <p class="notifText">Du har fått en anmeldelse</p>
+        <p class="text-caption dateText">Fre 29. April 12:00</p>
       </v-col>
     </v-row>
   </v-card>
@@ -101,9 +102,14 @@ export default {
 <style scoped>
 .notifCard {
   margin: 10px 0;
+  background-color: white;
 }
 
 .notifText {
-  padding: 12px;
+  padding: 12px 0;
+  color: black;
+}
+.dateText {
+  padding: 0 0 6px 0;
 }
 </style>
