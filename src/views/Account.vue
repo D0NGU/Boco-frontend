@@ -112,7 +112,6 @@ export default {
   grid-area: 1/1;
   height: 100%;
   width: 100%;
-  z-index: 2;
 }
 .profileDetails {
   position: absolute;
@@ -132,8 +131,5 @@ export default {
   width: 100%;
   z-index: 10;
   display: flex;
-}
-.v-card-text {
-  padding: 0;
 }
 </style>

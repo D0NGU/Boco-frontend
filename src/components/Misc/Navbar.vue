@@ -1,30 +1,29 @@
 <!-- Navigasjonsbar som alltid skal vises uavhengig av current view -->
 
 <template>
-  <div>
-    <div id="navBar">
-      <div class="navItem">
+    <v-row id="navBar">
+      <v-col class="navItem">
       <router-link :to="{name: 'Home'}">
         <div class="navLink">
           <v-icon>mdi-home</v-icon>
         </div>
       </router-link>
-      </div>
-      <div class="navItem">
+      </v-col>
+      <v-col class="navItem">
       <router-link :to="{name: 'Account'}">
         <div>
           <v-icon> mdi-account</v-icon>
         </div>
       </router-link>
-      </div>
-      <div class="navItem">
+      </v-col>
+      <v-col class="navItem">
         <router-link :to="{name: 'Listing'}">
           <div>
             <v-icon> mdi-plus-circle</v-icon>
           </div>
         </router-link>
-      </div>
-      <div class="navItem">
+      </v-col>
+      <v-col class="navItem">
         <v-dialog
             v-model="dialog"
             fullscreen=""
@@ -42,9 +41,8 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </div>
-    </div>
-  </div>
+      </v-col>
+    </v-row>
 </template>
 
 
@@ -69,11 +67,11 @@ export default {
   display: flex;
   flex-direction: row;
   background-color: #454655;
+  margin: 0;
 }
 #navBar a {
   color: white;
   text-decoration: none;
-  border-radius: 4px;
 }
 
 #navBar a.router-link-active {
@@ -83,7 +81,7 @@ export default {
 .navItem {
   width: 30%;
   flex-grow: 1;
-  height: 40px;
+  padding: 12px;
 }
 #notificationDialog {
   background-color: #edf1f5;
