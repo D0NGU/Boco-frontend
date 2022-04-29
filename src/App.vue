@@ -7,6 +7,9 @@
 </template>
 
 <style>
+body {
+  background-color: var(--backgroundBlue);
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -15,18 +18,6 @@
   color: #2c3e50;
 }
 
-nav {
-  background-color: white;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
 <script>
 import Login from "@/views/Login";

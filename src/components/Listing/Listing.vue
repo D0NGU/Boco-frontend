@@ -227,9 +227,8 @@ export default {
   box-shadow: none;
   margin: 0 auto;
   width: 350px;
+  padding: 1em;
 }
-
-
 
 .v-text-field, .v-file-input {
   margin-bottom: 22px;
