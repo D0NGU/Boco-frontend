@@ -71,7 +71,7 @@ export default {
 #navBar {
   display: flex;
   flex-direction: row;
-  background-color: #454655;
+  background-color: var(--bocoBlue);
   margin: 0;
 }
 #navBar a {
@@ -80,7 +80,8 @@ export default {
 }
 
 #navBar a.router-link-active {
-  color: #2ce7ff;
+  color: orange;
+
 }
 
 .navItem {
