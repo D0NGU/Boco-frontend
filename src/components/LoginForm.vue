@@ -106,6 +106,7 @@ export default {
       }
     },
 
+
     goToRegisterPage() {
       this.$router.push('/register');
     }

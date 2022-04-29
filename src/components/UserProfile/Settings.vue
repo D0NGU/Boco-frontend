@@ -9,8 +9,11 @@
     <v-switch inset="" color="indigo" label="Offentlig kjøpshistorikk" v-model="hideHistory"></v-switch>
   </div>
 
-  <v-btn @click="handleSaveClick" id="saveBtn">Lagre</v-btn>
-  <v-btn id="deleteUser" color="error" :to="{name: 'DeleteUser'}"> Slett bruker</v-btn>
+  <v-btn @click="handleSaveClick" class="settingsButtons">Lagre</v-btn>
+  <v-btn id="logOut" color="error" :to="{name: 'Login'}" class="settingsButtons"> Logg ut</v-btn>
+  <v-spacer>
+    <v-btn id="deleteUser" color="error" :to="{name: 'DeleteUser'}" class="settingsButtons"> Slett bruker</v-btn>
+  </v-spacer>
   <v-snackbar
       color="success"
       :timeout="3000"
@@ -42,6 +45,9 @@ export default {
         this.confirmationSnackBar = true;
       }
     },
+    logOut() {
+      this.$store.commit('SET_STATUS', false)
+    },
   },
   async beforeMount() {
     const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
@@ -52,7 +58,7 @@ export default {
 </script>
 
 <style scoped>
-#saveBtn, #deleteUser {
+.settingsButtons {
   margin: 10px 10px 20px 10px;
 }
 
