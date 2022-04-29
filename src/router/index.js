@@ -9,6 +9,7 @@ import DeleteUser from "@/components/UserProfile/DeleteUser";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
 import EditListing from "@/views/EditListing";
+import {getApiClient} from "@/service/ApiService";
 
 const routes = [
   /*{
@@ -18,7 +19,7 @@ const routes = [
   },
 */
   {
-    path: '/Home',
+    path: '/home',
     name: 'Home',
     component: Home
   },
@@ -71,6 +72,17 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: routes
+})
+
+getApiClient.interceptors.response.use(null, error => {
+  let path = '/error';
+  switch (error.response.status) {
+    case 403: path = '/login'; break;
+    case 404: path = '/login'; break;
+  }
+
+  router.push(path);
+  return Promise.reject(error);
 })
 
 export { routes };
