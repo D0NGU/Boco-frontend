@@ -48,7 +48,7 @@ export default {
 
   methods: {
     async getHistory() {
-      let myUserId = this.$store.state.myUserId;
+      let myUserId = this.$store.getters.myUserId;
       await UserAccountService.getUserRentalHistory(myUserId)
           .then(res => this.historyRentedProducts = res.data)
           .catch((err) => {

@@ -139,6 +139,9 @@ export default {
       this.dialog = false
       this.$refs.form.reset()
       this.$refs.form.resetValidation()
+      if (this.regisState === "Registered successfully!"){
+        this.$router.push("/login")
+      }
     },
 
     goToLoginPage() {
