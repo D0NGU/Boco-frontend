@@ -48,6 +48,7 @@
 
 <script>
 import NotificationView from "@/components/NotificationView";
+import axios from "axios";
 export default {
   components: {NotificationView},
   data () {
@@ -55,6 +56,23 @@ export default {
       dialog: false,
     }
   },
+  methods: {
+    loadData: function () {
+      console.log("user id " +this.$store.state.myUserId )
+      axios.get('/api/' + this.$store.state.getters.myUserId + '/unseen', function (response) {
+      if(response.data != null){
+        console.log("new alert")
+      }else{
+        console.log("no new alerts")
+      }
+      }.bind(this));
+    }
+  },
+  mounted: function () {
+    setInterval(function () {
+      this.loadData();
+    }.bind(this), 10000);
+  }
 }
 </script>
 
