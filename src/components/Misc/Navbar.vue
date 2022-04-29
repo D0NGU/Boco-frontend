@@ -53,6 +53,7 @@
 <script>
 import NotificationView from "@/components/NotificationView";
 import axios from "axios";
+import {getApiClient} from "@/service/ApiService";
 export default {
   components: {NotificationView},
   data () {
@@ -61,16 +62,16 @@ export default {
     }
   },
   methods: {
-    loadData: function () {
-      console.log("user id " +this.$store.state.myUserId )
-      axios.get('/api/' + this.$store.state.getters.myUserId + '/unseen', function (response) {
-      if(response.data != null){
-        console.log("new alert")
-      }else{
-        console.log("no new alerts")
-      }
-      }.bind(this));
-    }
+    async loadData() {
+      await getApiClient.get('/alerts/user/' + this.$store.state.myUserId + '/unseen').then(response => {
+        if (response.data !== "") {
+          //TODO bytt farge på varsel ikon
+          console.log("new alert")
+        } else {
+          console.log("no new alerts")
+        }
+      })
+    },
   },
   mounted: function () {
     setInterval(function () {
