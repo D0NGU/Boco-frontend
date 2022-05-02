@@ -24,6 +24,10 @@ export default {
 
     getUserId(email){
         return getApiClient.get(`user/get/`+email)
+    },
+
+    getVerifiedUser(userId) {
+        return getApiClient.get('user/' + userId + '/vertified');
     }
 }
 

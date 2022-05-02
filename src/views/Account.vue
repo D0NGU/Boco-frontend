@@ -114,6 +114,7 @@ import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
+import axios from 'axios'
 
 export default {
     name: 'account',
@@ -148,16 +149,20 @@ export default {
       this.userDescription = '';
       this.edit = false
     },
-    getVerifiedUser() {
-      // TODO: get data from database and check if user is verified
-    }
   },
   async beforeMount() {
-    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
+    let myUserId = this.$store.getters.myUserId;
+    const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
 
-    //TODO: get "user description" and if user is verified
-    //this.getVerifiedUser()
+    //TODO: get "user description"
+
+
+    await UserAccountService.getVerifiedUser(myUserId)
+        .then(res => this.isVerified = res.data)
+        .catch((err) => {
+          console.log(err.res.data)
+        })
 
   }
 }
