@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import cookies from "vue-cookie";
 
 export const mutations = {
   SET_STATUS(state, status) {
@@ -36,8 +37,8 @@ export default createStore({
   state: {
     loggedIn: false,
     token: '',
-    myUserId: '',
-    email: '',
+    myUserId: cookies.get("userId"),
+    email: cookies.get("email"),
   },
   getters: getters,
   mutations: mutations,

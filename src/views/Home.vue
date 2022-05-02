@@ -7,12 +7,13 @@
 <script>
 import ListingView from "@/components/Listing/ListingView";
 import UserAccountService from "@/service/UserAccountService";
+import cookies from "vue-cookie";
 export default {
     name: 'Home',
   components: {ListingView},
   async beforeMount() {
     const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
-    this.$store.commit("SET_MYUSERID", userInfo.id)
+    cookies.set("userId", userInfo.id);
   }
 }
 </script>
