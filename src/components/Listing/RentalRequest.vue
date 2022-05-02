@@ -29,10 +29,12 @@ export default {
   },
   methods: {
     acceptRental(){
-      RentalService.accept(this.id)
+      RentalService.accept(this.id);
+      // location.reload();
     },
     denyRental(){
       RentalService.deny(this.id)
+      // location.reload();
     }
   },
   async beforeMount() {

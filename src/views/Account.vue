@@ -18,15 +18,65 @@
     <div class="profileImageCover"></div>
   </div>
     <div class="profileDetails">
-      <v-carousel id="carousel" height="250px" hide-delimiter-background="" :show-arrows="false">
+      <v-carousel id="carousel" height="300px" hide-delimiter-background="" :show-arrows="false">
         <v-carousel-item class="carouselItem">
           <v-avatar size="x-large">
             <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
           </v-avatar>
-          <p class="text-button"> {{name}} </p>
           <div>
-            <p class="text-body-1">En veldig snill kar som liker å låne bort gjenstander :)</p>
+            <p class="text-button">{{name}}
+              <v-icon v-if="isVerified">mdi-account-check-outline</v-icon>
+            </p>
           </div>
+
+          <div>
+            <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
+            <v-btn v-if="!edit" class="my-2" id="editDescription"
+                   rounded
+                   color="grey"
+                   fab
+                   small
+                   dark
+                   @click="editDescription"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+
+            <div>
+              <v-btn v-if="edit"
+                     rounded
+                     class="ma-2"
+                     color="green"
+                     dark
+                     @click="saveDescription"
+              >
+                <v-icon dark right>
+                  mdi-checkbox-marked-circle
+                </v-icon>
+              </v-btn>
+              <v-btn v-if="edit"
+                     rounded
+                     class="ma-2"
+                     color="red"
+                     dark
+                     @click="deleteDescription"
+              >
+                <v-icon dark right>
+                  mdi-delete
+                </v-icon>
+              </v-btn>
+              <v-textarea v-if="edit"
+                          rows="2"
+                          outlined
+                          label="User description"
+                          v-model="userDescription"
+                          counter="190"
+                          maxlength="190"
+                          :rules="rules"
+              ></v-textarea>
+            </div>
+          </div>
+
         </v-carousel-item>
         <v-carousel-item class="carouselItem">
           <!-- TODO: Hent rating fra backend -->
@@ -43,13 +93,13 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <ListingView :ownerId="$store.state.myUserId"/>
+          <ListingView :ownerId="this.$store.state.myUserId"/>
         </v-window-item>
         <v-window-item value="history">
           <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
-          <MyReviews />
+          <MyReviews/>
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
@@ -72,17 +122,43 @@ export default {
   data() {
     return {
       //TODO Hent rating fra backend
-      name: '',
+      name: 'Test Name',
       ratingSeller: 5,
       ratingRenter: 5,
       reviewsCount: '',
       tab: null,
       userInfo: '',
+      userDescription: 'En veldig snill kar som liker å låne bort gjenstander :)', //TODO Hent "user description" fra backend
+      edit: false,
+      isVerified: false,
+      rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
+    }
+  },
+
+  methods: {
+    editDescription() {
+        this.edit = true;
+    },
+    saveDescription() {
+      //TODO send "user description" til backend
+      this.edit = false
+    },
+    deleteDescription() {
+      //TODO send tom "user description" til backend
+      this.userDescription = '';
+      this.edit = false
+    },
+    getVerifiedUser() {
+      // TODO: get data from database and check if user is verified
     }
   },
   async beforeMount() {
-    const userInfo = await UserAccountService.getUserId(this.$store.state.email)
+    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
+
+    //TODO: get "user description" and if user is verified
+    //this.getVerifiedUser()
+
   }
 }
 </script>
@@ -113,12 +189,13 @@ export default {
   grid-area: 1/1;
   height: 100%;
   width: 100%;
+  z-index: 2;
 }
 .profileDetails {
   position: absolute;
   height: 500px;
   width: 100%;
-  top: 70px;
+  top: 20px;
   left: 0;
   color: white;
   display: flex;
@@ -133,4 +210,8 @@ export default {
   z-index: 10;
   display: flex;
 }
+.v-card-text {
+  padding: 0;
+}
+
 </style>
