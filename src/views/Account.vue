@@ -129,7 +129,7 @@ export default {
       reviewsCount: '',
       tab: null,
       userInfo: '',
-      userDescription: 'En veldig snill kar som liker å låne bort gjenstander :)', //TODO Hent "user description" fra backend
+      userDescription: '', //TODO Hent "user description" fra backend
       edit: false,
       isVerified: false,
       rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
@@ -140,12 +140,26 @@ export default {
     editDescription() {
         this.edit = true;
     },
-    saveDescription() {
+    async saveDescription() {
+      let myUserId = this.$store.getters.myUserId;
+      console.log(myUserId)
+      let description = "testing user description"
+      await UserAccountService.updateUserDescription(myUserId, description)
+          .then(res => console.log("Success: " + res.status))
+          .catch((err) => {
+            console.log(err)
+          })
       //TODO send "user description" til backend
       this.edit = false
     },
-    deleteDescription() {
+    async deleteDescription() {
       //TODO send tom "user description" til backend
+      let myUserId = this.$store.getters.myUserId;
+      await UserAccountService.updateUserDescription(myUserId)
+          .then(res => console.log(res.status))
+          .catch((err) => {
+            console.log(err)
+          })
       this.userDescription = '';
       this.edit = false
     },
@@ -155,14 +169,19 @@ export default {
     const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
 
-    //TODO: get "user description"
-
-
-    await UserAccountService.getVerifiedUser(myUserId)
+    //check is user is verified
+    /*await UserAccountService.getVerifiedUser(myUserId)
         .then(res => this.isVerified = res.data)
         .catch((err) => {
           console.log(err.res.data)
-        })
+        })*/
+
+    //get user description
+    /*await UserAccountService.getUserDescription(myUserId)
+        .then(res => console.log(res.data))
+        .catch((err) => {
+          console.log(err.res.data)
+        })*/
 
   }
 }

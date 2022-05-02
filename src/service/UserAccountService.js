@@ -1,5 +1,6 @@
 import {getApiClient} from "@/service/ApiService";
 import axios from "axios";
+import VueCookie from "vue-cookie";
 
 export default {
     getUserRentalHistory(myUserId) {
@@ -28,6 +29,22 @@ export default {
 
     getVerifiedUser(userId) {
         return getApiClient.get('user/' + userId + '/vertified');
+    },
+
+    getUserDescription(userId) {
+        return getApiClient.get('user/' + userId + '/description');
+    },
+
+    updateUserDescription(userId, description) {
+        const url = 'http://localhost:8080/api/user/' + userId + '/description';
+        var config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' +VueCookie.get('token'),
+            }
+        };
+        console.log("description from frontend:" + description)
+        return axios.post(url,  {description: description}, config)
     }
 }
 
