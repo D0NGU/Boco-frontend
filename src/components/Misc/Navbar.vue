@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     async loadData() {
-      await getApiClient.get('/alerts/user/' + this.$store.state.myUserId + '/unseen').then(response => {
+      await getApiClient.get('alerts/user/' + this.$store.state.myUserId + '/unseen').then(response => {
         if (response.data !== "") {
           console.log("New alert")
           this.notification = true;
