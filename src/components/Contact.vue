@@ -1,5 +1,5 @@
 <template>
-  <h1>Kontakt oss</h1>
+  <h1 id="header">Kontakt oss</h1>
   <v-text-field
       v-model="fname"
       label="Fornavn"
@@ -19,18 +19,33 @@
       hide-details="auto"
   ></v-text-field>
   <v-text-field
+      id="feedbackField"
       v-model="feedback"
       label="Kommentar"
       type="text"
       hide-details="auto"
-      height="100px"
+      height="200px"
   ></v-text-field>
-  <v-btn
-      id="sendForm"
-  >Send kontaktskjema</v-btn>
-  <v-btn
-      id="dismiss"
-  >Avbryt</v-btn>
+  <v-row>
+    <v-col
+      cols="12"
+    >
+      <v-btn
+          id="sendForm"
+          @click="sendContact"
+      >Send kontaktskjema</v-btn>
+    </v-col>
+    <v-col
+      cols="12"
+      >
+      <v-btn
+          id="dismiss"
+          onclick="location.href='/home'"
+      >Avbryt</v-btn>
+    </v-col>
+  </v-row>
+
+
 </template>
 
 <script>
@@ -43,12 +58,24 @@ export default {
       email: '',
       feedback: '',
     }
+  },
+  methods: {
+    sendContact(){
+      console.log("Form is sent.");
+    }
   }
 }
 </script>
 
 <style scoped>
+#header{
+  padding: 0.5em;
+}
+.v-text-field{
+  padding: 0.5em;
+}
 #sendForm{
+  margin-top: 1.5em;
   background-color: var(--bocoBlue);
   color: white;
   font-weight: bold;

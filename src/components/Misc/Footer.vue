@@ -39,7 +39,7 @@ c117 8 216 11 219 7 26 -26 -367 -202 -618 -278 -204 -62 -267 -72 -460 -72
           </g>
         </svg>
         <v-divider/>
-        <h4 onclick="location.href='/Home'">Kontakt oss</h4>
+        <h4 onclick="location.href='/Contact'">Kontakt oss</h4>
         <h4 onclick="location.href='/Home'">
           <v-icon>mdi-forum</v-icon>
           Chat
