@@ -12,15 +12,8 @@
     </div>
 
     <div v-if="noRentals">
-      <p v-if="!error">Du har ingen leid produkter</p>
+      <p v-if="!error">Du har ikke leid noen produkter enda</p>
       <p v-else> {{ error }} </p>
-      <v-btn
-          color="blue-grey"
-          class="ma-2 white--text"
-          @click="refresh"
-      >Refresh
-        <v-icon left dark>mdi-cached</v-icon>
-      </v-btn>
     </div>
 
   </div>
@@ -61,11 +54,10 @@ export default {
         this.noRentals = false
       }
     },
-
-    refresh() {
-      this.getHistory();
-    }
   },
+  beforeMount() {
+    this.getHistory();
+  }
 }
 </script>
 
