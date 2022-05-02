@@ -12,6 +12,7 @@ module.exports = defineConfig({
     manifestOptions: {
       name: "BoCo",
       short_name: "BoCo",
+      start_url: "/login",
       display: 'standalone',
       background_color: "#004aab",
       icons: [
