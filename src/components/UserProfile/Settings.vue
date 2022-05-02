@@ -9,14 +9,14 @@
     <v-switch inset="" color="indigo" label="Offentlig kjøpshistorikk" v-model="hideHistory"></v-switch>
   </div>
 
-  <v-btn @click="handleSaveClick" class="settingsButtons">Lagre</v-btn>
+  <v-btn id="saveBtn" @click="handleSaveClick" class="settingsButtons">Lagre</v-btn>
   <v-dialog
     v-model="dialog"
     persistent
     min-width="70px"
     >
     <template v-slot:activator="{ on, attrs }">
-      <v-btn id="logOut" color="error" class="settingsButtons" v-bind="attrs" v-on="on" @click="dialog=true"> Logg ut</v-btn>
+      <v-btn id="logOut"  class="settingsButtons" v-bind="attrs" v-on="on" @click="dialog=true"> Logg ut</v-btn>
     </template>
     <v-card>
       <v-card-title class="text-h6">Er du sikker på at du vil logge ut?</v-card-title>
@@ -101,5 +101,10 @@ h1 {
 #textFieldWrapper {
   margin: 0 auto;
   width: 350px;
+}
+
+#saveBtn {
+  color: white;
+  background-color: var(--bocoBlue);
 }
 </style>

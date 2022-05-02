@@ -1,9 +1,11 @@
 <template>
-<nav v-if="$store.state.loggedIn">
-  <Navbar />
+  <nav v-if="$store.state.loggedIn">
+  <Navbar id="navBar"/>
 </nav>
 
   <router-view></router-view>
+
+  <Footer/>
 </template>
 
 <style>
@@ -23,7 +25,8 @@ body {
 import VueCookie from 'vue-cookie'
 import Login from "@/views/Login";
 import Navbar from "./components/Misc/Navbar.vue"
+import Footer from "./components/Misc/Footer.vue"
 export default {
-  components: {Login, Navbar},
+  components: {Login, Navbar, Footer},
 }
 </script>

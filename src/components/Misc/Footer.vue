@@ -1,8 +1,7 @@
 <template>
-    <v-row id="footer" justify="center" no-gutters="">
+    <v-row id="footer" justify="center">
       <v-col cols="12">
-        <img src="">
-        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+        <svg id="logo" version="1.0" xmlns="http://www.w3.org/2000/svg"
              width="50.000000pt" height="50.000000pt" viewBox="0 0 500.000000 500.000000"
              preserveAspectRatio="xMidYMid meet">
 
@@ -39,11 +38,14 @@ c117 8 216 11 219 7 26 -26 -367 -202 -618 -278 -204 -62 -267 -72 -460 -72
           </g>
         </svg>
         <v-divider/>
-        <h4 onclick="location.href='/Home'">Kontakt oss</h4>
-        <h4 onclick="location.href='/Home'">
-          <v-icon>mdi-forum</v-icon>
-          Chat
-        </h4>
+        <div id="info">
+          <h4 onclick="location.href='/Home'">Kontakt oss</h4>
+          <h4 onclick="location.href='/Home'">FAQ</h4>
+          <h4 onclick="location.href='/Home'">
+            Chat
+          </h4>
+          <p id="copyrightMessage">&copy; 2022 BoCo</p>
+        </div>
       </v-col>
       <!--<v-col id="date" cols="12">
         <h5>Laget av</h5>
@@ -66,13 +68,39 @@ export default {
 
 <style scoped>
 #footer{
-  padding: 1em;
   color: var(--bocoBlue);
   background-color: white;
-  border: solid 2px orange;
+  position: relative;
+  margin: 30px 0 0 0;
+  width: 100%;
+
 }
-#date{
-  padding-top: 1em;
+.v-col {
+  padding: 0;
 }
+
+#info {
+  margin: 1.5em;
+}
+
+#logo {
+  margin: 1.5em;
+}
+
+h4 {
+  padding: 0.1em;
+  cursor: pointer;
+}
+
+#copyrightMessage {
+  margin-top: 1em;
+  color: grey;
+}
+
+.v-divider {
+  width: 95%;
+  margin: 0 auto;
+}
+
 
 </style>
