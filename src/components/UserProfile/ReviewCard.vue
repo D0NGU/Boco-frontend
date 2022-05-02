@@ -7,7 +7,7 @@
       </div>
       <v-divider vertical="" />
       <div class="itemDetail">
-        <p class="text-subtitle-1">{{ ratingComment }} </p>
+        <p class="text-subtitle-1">{{ comment }} </p>
         <!--<p class="text-caption" >{{itemPrice}} kr/dag</p>-->
 
 
@@ -30,7 +30,7 @@ export default {
   name: "ReviewCard",
   props: {
     rating: Number,
-    ratingComment: String,
+    comment: String,
     authorId: Number,
   },
   data (){

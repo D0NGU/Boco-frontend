@@ -2,7 +2,7 @@
   <div v-for="review in reviews">
     <ReviewCard
         :rating="review.rating"
-        :rating-comment="review.comment"
+        :comment="review.comment"
         :authorId="review.author"
 
     />
