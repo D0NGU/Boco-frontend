@@ -193,9 +193,9 @@ export default {
 }
 .profileDetails {
   position: absolute;
-  height: 500px;
+  height: 480px;
   width: 100%;
-  top: 20px;
+  top: 40px;
   left: 0;
   color: white;
   display: flex;
