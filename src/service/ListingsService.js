@@ -25,5 +25,8 @@ export default {
     },
     getListing(id) {
         return getApiClient.get('listing/'+id)
+    },
+    delete(userId, itemId) {
+        return getApiClient.delete('products/'+userId+'/delete/?productId='+itemId)
     }
 }
