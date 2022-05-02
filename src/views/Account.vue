@@ -24,9 +24,54 @@
             <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
           </v-avatar>
           <p class="text-button"> {{name}} </p>
+
           <div>
-            <p class="text-body-1">En veldig snill kar som liker å låne bort gjenstander :)</p>
+            <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
+            <div>
+              <v-btn v-if="edit"
+                     rounded
+                     class="ma-2"
+                     color="green"
+                     dark
+                     @click="saveDescription"
+              >
+                <v-icon dark right>
+                  mdi-checkbox-marked-circle
+                </v-icon>
+              </v-btn>
+              <v-btn v-if="edit"
+                     rounded
+                     class="ma-2"
+                     color="red"
+                     dark
+                     @click="deleteDescription"
+              >
+                <v-icon dark right>
+                  mdi-delete
+                </v-icon>
+              </v-btn>
+              <v-textarea v-if="edit"
+                          rows="2"
+                          outlined
+                          label="User description"
+                          v-model="userDescription"
+              ></v-textarea>
+
+
+            </div>
+
+            <v-btn v-if="!edit" class="my-2" id="editDescription"
+                   rounded
+                   color="grey"
+                   fab
+                   small
+                   dark
+                   @click="editDescription"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
           </div>
+
         </v-carousel-item>
         <v-carousel-item class="carouselItem">
           <!-- TODO: Hent rating fra backend -->
@@ -43,7 +88,7 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <ListingView :ownerId="$store.state.myUserId"/>
+          <ListingView :ownerId="this.$store.state.myUserId"/>
         </v-window-item>
         <v-window-item value="history">
           <HistoryComponent/>
@@ -77,6 +122,24 @@ export default {
       reviewsCount: '',
       tab: null,
       userInfo: '',
+      userDescription: 'En veldig snill kar som liker å låne bort gjenstander :)', //TODO Hent "user description" fra backend
+      edit: false,
+    }
+  },
+
+  methods: {
+    editDescription() {
+        this.edit = true;
+    },
+    saveDescription() {
+      //TODO send "user description" til backend
+      console.log("hi")
+      this.edit = false
+    },
+    deleteDescription() {
+      //TODO send tom "user description" til backend
+      this.userDescription = '';
+      this.edit = false
     }
   },
   async beforeMount() {
