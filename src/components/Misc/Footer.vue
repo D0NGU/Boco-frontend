@@ -39,19 +39,14 @@ c117 8 216 11 219 7 26 -26 -367 -202 -618 -278 -204 -62 -267 -72 -460 -72
         </svg>
         <v-divider/>
         <div id="info">
-          <h4 onclick="location.href='/Home'">Kontakt oss</h4>
+          <h4 onclick="location.href='/Contact'">Kontakt oss</h4>
           <h4 onclick="location.href='/Home'">FAQ</h4>
           <h4 onclick="location.href='/Home'">
-            Chat
+            <v-icon>mdi-forum</v-icon> Chat
           </h4>
           <p id="copyrightMessage">&copy; 2022 BoCo</p>
         </div>
       </v-col>
-      <!--<v-col id="date" cols="12">
-        <h5>Laget av</h5>
-        Scrum-team 08 -
-        {{ new Date().getFullYear() }}
-      </v-col>-->
     </v-row>
 </template>
 
