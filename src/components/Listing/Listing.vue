@@ -5,8 +5,22 @@
   <h1 v-else >Opprett en ny annonse</h1>
   <div class="flex-column mb-6">
     <v-card class="container">
-      <div>
+      <v-form
+          v-model="valid"
+          lazy-validation
+          @submit.prevent="createAd"
+          ref="form">
         <v-text-field
+            v-if="updating"
+            type="text"
+            id="adName"
+            v-model="adName"
+            readonly
+            label="Navn på annonse"
+            hide-details="auto"
+        ></v-text-field>
+        <v-text-field
+            v-else
             data-testid="name-input"
             type="text"
             v-model="adName"
@@ -14,15 +28,12 @@
             :rules="rules"
             hide-details="auto"
         ></v-text-field>
-      </div>
-      <div>
         <v-text-field
             v-model="adDescription"
             label="Beskrivelse"
             :rules="rules"
             hide-details="auto"
         ></v-text-field>
-      </div>
       <div>
 <!--        <v-file-input
             v-bind:value="adPicture"
@@ -35,7 +46,6 @@
             prepend-icon="mdi-camera"
         />-->
       </div>
-      <div>
         <v-select
             v-model="adCategory"
             :items="categories"
@@ -43,8 +53,6 @@
             outlined
             prepend-icon="mdi-widgets"
         ></v-select>
-      </div>
-      <div>
         <v-text-field
             v-model="adPrice"
             type="text"
@@ -52,9 +60,6 @@
             :rules="rulesNumber"
             hide-details="auto"
         />
-      </div>
-
-      <div>
         <v-radio-group
             v-model="pricePer"
             column
@@ -70,7 +75,6 @@
               value="set"
           ></v-radio>
         </v-radio-group>
-      </div>
 
 <!--
       <v-container class="grey lighten-5">
@@ -114,9 +118,6 @@
         </v-row>
       </v-container>
 -->
-
-
-      <div>
         <v-text-field
             v-model="adAddress"
             type="text"
@@ -124,8 +125,6 @@
             :rules="rules"
             hide-details="auto"
         />
-      </div>
-      <div>
         <v-text-field
             v-model="adPhone"
             type="text"
@@ -133,15 +132,13 @@
             :rules="rulesPhone"
             hide-details="auto"
         />
-      </div>
-      <div>
+  </v-form>
         <v-switch
             v-model="listed"
             inset=""
             color="indigo"
             :label="`Skjul annonse`"
         ></v-switch>
-      </div>
         <div v-if="updating">
         <v-btn
             class="createAdButton"
@@ -155,18 +152,17 @@
           </v-btn>
         </div>
       <v-btn
+          :disabled="!valid"
           class="createAdButton"
           @click="createAd()"
           v-else
       >Opprett annonse
       </v-btn>
-      <div>
         <v-btn
             id="cancelButton"
+            @click="$router.back()"
         >Avbryt
         </v-btn>
-      </div>
-
       <v-dialog id="popOut" v-model="dialog">
         <v-card>
           <v-card-title class="text-h5"> {{statusMessage}} </v-card-title>
@@ -220,6 +216,7 @@ export default {
   },
   data() {
     return {
+      valid: false,
       updating: false,
       adName: '',
       adDescription: '',
