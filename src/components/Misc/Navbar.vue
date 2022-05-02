@@ -2,9 +2,6 @@
 
 <template>
     <v-row id="navBar">
-      <v-btn @click="newAlert()">
-        ny alert
-      </v-btn>
       <v-col class="navItem">
       <router-link :to="{name: 'Home'}">
         <div class="navLink">
@@ -55,10 +52,7 @@
 
 <script>
 import NotificationView from "@/components/NotificationView";
-import axios from "axios";
 import {getApiClient} from "@/service/ApiService";
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
 export default {
   components: {NotificationView},
   data () {
@@ -70,7 +64,6 @@ export default {
     }
   },
   methods: {
-    /*
     async loadData() {
       await getApiClient.get('/alerts/user/' + this.$store.state.myUserId + '/unseen').then(response => {
         if (response.data !== "") {
@@ -80,39 +73,12 @@ export default {
           console.log("no new alerts")
         }
       })
-    },*/
-    connect() {
-
-      this.socket = new SockJS("http://localhost:8080/websocket");
-      this.stompClient = Stomp.over(this.socket);
-      this.stompClient.connect(
-          {},
-          frame => {
-            this.connected = true;
-            console.log(frame);
-            this.stompClient.subscribe("/alerts/greetings", tick => {
-              console.log(tick);
-              this.received_messages.push(JSON.parse(tick.body).content);
-              console.log(this.received_messages)
-            });
-          },
-          error => {
-            console.log(error);
-            this.connected = false;
-          }
-      );
     },
-    async newAlert(){
-      const alert = {description: "test",alertDate: "2022-06-12", hasSeen: false, optionalId: 1, userId: 2}
-      await getApiClient.post("alerts/user/2/newAlert", alert)
-    }
   },
   mounted(){
-    /*
     setInterval(function () {
       this.loadData();
-    }.bind(this), 10000);*/
-    this.connect()
+    }.bind(this), 10000);
   },
 }
 </script>
