@@ -146,6 +146,7 @@ export default {
   justify-content: center;
   padding: 20px;
   margin-top: 30px;
+  margin-bottom: 60px;
 }
 
 #inputWrapper {

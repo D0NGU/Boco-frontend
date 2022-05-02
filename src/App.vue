@@ -1,9 +1,11 @@
 <template>
-<nav v-if="this.$store.state.loggedIn">
-  <Navbar />
+  <nav v-if="$store.state.loggedIn">
+  <Navbar id="navBar"/>
 </nav>
 
   <router-view></router-view>
+
+  <Footer/>
 </template>
 
 <style>
@@ -20,53 +22,11 @@ body {
 
 </style>
 <script>
+import VueCookie from 'vue-cookie'
 import Login from "@/views/Login";
 import Navbar from "./components/Misc/Navbar.vue"
-import axios from "axios";
+import Footer from "./components/Misc/Footer.vue"
 export default {
-  components: {Login, Navbar},
-  data() {
-    return {
-      shopId: '',
-  }
-  },
-  Create () {// page creation lifecycle function
-    this.initWebSocket()
-  },
-  Destroyed: function () {// leave page life cycle function
-    this.websocketclose();
-  },
-  methods: {
-    collapse: function(){
-      this.isCollapse = !this.isCollapse;
-      if (this.isCollapse) {
-        this.iconClass = "cebianlanzhankai";
-      } else{
-        this.iconClass = "cebianlanshouhui";
-      }
-    },
-    initWebSocket: function () {
-      // WebSocket is different from ordinary requests in terms of protocol, WS is equivalent to http, WSS is equivalent to HTTPS
-      this.websock = new WebSocket("ws://localhost:8046/websocket/DPS007");
-      this.websock.onopen = this.websocketonopen;
-      this.websock.onerror = this.websocketonerror;
-      this.websock.onmessage = this.websocketonmessage;
-      this.websock.onclose = this.websocketclose;
-    },
-    websocketonopen: function () {
-      console.log("WebSocket Connection Successful");
-    },
-    websocketonerror: function (e) {
-      console.log("WebSocket connection error");
-    },
-    websocketonmessage: function (e) {
-      var da = JSON.parse(e.data);
-      console.log(da);
-      this.message = da;
-    },
-    websocketclose: function (e) {
-      console.log("connection closed (" + e.code + ")");
-    },
-  },
+  components: {Login, Navbar, Footer},
 }
 </script>

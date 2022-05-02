@@ -29,7 +29,8 @@
             fullscreen=""
         >
           <template v-slot:activator="{ props }">
-              <v-icon color="white" v-bind="props"> mdi-bell </v-icon>
+              <v-icon v-show="!notification" color="white" v-bind="props"> mdi-bell </v-icon>
+              <v-icon v-show="notification"  color="white" v-bind="props"> mdi-bell-alert </v-icon>
           </template>
 
           <v-card id="notificationDialog">
@@ -52,12 +53,34 @@
 
 <script>
 import NotificationView from "@/components/NotificationView";
+import {getApiClient} from "@/service/ApiService";
 export default {
   components: {NotificationView},
   data () {
     return {
       dialog: false,
+      received_messages: [],
+      send_message: null,
+      connected: false,
+      notification: false
     }
+  },
+  methods: {
+    async loadData() {
+      await getApiClient.get('alerts/user/' + this.$store.state.myUserId + '/unseen').then(response => {
+        if (response.data !== "") {
+          console.log("New alert")
+          this.notification = true;
+        } else {
+          this.notification = false;
+        }
+      })
+    },
+  },
+  mounted(){
+    setInterval(function () {
+      this.loadData();
+    }.bind(this), 15000);
   },
 }
 </script>
@@ -73,7 +96,11 @@ export default {
   flex-direction: row;
   background-color: var(--bocoBlue);
   margin: 0;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
 }
+
 #navBar a {
   color: white;
   text-decoration: none;
@@ -90,6 +117,9 @@ export default {
   padding: 12px;
 }
 #notificationDialog {
+  background-color: #edf1f5;
+}
+#chatDialog {
   background-color: #edf1f5;
 }
 #closeButton {

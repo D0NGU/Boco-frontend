@@ -9,8 +9,35 @@
     <v-switch inset="" color="indigo" label="Offentlig kjøpshistorikk" v-model="hideHistory"></v-switch>
   </div>
 
-  <v-btn @click="handleSaveClick" class="settingsButtons">Lagre</v-btn>
-  <v-btn id="logOut" color="error" :to="{name: 'Login'}" class="settingsButtons"> Logg ut</v-btn>
+  <v-btn id="saveBtn" @click="handleSaveClick" class="settingsButtons">Lagre</v-btn>
+  <v-dialog
+    v-model="dialog"
+    persistent
+    min-width="70px"
+    >
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn id="logOut"  class="settingsButtons" v-bind="attrs" v-on="on" @click="dialog=true"> Logg ut</v-btn>
+    </template>
+    <v-card>
+      <v-card-title class="text-h6">Er du sikker på at du vil logge ut?</v-card-title>
+      <v-card-text>Du vil være nødt til å logge inn på nytt.</v-card-text>
+      <v-card-actions justify="center">
+        <v-btn
+            color="indigo darken-4"
+            @click="dialog = false"
+        >
+          Nei
+        </v-btn>
+        <v-btn
+            color="red darken-4"
+            @click="logOut"
+          >
+          Ja, logg ut
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
   <v-spacer>
     <v-btn id="deleteUser" color="error" :to="{name: 'DeleteUser'}" class="settingsButtons"> Slett bruker</v-btn>
   </v-spacer>
@@ -37,6 +64,7 @@ export default {
       newPasswordRepeat: "",
       hideHistory: false,
       confirmationSnackBar: false,
+      dialog: false,
     }
   },
   methods: {
@@ -49,6 +77,7 @@ export default {
     logOut() {
       this.$store.commit('SET_STATUS', false);
       cookies.set('token', "", { path: '/' });
+      setTimeout( () => this.$router.push({ path: '/login'}), 1500);
     },
   },
   async beforeMount() {
@@ -72,5 +101,10 @@ h1 {
 #textFieldWrapper {
   margin: 0 auto;
   width: 350px;
+}
+
+#saveBtn {
+  color: white;
+  background-color: var(--bocoBlue);
 }
 </style>
