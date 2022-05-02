@@ -24,7 +24,7 @@
             outlined
             rounded
             text
-            onclick="location.href='/login'"
+            onclick="location.href='/account'"
         >
           Avbryt
         </v-btn>
@@ -37,8 +37,7 @@
           max-width="300px"
           v-if="clicked ? 'true':''"
       >Brukeren ble slettet!
-        <v-spacer></v-spacer>
-        Registrer ny bruker <router-link :to="{name: 'RegisterForm'}">her</router-link></v-alert>
+      </v-alert>
     </v-card>
   </div>
 
@@ -66,6 +65,7 @@ export default {
         console.warn(error.response);
       })
       this.$store.commit('SET_STATUS', false)
+      setTimeout(() => this.$router.push({path: '/home'}), 1500);
     },
   }
 }
