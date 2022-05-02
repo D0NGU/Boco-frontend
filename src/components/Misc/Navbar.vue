@@ -29,7 +29,8 @@
             fullscreen=""
         >
           <template v-slot:activator="{ props }">
-              <v-icon color="white" v-bind="props"> mdi-bell </v-icon>
+              <v-icon v-show="!notification" color="white" v-bind="props"> mdi-bell </v-icon>
+              <v-icon v-show="notification"  color="white" v-bind="props"> mdi-bell-alert </v-icon>
           </template>
 
           <v-card id="notificationDialog">
@@ -61,16 +62,17 @@ export default {
       received_messages: [],
       send_message: null,
       connected: false,
+      notification: false
     }
   },
   methods: {
     async loadData() {
       await getApiClient.get('/alerts/user/' + this.$store.state.myUserId + '/unseen').then(response => {
         if (response.data !== "") {
-          //TODO bytt farge på varsel ikon
-          console.log("new alert")
+          console.log("New alert")
+          this.notification = true;
         } else {
-          console.log("no new alerts")
+          this.notification = false;
         }
       })
     },
@@ -78,7 +80,7 @@ export default {
   mounted(){
     setInterval(function () {
       this.loadData();
-    }.bind(this), 10000);
+    }.bind(this), 5000);
   },
 }
 </script>

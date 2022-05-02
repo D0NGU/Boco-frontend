@@ -6,7 +6,8 @@
     >
       <v-col cols="8"
       sm="4"
-      md="8">
+      md="8"
+      @click="routeToProduct(optionalId), markAsSeen(alertId)">
         <p class="notifText">{{ description }}</p>
         <p class="text-caption dateText">{{ alertDate }}</p>
       </v-col>
@@ -32,7 +33,7 @@ export default {
     alertDate: Date,
     hasSeen: Boolean,
     optionalId: Number,
-    userId: Number
+    userId: Number,
   },
   data () {
     return {
@@ -47,7 +48,16 @@ export default {
     async markAsSeen(alertId) {
       await getApiClient.put("/alerts/seen/" + alertId)
       this.$emit("update");
-    }
+    },
+    routeToProduct(optionalId) {
+      if (this.description === "Ny forespørsel om utleie.") {
+        this.$router.push('/listing/edit/' + optionalId);
+      } else if (this.description === "Din forespørsel om utleie ble godtatt!" || this.description === "Din forespørsel om utleie ble avslått!") {
+        this.$router.push('/listing/' + optionalId);
+      } else  {
+        this.$router.push('/account');
+      }
+    },
   }
 }
 </script>
