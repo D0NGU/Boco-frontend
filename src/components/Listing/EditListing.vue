@@ -2,7 +2,7 @@
   <h1 id="createListingHeadline">Oppdater annonse</h1>
   <div class="flex-column mb-6">
     <v-card class="container">
-      <v-form v-model="isFormValid">
+      <v-form>
         <div>
           <v-text-field
               id="adName"
@@ -140,7 +140,6 @@
       <div>
         <v-btn
             id="createAdButton"
-            :diabled="!isFormValid"
             @click="updateAd()"
 
         >Oppdater annonse
@@ -157,7 +156,7 @@
               <v-btn
                   color="red"
                   text
-                  @click="dialog = false"
+                  @click="close"
               >
                 Close
               </v-btn>
@@ -168,7 +167,7 @@
       <div>
         <v-btn
             id="cancelButton"
-            onclick="router.push({name: 'Account'})"
+            @click="$router.push({name: 'Account'})"
         >Avbryt
         </v-btn>
       </div>
@@ -183,10 +182,10 @@
 </template>
 
 <script>
-import axios from "axios";
 import ListingsService from "@/service/ListingsService";
 import RentalRequestView from "@/components/Listing/RentalRequestView";
 import ProductService from "@/service/ProductService";
+import router from "@/router";
 
 export default {
   name: "AdEditPage",
@@ -196,7 +195,6 @@ export default {
   },
   data () {
     return {
-      //TODO: Få produktinformasjon fra backend
       adName: '',
       adDescription: '',
       adPrice:'',
@@ -243,7 +241,7 @@ export default {
       this.dialog = true;
       this.createdStatus = true;
       console.log("Listing was updated.")
-      await ListingsService.edit(null, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
+      await ListingsService.edit(this.itemId, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
         tempStat = response.data
       }).catch((error) => {
         if(error.response){
@@ -251,6 +249,10 @@ export default {
         }
       })
     },
+    close(){
+      this.dialog = false;
+      router.push({ name: 'Account'});
+    }
   },
   beforeMount() {
     this.getInfo();

@@ -153,13 +153,30 @@
         >Avbryt
         </v-btn>
       </div>
+
+      <v-dialog id="popOut" v-model="dialog">
+        <v-card>
+          <v-card-title class="text-h5" v-if="success"> Annonsen ble opprettet! </v-card-title>
+          <v-card-title class="text-h5" v-else> Opprettelse av annonse feilet </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red"
+                text
+                @click=close()
+            >
+              Lukk
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import ListingsService from "@/service/ListingsService";
+import router from "@/router";
 
 export default {
   name: "AdPage",
@@ -178,6 +195,8 @@ export default {
       categories: [],
       createdStatus: false,
       dialog: false,
+      failedInfo: '',
+      success: false,
       rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
@@ -201,9 +220,7 @@ export default {
       })
     },
 
-    //This works, but won't run because of backend
     async saveAd() {
-      this.dialog = true;
       console.log("Listing was created.")
       let tempStat = '';
       await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
@@ -211,15 +228,23 @@ export default {
       }).catch((error) => {
         if(error.response) {
           tempStat = error.response.status;
+          this.failedInfo = error.response.data;
         }
       })
+      this.success = true;
+      this.dialog = true;
     },
+    close(){
+      this.dialog = false;
+      if(this.success){
+        router.push({ name: 'Account'});
+      }
+    }
   },
    beforeMount(){
     this.getCategoriesSelect();
   }
 }
-//TODO Få den valgte kategorien til å vises for bruker
 </script>
 
 <style scoped>
