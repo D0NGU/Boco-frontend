@@ -21,6 +21,7 @@
           :rules="rulesApplyToAll"
           id="password"
           v-model="password"
+          v-on:keyup.enter="logInButton()"
           :type="show ?'text': 'password'"
           @click:append="show=!show"
           label="Passord">
@@ -71,6 +72,9 @@
 
 <script>
 import LoginService from '@/service/LoginService'
+import UserAccountService from "@/service/UserAccountService";
+import cookie from 'vue-cookie'
+
 export default {
 
   methods: {
@@ -82,8 +86,9 @@ export default {
         console.log("Form is validated")
         await LoginService.handleClickSignIn(this.email, this.password).then(response => {
           tempStat = response.status;
-          userId = response.data.id;
-          token = response.data.token;
+          //userId = response.data.id;
+          token = response.data.access_token;
+          cookie.set('token', token);
         }).catch((error) => {
           if (error.response) {
             tempStat = error.response.status;
@@ -93,8 +98,8 @@ export default {
 
       if (tempStat === 200){
         this.loginStatus = "Successfull login";
-        this.$store.dispatch("login", {token: token, userID: userId,});
-        await this.$router.push('/Home');
+        this.$store.dispatch("login", {token: token, email: this.email,});
+        await this.$router.push('/home');
       } else if (tempStat === 403) {
         this.dialog = true
         this.loginStatus = "Wrong password";
@@ -103,6 +108,7 @@ export default {
         this.loginStatus = "User does not exist";
       }
     },
+
 
     goToRegisterPage() {
       this.$router.push('/register');

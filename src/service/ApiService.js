@@ -1,11 +1,10 @@
 import axios from 'axios'
-import store from '@/store'
+import VueCookie from 'vue-cookie'
 
 export const getApiClient = axios.create({
     baseURL: `http://localhost:8080/api/`,
     headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${store.getters.token}`,
+        'Content-type': 'application/json',
+        Authorization: 'Bearer ' +VueCookie.get('token'),
     }
 })

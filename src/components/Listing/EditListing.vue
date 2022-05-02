@@ -2,7 +2,7 @@
   <h1 id="createListingHeadline">Oppdater annonse</h1>
   <div class="flex-column mb-6">
     <v-card class="container">
-      <v-form v-model="isFormValid">
+      <v-form>
         <div>
           <v-text-field
               id="adName"
@@ -21,7 +21,7 @@
           ></v-text-field>
         </div>
 
-        <div>
+<!--        <div>
           <v-file-input
               label="Last opp bildene"
               hide-details="auto"
@@ -30,14 +30,13 @@
               chips
               prepend-icon="mdi-camera"
           />
-        </div>
+        </div>-->
 
         <div>
           <v-select
-              v-model="categories"
+              v-model="selectedCategory"
               :items="categories"
               label="Kategori"
-              hide-details="auto"
               outlined
               prepend-icon="mdi-widgets"
           ></v-select>
@@ -141,7 +140,6 @@
       <div>
         <v-btn
             id="createAdButton"
-            :diabled="!isFormValid"
             @click="updateAd()"
 
         >Oppdater annonse
@@ -158,7 +156,7 @@
               <v-btn
                   color="red"
                   text
-                  @click="dialog = false"
+                  @click="close"
               >
                 Close
               </v-btn>
@@ -169,33 +167,45 @@
       <div>
         <v-btn
             id="cancelButton"
-            onclick="location.href='/'"
+            @click="$router.push({name: 'Account'})"
         >Avbryt
         </v-btn>
+      </div>
+    </v-card>
+    <v-card>
+      <div>
+        <RentalRequestView
+          :product-id="itemId" />
       </div>
     </v-card>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import ListingsService from "@/service/ListingsService";
+import RentalRequestView from "@/components/Listing/RentalRequestView";
+import ProductService from "@/service/ProductService";
+import router from "@/router";
 
 export default {
   name: "AdEditPage",
+  components: {RentalRequestView},
+  props: {
+    itemId: Number
+  },
   data () {
     return {
-      //TODO: Få produktinformasjon fra backend
-      adName: this.$store.state.myListingName,
-      adDescription:this.$store.state.myListingDes,
-      adPrice:this.$store.state.myListingPrice,
+      adName: '',
+      adDescription: '',
+      adPrice:'',
       pricePer:'',
       fromDate:'',
       toDate: '',
-      adAddress:this.$store.state.myAddress,
-      adPhone:this.$store.state.myPhone,
-      switch1:this.$store.state.unlisted,
+      adAddress:'',
+      adPhone:'',
+      switch1:'',
       categories: [],
+      selectedCategory: '',
       createdStatus: false,
       dialog: false,
       rules: [
@@ -211,40 +221,42 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
-      created() {
-        this.getCategories();
-      },
     }
   },
   methods: {
-    getCategories(){
-      ListingsService.getCategories().then((response) => {
-        this.categories = response.data;
-      });
+    async getInfo(){
+      const categories = (await ListingsService.getCategories()).data
+      categories.forEach(cat => {
+        this.categories.push(cat.category)
+      })
+      const productInfo = (await ProductService.getProductById(this.itemId)).data
+      this.adName = productInfo.title;
+      this.adDescription = productInfo.description;
+      this.adPrice = productInfo.price;
+      this.adAddress = productInfo.address;
+      this.selectedCategory = productInfo.category
     },
     async updateAd(){
       let tempStat;
       this.dialog = true;
       this.createdStatus = true;
       console.log("Listing was updated.")
-      await ListingsService.edit(null, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
+      await ListingsService.edit(this.itemId, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
         tempStat = response.data
       }).catch((error) => {
         if(error.response){
           tempStat = error.response.data;
         }
       })
-      if(tempStat === 201){
-        this.createdStatus = true;
-        this.$store.commit('SET_MYLISTINGNAME', this.adName)
-        this.$store.commit('SET_MYLISTINGDES', this.adDescription)
-        this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
-        this.$store.commit('SET_MYADDRESS', this.adAddress)
-        this.$store.commit('SET_MYPHONE', this.adPhone)
-        this.$store.commit('SET_UNLISTED', this.switch1)
-      }
     },
+    close(){
+      this.dialog = false;
+      router.push({ name: 'Account'});
+    }
   },
+  beforeMount() {
+    this.getInfo();
+  }
 }
 </script>
 

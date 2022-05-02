@@ -23,7 +23,7 @@
         ></v-text-field>
       </div>
       <div>
-        <v-file-input
+<!--        <v-file-input
             v-bind:value="adPicture"
             v-on:input="adPicture = $event.target.value"
             label="Last opp bildene"
@@ -32,15 +32,13 @@
             multiple
             chips
             prepend-icon="mdi-camera"
-        />
+        />-->
       </div>
       <div>
         <v-select
             v-model="adCategory"
-            :items="items"
+            :items="categories"
             label="Kategori"
-            :rules="rulesSelect"
-            hide-details="auto"
             outlined
             prepend-icon="mdi-widgets"
         ></v-select>
@@ -155,18 +153,36 @@
         >Avbryt
         </v-btn>
       </div>
+
+      <v-dialog id="popOut" v-model="dialog">
+        <v-card>
+          <v-card-title class="text-h5" v-if="success"> Annonsen ble opprettet! </v-card-title>
+          <v-card-title class="text-h5" v-else> Opprettelse av annonse feilet </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red"
+                text
+                @click=close()
+            >
+              Lukk
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import ListingsService from "@/service/ListingsService";
+import router from "@/router";
 
 export default {
   name: "AdPage",
   data() {
     return {
+      adCategory: '',
       adName: '',
       adDescription: '',
       adPrice: '',
@@ -179,6 +195,8 @@ export default {
       categories: [],
       createdStatus: false,
       dialog: false,
+      failedInfo: '',
+      success: false,
       rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
@@ -192,21 +210,17 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
-      created() {
-        this.getCategoriesSelect();
-      },
     }
   },
   methods: {
-    getCategoriesSelect() {
-      ListingsService.getCategories().then((response) => {
-        this.categories = response.data;
-      });
+    async getCategoriesSelect() {
+      const categories = (await ListingsService.getCategories()).data
+      categories.forEach(cat => {
+        this.categories.push(cat.category)
+      })
     },
 
-    //This works, but won't run because of backend
     async saveAd() {
-      this.dialog = true;
       console.log("Listing was created.")
       let tempStat = '';
       await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
@@ -214,21 +228,23 @@ export default {
       }).catch((error) => {
         if(error.response) {
           tempStat = error.response.status;
+          this.failedInfo = error.response.data;
         }
       })
-      if(tempStat === 201){
-        this.createdStatus = true;
-        this.$store.commit('SET_MYLISTINGNAME', this.adName)
-        this.$store.commit('SET_MYLISTINGDES', this.adDescription)
-        this.$store.commit('SET_MYLISTINGPRICE', this.adPrice)
-        this.$store.commit('SET_MYADDRESS', this.adAddress)
-        this.$store.commit('SET_MYPHONE', this.adPhone)
-        this.$store.commit('SET_UNLISTED', this.switch1)
-      }
+      this.success = true;
+      this.dialog = true;
     },
+    close(){
+      this.dialog = false;
+      if(this.success){
+        router.push({ name: 'Account'});
+      }
+    }
   },
+   beforeMount(){
+    this.getCategoriesSelect();
+  }
 }
-//TODO Få den valgte kategorien til å vises for bruker
 </script>
 
 <style scoped>
@@ -236,9 +252,8 @@ export default {
   box-shadow: none;
   margin: 0 auto;
   width: 350px;
+  padding: 1em;
 }
-
-
 
 .v-text-field, .v-file-input {
   margin-bottom: 22px;

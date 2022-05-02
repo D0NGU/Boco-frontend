@@ -44,8 +44,8 @@
                       class= 'sortOption categoryOption'
                       @click="selectCategory(category)"
                   v-bind:style="category.active ? {'background-color' : 'lightblue'} : null">
-                    <v-icon color="blue">{{category.icon}}</v-icon>
-                    {{ category.category }}
+<!--                    <v-icon color="blue">{{category.icon}}</v-icon>-->
+                    {{ category }}
                   </div>
                   <v-divider />
                 </v-item>
@@ -76,17 +76,16 @@
 
           <v-container>
             <v-row>
-              <v-col
-                  v-for="(category, i) in chosenCategories"
-                  :key="category.category"
-              >
-                <v-chip
+              <v-col>
+<!--
+ v-for="(category, i) in chosenCategories"
+                  :key="category.category"<v-chip
                     closable=""
                     @click:close="chosenCategories.splice(i, 1)"
                 >
                   <v-icon> {{category.icon}} </v-icon>
                   {{ category.category }}
-                </v-chip>
+                </v-chip>-->
               </v-col>
             </v-row>
           </v-container>
@@ -111,11 +110,12 @@ export default {
       overlay: false,
       // TODO: Legg til disse listene automatisk?
       sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
-      chosenSortBy: 'product_id',
-      ascending: true,
-      categories: [{icon: 'mdi-basketball', category: 'Sport', active: false}, {icon: 'mdi-flower', category: 'Hage', active: false}, {icon: 'mdi-sofa-single', category: 'Møbler', active: false}, {icon: 'mdi-hammer-wrench', category: 'Verktøy', active: false}],
+      chosenSortBy: 'price',
+      ascending: false,
+      //categories: [{icon: 'mdi-basketball', category: 'Sport', active: false}, {icon: 'mdi-flower', category: 'Hage', active: false}, {icon: 'mdi-sofa-single', category: 'Møbler', active: false}, {icon: 'mdi-hammer-wrench', category: 'Verktøy', active: false}],
+      categories: [],
       //TODO fiks dette når backend støtter flere kategorier
-      chosenCategories: null,
+      chosenCategories: '',
     };
   },
   methods: {
@@ -141,18 +141,23 @@ export default {
     },
 
     selectCategory(selectedCategory) {
-      if(!this.chosenCategories.includes(selectedCategory)){
+      this.chosenCategories = selectedCategory;
+      setTimeout(() => this.sortByDialog = false, 300);
+      /*if(!this.chosenCategories.includes(selectedCategory)){
       this.chosenCategories.push(selectedCategory)
       } else {
         const index = this.chosenCategories.indexOf(selectedCategory);
         if (index > -1) {
           this.chosenCategories.splice(index, 1); // 2nd parameter means remove one item only
         }
-      }
+      }*/
     }
   },
   async beforeMount() {
-    this.categories = (await ListingsService.getCategories()).data
+    const categories = (await ListingsService.getCategories()).data
+    categories.forEach(cat => {
+      this.categories.push(cat.category)
+    })
   }
 }
 </script>

@@ -1,10 +1,8 @@
 import { getApiClient } from "@/service/ApiService";
 
 export default {
-    getProductById(id, pageNumber) {
-        return getApiClient.get('products/'+id, {
-            params: {pageNumber}
-        })
+    getProductById(id) {
+        return getApiClient.get('products/'+id, )
     },
     getProductsByUserId(id){
         return getApiClient.get('products/user/'+id)
@@ -12,8 +10,8 @@ export default {
 
     getProducts(searchWord, category, pageNumber, sortBy, ascending) {
         const searchParams = {q: searchWord, category: category, page: pageNumber, sortBy: sortBy, ascending: ascending}
-        return getApiClient.get('products/search/', {
-            params: {searchParams}
+        return getApiClient.get('products/search?q='+searchWord+'&category='+category+'&page='+pageNumber+'&ascending='+ascending+'&sortBy='+sortBy, {
+            //params: {searchParams}
         })
     },
 }

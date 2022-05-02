@@ -9,8 +9,11 @@
     <v-switch inset="" color="indigo" label="Offentlig kjøpshistorikk" v-model="hideHistory"></v-switch>
   </div>
 
-  <v-btn @click="handleSaveClick" id="saveBtn">Lagre</v-btn>
-  <v-btn id="deleteUser" color="error" :to="{name: 'DeleteUser'}"> Slett bruker</v-btn>
+  <v-btn @click="handleSaveClick" class="settingsButtons">Lagre</v-btn>
+  <v-btn id="logOut" color="error" :to="{name: 'Login'}" class="settingsButtons"> Logg ut</v-btn>
+  <v-spacer>
+    <v-btn id="deleteUser" color="error" :to="{name: 'DeleteUser'}" class="settingsButtons"> Slett bruker</v-btn>
+  </v-spacer>
   <v-snackbar
       color="success"
       :timeout="3000"
@@ -21,6 +24,7 @@
 
 <script>
 import UserAccountService from "@/service/UserAccountService";
+import cookies from 'vue-cookie';
 
 export default {
   name: "Settings",
@@ -42,17 +46,21 @@ export default {
         this.confirmationSnackBar = true;
       }
     },
+    logOut() {
+      this.$store.commit('SET_STATUS', false);
+      cookies.set('token', "", { path: '/' });
+    },
   },
   async beforeMount() {
-    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
-    this.name = userInfo.data.fname + " " + userInfo.data.lname
-    this.email = userInfo.data.email
+    const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
+    this.name = userInfo.fname + " " + userInfo.lname
+    this.email = userInfo.email
   }
 }
 </script>
 
 <style scoped>
-#saveBtn, #deleteUser {
+.settingsButtons {
   margin: 10px 10px 20px 10px;
 }
 
