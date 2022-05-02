@@ -4,24 +4,18 @@
            align="center"
            justify="center"
     >
-      <v-col
-          cols="2"
-      md="2">
-        <v-icon class="notifIcon"> mdi-message-draw </v-icon>
-      </v-col>
       <v-col cols="8"
       sm="4"
       md="8">
         <p class="notifText">{{ description }}</p>
         <p class="text-caption dateText">{{ alertDate }}</p>
       </v-col>
-      <v-col>
-        <v-btn v-show="!this.hasSeen" @click="markAsSeen(this.alertId)">
-          Har sett
-        </v-btn>
-        <v-btn @click="deleteAlert(this.alertId)">
-          Slett
-        </v-btn>
+      <v-col cols="1">
+        <v-icon title="Marker som sett" v-show="!this.hasSeen" @click="markAsSeen(this.alertId)"> mdi-eye</v-icon>
+        <v-icon title="Har sett" v-show="this.hasSeen"> mdi-check-bold</v-icon>
+      </v-col>
+      <v-col cols="1">
+        <v-icon title="Slett" @click="deleteAlert(this.alertId)">mdi-trash-can-outline</v-icon>
       </v-col>
     </v-row>
   </v-card>
@@ -48,9 +42,11 @@ export default {
   methods: {
     async deleteAlert(alertId) {
       await getApiClient.delete("/alerts/" + alertId)
+      this.$emit("update");
     },
     async markAsSeen(alertId) {
       await getApiClient.put("/alerts/seen/" + alertId)
+      this.$emit("update");
     }
   }
 }
@@ -68,5 +64,9 @@ export default {
 }
 .dateText {
   padding: 0 0 6px 0;
+}
+
+.v-icon {
+  cursor: pointer;
 }
 </style>

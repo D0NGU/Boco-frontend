@@ -7,6 +7,7 @@
         :hasSeen="alert.hasSeen"
         :optionalId="alert.optionalId"
         :userId="alert.userId"
+        @update="getAlerts"
     />
   </div>
 </template>
