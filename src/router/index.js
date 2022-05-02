@@ -9,14 +9,14 @@ import DeleteUser from "@/components/UserProfile/DeleteUser";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
 import {getApiClient} from "@/service/ApiService";
+import Landing from "@/views/Landing";
 
 const routes = [
-  /*{
+  {
     path: '/',
     name: 'Landing',
     component: Landing
   },
-*/
   {
     path: '/home',
     name: 'Home',
