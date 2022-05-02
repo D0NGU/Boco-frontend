@@ -1,5 +1,4 @@
-import BASE_URL from '../constants';
-import {getApiClient} from "@/service/ApiService";
+import {baseURL, getApiClient} from "@/service/ApiService";
 
 export default {
     getCategories() {
@@ -18,7 +17,7 @@ export default {
             userId: userId,
             category: category
         };
-        return getApiClient.post(BASE_URL + 'products', createdProduct)
+        return getApiClient.post(baseURL + 'products', createdProduct)
     },
     editProduct(productId, description, address, price, unlisted, category){
         const product = { description: description, address: address, price: price, unlisted: unlisted, category: category };

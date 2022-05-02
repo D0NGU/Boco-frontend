@@ -18,9 +18,16 @@
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
       <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :min-date="productInfo.availableFrom" :max-date="productInfo.availableTo" :start-date="startDate"></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
+      <v-btn id="mapBtn" @click="mapClick">Kart</v-btn>
+      <div v-if="this.showMap">
+        <Map :address1="productInfo.address" @closeMap="mapClick" />
+      </div>
     </div>
   </div>
 </template>
+
+
+
 
 <script>
 import Datepicker from '@vuepic/vue-datepicker';
@@ -28,14 +35,20 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
 import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
+import Map from "@/components/Map";
 
 export default {
   name: "ListingDetails",
-  components: {Datepicker},
+  components: {
+    Map, 
+    Datepicker
+  },
+
   props: {
     itemId: Number,
     userId: Number,
   },
+
   data () {
     return {
       date: ref(),
@@ -43,10 +56,13 @@ export default {
       requestSent: false,
       productInfo: '',
       ownerInfo: '',
+      showMap: false,
       startDate: new Date(),
     }
   },
+
   methods: {
+
     async getListingInfo(){
       const product = (await ListingsService.getListing(this.itemId)).data
       this.productInfo = product.product;
@@ -55,6 +71,7 @@ export default {
         this.startDate = this.productInfo.availableFrom
       }
     },
+
     async sendRequest() {
       if(this.date !== undefined && this.date !== null){
         const dateFrom = new Date(this.date[0].getFullYear()+"/"+(this.date[0].getMonth()+1)+"/"+this.date[0].getDate());
@@ -66,12 +83,21 @@ export default {
         setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 1);
       }
     },
+
+    mapClick() {
+      document.documentElement.scrollTop = 0;
+      this.showMap = !this.showMap
+    },
   },
+
   beforeMount() {
     this.getListingInfo()
   }
 }
 </script>
+
+
+
 
 <style scoped>
 #details {
@@ -79,7 +105,10 @@ export default {
   margin: 20px;
 }
 #requestBtn {
-  margin: 0 auto 20px auto;
+  margin: 0 5px 20px;
+}
+#mapBtn {
+  margin: 0 5px 20px;
 }
 #requestForm > *{
   padding: 10px;

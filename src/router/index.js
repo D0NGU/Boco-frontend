@@ -71,12 +71,12 @@ const router = createRouter({
 getApiClient.interceptors.response.use(null, error => {
   let path = '/error';
   switch (error.response.status) {
-    case 403: path =   router.push('/login');  return Promise.reject(error);
-      break;
+    case 403: 
+      path = router.push('/login');  
+      return Promise.reject(error);
   }
   return Promise.reject(error);
 })
 
 export { routes };
-
 export default router
