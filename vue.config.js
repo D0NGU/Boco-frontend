@@ -8,10 +8,12 @@ module.exports = defineConfig({
     },
   },
   pwa: {
+    themeColor: "#004aab",
     manifestOptions: {
       name: "BoCo",
       short_name: "BoCo",
       display: 'standalone',
+      background_color: "#004aab",
       icons: [
         {
           src: `/img/48.png`,
