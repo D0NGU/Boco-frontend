@@ -358,6 +358,6 @@ font-weight: bold;
 }
 
 button {
-  margin: 5px;
+  margin: 0.4em;
 }
 </style>
