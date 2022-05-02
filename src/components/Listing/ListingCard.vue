@@ -70,7 +70,7 @@ export default {
       if(this.itemOwner !== this.$store.state.myUserId){
         router.push({name: 'ListingDetails', params: { itemId: this.itemId }})
       } else {
-        router.push({name: 'ListingEdit', params: { itemId: this.itemId }})
+        router.push({name: 'Listing', params: { itemId: this.itemId }})
       }
     }
   },

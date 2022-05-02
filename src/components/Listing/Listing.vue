@@ -1,7 +1,8 @@
 <!-- inneholder listing component -->
 
 <template>
-  <h1 id="createListingHeadline">Opprett en ny annonse</h1>
+  <h1 v-if="updating">Oppdater annonse</h1>
+  <h1 v-else >Opprett en ny annonse</h1>
   <div class="flex-column mb-6">
     <v-card class="container">
       <div>
@@ -71,6 +72,7 @@
         </v-radio-group>
       </div>
 
+<!--
       <v-container class="grey lighten-5">
         <v-row no-gutters>
           <v-col order="1">
@@ -111,6 +113,7 @@
           </v-col>
         </v-row>
       </v-container>
+-->
 
 
       <div>
@@ -133,39 +136,70 @@
       </div>
       <div>
         <v-switch
-            v-model="switch1"
-            inset
+            v-model="listed"
+            inset=""
             color="indigo"
             :label="`Skjul annonse`"
         ></v-switch>
       </div>
-      <div>
+        <div v-if="updating">
         <v-btn
-            id="createAdButton"
-            @click="saveAd()"
-        >Opprett annonse
+            class="createAdButton"
+            @click="updateAd()"
+        >Oppdater annonse
         </v-btn>
-      </div>
+          <v-btn
+              @click="deleteDialog=true"
+              color="error">
+            Slett
+          </v-btn>
+        </div>
+      <v-btn
+          class="createAdButton"
+          @click="createAd()"
+          v-else
+      >Opprett annonse
+      </v-btn>
       <div>
         <v-btn
             id="cancelButton"
-            onclick="location.href='/'"
         >Avbryt
         </v-btn>
       </div>
 
       <v-dialog id="popOut" v-model="dialog">
         <v-card>
-          <v-card-title class="text-h5" v-if="success"> Annonsen ble opprettet! </v-card-title>
-          <v-card-title class="text-h5" v-else> Opprettelse av annonse feilet </v-card-title>
+          <v-card-title class="text-h5"> {{statusMessage}} </v-card-title>
           <v-card-actions>
-            <v-spacer></v-spacer>
             <v-btn
                 color="red"
                 text
                 @click=close()
             >
               Lukk
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-spacer />
+      <v-dialog v-model="deleteDialog">
+        <v-card>
+          <v-card-title class="text-h5"> Er du sikker på at du vil slette denne annonsen? </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red"
+                text
+                @click="deleteDialog=false"
+            >
+              Avbryt
+            </v-btn>
+            <v-btn
+                color="red"
+                text
+                @click=deleteAd
+            >
+              Slett
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -177,26 +211,29 @@
 <script>
 import ListingsService from "@/service/ListingsService";
 import router from "@/router";
+import ProductService from "@/service/ProductService";
 
 export default {
   name: "AdPage",
+  props: {
+    itemId: String
+  },
   data() {
     return {
-      adCategory: '',
+      updating: false,
       adName: '',
       adDescription: '',
+      adCategory: '',
       adPrice: '',
       pricePer: '',
-      fromDate: '',
-      toDate: '',
+      dateFrom: '',
+      dateTo: '',
       adAddress: '',
       adPhone: '',
-      switch1: false,
+      listed: false,
       categories: [],
-      createdStatus: false,
       dialog: false,
-      failedInfo: '',
-      success: false,
+      statusMessage: '',
       rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
@@ -210,39 +247,77 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
+      deleteDialog: false,
     }
   },
   methods: {
-    async getCategoriesSelect() {
+    async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
         this.categories.push(cat.category)
       })
+      if(this.updating) {
+        const productInfo = (await ProductService.getProductById(this.itemId)).data
+        this.adName = productInfo.title;
+        this.adDescription = productInfo.description;
+        this.adPrice = productInfo.price;
+        this.adAddress = productInfo.address;
+        this.selectedCategory = productInfo.category
+        this.listed = !(productInfo.unlisted);
+        this.dateFrom = productInfo.dateFrom;
+        this.dateTo = productInfo.dateTo;
+      }
     },
 
-    async saveAd() {
+    async createAd() {
       console.log("Listing was created.")
       let tempStat = '';
-      await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
+      await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.listed, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
         tempStat = response.status;
       }).catch((error) => {
         if(error.response) {
           tempStat = error.response.status;
-          this.failedInfo = error.response.data;
+          this.statusMessage = error.response.data;
         }
       })
-      this.success = true;
+      this.statusMessage = "Annonsen ble opprettet!";
       this.dialog = true;
     },
+    async updateAd(){
+      let tempStat;
+      this.dialog = true;
+      this.createdStatus = true;
+      console.log("Listing was updated.")
+      await ListingsService.edit(this.itemId, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
+        tempStat = response.data
+      }).catch((error) => {
+        if(error.response){
+          this.statusMessage = error.response.data;
+        }
+      })
+      this.statusMessage = "Endringen var vellykket!";
+      this.dialog = true;
+    },
+    async deleteAd(){
+      await ListingsService.delete(this.$store.state.myUserId, this.itemId)
+      this.deleteDialog = false;
+      this.statusMessage = "Annonsen ble slettet.";
+      this.dialog = true;
+    },
+
     close(){
       this.dialog = false;
-      if(this.success){
-        router.push({ name: 'Account'});
-      }
+      router.back();
     }
   },
    beforeMount(){
-    this.getCategoriesSelect();
+     if(this.itemId !== undefined){
+       this.updating = true;
+     }
+    this.getInfo();
+    /*if(this.itemId > 0){
+      this.updating = true;
+    }*/
   }
 }
 </script>
@@ -264,7 +339,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-#createAdButton{
+.createAdButton{
 background-color: var(--bocoBlue);
 color: white;
 font-weight: bold;
@@ -274,7 +349,7 @@ color: var(--bocoBlue);
 font-weight: bold;
 }
 
-#createAdButton {
-  margin-bottom: 10px;
+button {
+  margin: 5px;
 }
 </style>
