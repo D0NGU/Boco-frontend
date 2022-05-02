@@ -30,12 +30,13 @@
     "@vue/cli-service": "~5.0.0",
     "@vue/test-utils": "^2.0.0-0",
     "@vue/vue3-jest": "^27.0.0-alpha.1",
+    "axios": "^0.27.2",
     "babel-jest": "^27.0.6",
     "jest": "^27.0.5",
     "sass": "^1.38.0",
     "sass-loader": "^10.0.0",
     "vue-cli-plugin-vuetify": "~2.4.8",
+    "vue-cookie": "^1.1.4",
     "vuetify-loader": "^2.0.0-alpha.0"
   }
 }
-
