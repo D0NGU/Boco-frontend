@@ -32,19 +32,25 @@ export default {
     },
 
     getUserDescription(userId) {
-        return getApiClient.get('user/' + userId + '/description');
+        const url = 'http://localhost:8080/api/user/' + userId + '/description';
+        var config = {
+            headers: {
+                'Content-Type': 'text/plain',
+                Authorization: 'Bearer ' + VueCookie.get('token'),
+            }
+        };
+        return axios.get(url, config);
     },
 
     updateUserDescription(userId, description) {
         const url = 'http://localhost:8080/api/user/' + userId + '/description';
         var config = {
             headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' +VueCookie.get('token'),
+                'Content-Type': 'text/plain',
+                 Authorization: 'Bearer ' + VueCookie.get('token'),
             }
         };
-        console.log("description from frontend:" + description)
-        return axios.post(url,  {description: description}, config)
+        return axios.post(url, description, config)
     }
 }
 

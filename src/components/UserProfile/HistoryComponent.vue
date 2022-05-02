@@ -48,7 +48,6 @@ export default {
             this.error = "En feil har skjedd"
           })
 
-      console.log(this.historyRentedProducts.length)
       if (!this.historyRentedProducts.length){
         this.noRentals = true;
       } else {

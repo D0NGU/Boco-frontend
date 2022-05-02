@@ -114,7 +114,6 @@ import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
-import axios from 'axios'
 
 export default {
     name: 'account',
@@ -129,7 +128,7 @@ export default {
       reviewsCount: '',
       tab: null,
       userInfo: '',
-      userDescription: '', //TODO Hent "user description" fra backend
+      userDescription: '',
       edit: false,
       isVerified: false,
       rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
@@ -140,48 +139,46 @@ export default {
     editDescription() {
         this.edit = true;
     },
-    async saveDescription() {
-      let myUserId = this.$store.getters.myUserId;
-      console.log(myUserId)
-      let description = "testing user description"
-      await UserAccountService.updateUserDescription(myUserId, description)
-          .then(res => console.log("Success: " + res.status))
-          .catch((err) => {
-            console.log(err)
-          })
-      //TODO send "user description" til backend
+    saveDescription() {
+      if (!this.userDescription.length){
+        this.userDescription = ' ';
+      }
+      this.updateUserDescription()
       this.edit = false
     },
-    async deleteDescription() {
-      //TODO send tom "user description" til backend
+    deleteDescription() {
+      this.userDescription = ' ';
+      this.updateUserDescription()
+      this.edit = false
+    },
+
+    async updateUserDescription() {
       let myUserId = this.$store.getters.myUserId;
-      await UserAccountService.updateUserDescription(myUserId)
+      await UserAccountService.updateUserDescription(myUserId, this.userDescription)
           .then(res => console.log(res.status))
           .catch((err) => {
             console.log(err)
           })
-      this.userDescription = '';
-      this.edit = false
-    },
+    }
   },
   async beforeMount() {
     let myUserId = this.$store.getters.myUserId;
     const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
 
-    //check is user is verified
+    //check if user is verified TODO: getting error on backend Cannot invoke "java.lang.Double.doubleValue()" because the return value of getAverageUserReviews(int)" is null
     /*await UserAccountService.getVerifiedUser(myUserId)
         .then(res => this.isVerified = res.data)
         .catch((err) => {
-          console.log(err.res.data)
+          console.log(err)
         })*/
 
     //get user description
-    /*await UserAccountService.getUserDescription(myUserId)
-        .then(res => console.log(res.data))
+    await UserAccountService.getUserDescription(myUserId)
+        .then(res => this.userDescription = res.data)
         .catch((err) => {
-          console.log(err.res.data)
-        })*/
+          console.log(err)
+        })
 
   }
 }
