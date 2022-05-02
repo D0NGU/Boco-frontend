@@ -55,7 +55,7 @@
         <v-dialog id="popOut" v-model="dialog">
           <v-card>
             <v-card-title class="text-h5" v-if="regisState ==='Registered successfully!'"> Registered! </v-card-title>
-            <v-card-title class="text-h5" v-if="regisState !=='Registered successfully!'"> Registering failed </v-card-title>
+            <v-card-title class="text-h5" v-if="regisState !=='Registered successfully!' && !(regisState === '')"> Registering failed </v-card-title>
             <v-card-text> {{regisState}} </v-card-text>
 
             <v-card-actions>
@@ -98,11 +98,11 @@ export default {
       email: '',
       password: '',
       emailRules: [
-        v => !!v || 'E-mail is required',
+        v => !!v || 'E-post er påkrevd',
         v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
       ],
       rulesApplyToAll: [
-        value => !!value || 'Required.',
+        value => !!value || 'Påkrevd.',
       ],
       show: false,
       regisState: '',
@@ -127,11 +127,11 @@ export default {
       }
 
       if (tempStat === 201){
-        this.regisState = "Registered successfully!";
+        this.regisState = "Brukeren ble opprettet!";
       } else if (tempStat === 409) {
-        this.regisState = "Email is already in use";
+        this.regisState = "E-posten er allerede i bruk.";
       } else if (tempStat === 500) {
-        this.regisState = "An error occurred when registering. Try again";
+        this.regisState = "Det oppsto en feil ved registrering. Prøv igjen";
       }
     },
 

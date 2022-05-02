@@ -11,6 +11,7 @@ export default {
     name: 'Home',
   components: {ListingView},
   async beforeMount() {
+      //TODO Flytt denne til innlogging
     const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
     this.$store.commit("SET_MYUSERID", userInfo.id)
   }
