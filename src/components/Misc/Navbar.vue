@@ -46,17 +46,45 @@
           </v-card>
         </v-dialog>
       </v-col>
+
+      <v-col class="navItem">
+        <v-dialog
+            v-model="chat"
+            fullscreen=""
+        >
+          <template v-slot:activator="{ props }">
+            <v-icon color="white" v-bind="props"> mdi-message-alert </v-icon>
+          </template>
+
+          <v-card id="chatDialog">
+            <v-card-text>
+              <ChatView />
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                  id="closeButton"
+                  block="" @click="chat = false"
+              >Lukk
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-col>
     </v-row>
 </template>
 
 
 <script>
 import NotificationView from "@/components/NotificationView";
+import ChatView from "@/components/ChatView";
 export default {
-  components: {NotificationView},
+  components: {
+    NotificationView,
+    ChatView},
   data () {
     return {
       dialog: false,
+      chat: false,
     }
   },
 }
@@ -90,6 +118,9 @@ export default {
   padding: 12px;
 }
 #notificationDialog {
+  background-color: #edf1f5;
+}
+#chatDialog {
   background-color: #edf1f5;
 }
 #closeButton {

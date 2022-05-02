@@ -7,13 +7,12 @@
       <v-col
           cols="2"
           md="2">
-        <v-icon class="chatIcon"> message </v-icon>
+        <v-icon class="chatIcon"> mdi-message </v-icon>
       </v-col>
       <v-col cols="8"
              sm="4"
              md="8">
         <p class="chatText">Du har fått en ny melding</p>
-        <p class="text-caption dateText">Fre 02. Mai 12:00</p>
       </v-col>
     </v-row>
   </v-card>
@@ -25,7 +24,7 @@
       <v-col
           cols="2"
           md="2">
-        <v-icon class="chatIcon"> message-outline </v-icon>
+        <v-icon class="chatIcon"> mdi-message-outline </v-icon>
       </v-col>
       <v-col cols="8"
              sm="4"
@@ -42,7 +41,7 @@
       <v-col
           cols="2"
           md="2">
-        <v-icon class="chatIcon"> message-outline </v-icon>
+        <v-icon class="chatIcon"> mdi-message-outline </v-icon>
       </v-col>
       <v-col cols="8"
              sm="4"
@@ -75,7 +74,9 @@ export default {
   padding: 12px 0;
   color: black;
 }
-.dateText {
-  padding: 0 0 6px 0;
+
+.chatIcon {
+  cursor: pointer;
 }
+
 </style>
