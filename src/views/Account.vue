@@ -18,7 +18,7 @@
     <div class="profileImageCover"></div>
   </div>
     <div class="profileDetails">
-      <v-carousel id="carousel" height="250px" hide-delimiter-background="" :show-arrows="false">
+      <v-carousel id="carousel" height="300px" hide-delimiter-background="" :show-arrows="false">
         <v-carousel-item class="carouselItem">
           <v-avatar size="x-large">
             <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
@@ -31,6 +31,17 @@
 
           <div>
             <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
+            <v-btn v-if="!edit" class="my-2" id="editDescription"
+                   rounded
+                   color="grey"
+                   fab
+                   small
+                   dark
+                   @click="editDescription"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+
             <div>
               <v-btn v-if="edit"
                      rounded
@@ -59,21 +70,11 @@
                           outlined
                           label="User description"
                           v-model="userDescription"
+                          counter="190"
+                          maxlength="190"
+                          :rules="rules"
               ></v-textarea>
-
-
             </div>
-
-            <v-btn v-if="!edit" class="my-2" id="editDescription"
-                   rounded
-                   color="grey"
-                   fab
-                   small
-                   dark
-                   @click="editDescription"
-            >
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
           </div>
 
         </v-carousel-item>
@@ -130,6 +131,7 @@ export default {
       userDescription: 'En veldig snill kar som liker å låne bort gjenstander :)', //TODO Hent "user description" fra backend
       edit: false,
       isVerified: false,
+      rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
     }
   },
 
@@ -139,7 +141,6 @@ export default {
     },
     saveDescription() {
       //TODO send "user description" til backend
-      console.log("hi")
       this.edit = false
     },
     deleteDescription() {
@@ -194,7 +195,7 @@ export default {
   position: absolute;
   height: 500px;
   width: 100%;
-  top: 70px;
+  top: 20px;
   left: 0;
   color: white;
   display: flex;
@@ -212,4 +213,5 @@ export default {
 .v-card-text {
   padding: 0;
 }
+
 </style>
