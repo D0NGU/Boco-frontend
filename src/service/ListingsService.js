@@ -4,7 +4,7 @@ export default {
     getCategories() {
         return getApiClient.get('/categories')
     },
-    create(productId, title, description, address, price, unlisted, availableFrom, availableTo, userId, category) {
+    create(productId, title, description, address, price, unlisted, availableFrom, availableTo, userId, category, image) {
         const createdProduct = {
             productId: productId,
             title: title,
@@ -15,7 +15,8 @@ export default {
             availableFrom: availableFrom,
             availableTo: availableTo,
             userId: userId,
-            category: category
+            category: category,
+            image: image
         };
         return getApiClient.post('http://localhost:8080/api/products', createdProduct)
     },

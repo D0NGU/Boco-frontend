@@ -20,19 +20,16 @@
             label="Beskrivelse"
             :rules="rules"
             hide-details="auto"
-        ></v-text-field>
+        />
       </div>
       <div>
-<!--        <v-file-input
-            v-bind:value="adPicture"
-            v-on:input="adPicture = $event.target.value"
-            label="Last opp bildene"
-            hide-details="auto"
-            accept="image/*"
-            multiple
-            chips
-            prepend-icon="mdi-camera"
-        />-->
+        <v-file-input
+          v-model="files"
+          label="Last opp bildene"
+          hide-details="auto"
+          accept="image/*"
+          prepend-icon="mdi-camera"
+        />
       </div>
       <div>
         <v-select
@@ -178,6 +175,8 @@ export default {
       categories: [],
       createdStatus: false,
       dialog: false,
+      files: [],
+      image: [],
       rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
@@ -205,8 +204,11 @@ export default {
     async saveAd() {
       this.dialog = true;
       console.log("Listing was created.")
+      this.image.push( await this.getBase64(this.files[0]));
+      console.log(this.image)
+
       let tempStat = '';
-      await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
+      await ListingsService.create(0,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk', this.image[0]).then(response => {
         tempStat = response.status;
       }).catch((error) => {
         if(error.response) {
@@ -214,6 +216,20 @@ export default {
         }
       })
     },
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve({
+          imgName: file.name,
+          img64: reader.result.split(",")[1],
+          productId: 0,
+        },
+        console.log(reader.result),
+      );
+        reader.onerror = error => reject(error);
+      });
+    }
   },
    beforeMount(){
     this.getCategoriesSelect();

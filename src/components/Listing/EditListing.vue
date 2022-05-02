@@ -21,7 +21,7 @@
           ></v-text-field>
         </div>
 
-<!--        <div>
+        <div>
           <v-file-input
               label="Last opp bildene"
               hide-details="auto"
@@ -30,7 +30,7 @@
               chips
               prepend-icon="mdi-camera"
           />
-        </div>-->
+        </div>
 
         <div>
           <v-select
@@ -197,6 +197,7 @@ export default {
   data () {
     return {
       //TODO: Få produktinformasjon fra backend
+      adId:'',
       adName: '',
       adDescription: '',
       adPrice:'',
@@ -232,6 +233,7 @@ export default {
         this.categories.push(cat.category)
       })
       const productInfo = (await ProductService.getProductById(this.itemId)).data
+      this.adId = productInfo.productId;
       this.adName = productInfo.title;
       this.adDescription = productInfo.description;
       this.adPrice = productInfo.price;
@@ -243,7 +245,7 @@ export default {
       this.dialog = true;
       this.createdStatus = true;
       console.log("Listing was updated.")
-      await ListingsService.edit(null, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
+      await ListingsService.edit(this.adId, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
         tempStat = response.data
       }).catch((error) => {
         if(error.response){
