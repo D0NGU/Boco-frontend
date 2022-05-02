@@ -80,7 +80,7 @@ export default {
   mounted(){
     setInterval(function () {
       this.loadData();
-    }.bind(this), 5000);
+    }.bind(this), 15000);
   },
 }
 </script>
