@@ -96,7 +96,11 @@ export default {
   flex-direction: row;
   background-color: var(--bocoBlue);
   margin: 0;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
 }
+
 #navBar a {
   color: white;
   text-decoration: none;

@@ -2,7 +2,6 @@
 
 <template>
   <ListingView />
-  <Footer id="footer"/>
 </template>
 
 <script>
@@ -21,13 +20,4 @@ export default {
 </script>
 
 <style>
-#footer{
-  position: -webkit-sticky;
-  position: sticky;
-  display: flex;
-  z-index: 1;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
 </style>
