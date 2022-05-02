@@ -19,6 +19,12 @@
 </p>
 <hr>
 
+## Requirements
+
+- Node.js v16.14.0
+- npm 8.3.1
+
+
 ## Project setup
 
 Clone repository locally, browse to project folder and execute:

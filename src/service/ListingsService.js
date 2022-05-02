@@ -19,15 +19,15 @@ export default {
         };
         return getApiClient.post(baseURL + 'products', createdProduct)
     },
-    editProduct(productId, description, address, price, unlisted, category){
+    editProduct(productId, description, address, price, unlisted, category) {
         const product = { description: description, address: address, price: price, unlisted: unlisted, category: category };
         console.log(product)
-        return getApiClient.put('products/'+productId,  product)
+        return getApiClient.put('products/' + productId,  product)
     },
     getListing(id) {
-        return getApiClient.get('listing/'+id)
+        return getApiClient.get('listing/' + id)
     },
     delete(userId, itemId) {
-        return getApiClient.delete('products/'+userId+'/delete/?productId='+itemId)
+        return getApiClient.delete('products/' + userId + '/delete/?productId=' + itemId)
     }
 }
