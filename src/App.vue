@@ -1,5 +1,5 @@
 <template>
-<nav v-if="this.$store.state.loggedIn">
+<nav v-if="$store.state.loggedIn">
   <Navbar />
 </nav>
 
@@ -20,9 +20,9 @@ body {
 
 </style>
 <script>
+import VueCookie from 'vue-cookie'
 import Login from "@/views/Login";
 import Navbar from "./components/Misc/Navbar.vue"
-import axios from "axios";
 export default {
   components: {Login, Navbar},
 }
