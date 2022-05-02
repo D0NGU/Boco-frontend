@@ -1,11 +1,12 @@
 import axios from 'axios'
+import {baseURL} from "@/service/ApiService";
 
 export default {
     handleClickSignIn(email, password) {
         const params = new URLSearchParams();
         params.append('username', email);
         params.append('password', password);
-        return axios.post(`http://localhost:8080/api/login`, params,{
+        return axios.post(baseURL + `login`, params,{
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }});
@@ -13,7 +14,7 @@ export default {
 
     handleClickSignUp(firstname, lastname, email, password) {
         const registerNewUserRequest = {fname: firstname, lname: lastname, email: email, password: password};
-        return axios.post(`http://localhost:8080/api/user/save`, registerNewUserRequest,
+        return axios.post(baseURL + `user/save`, registerNewUserRequest,
             {headers: {
                 'Content-Type': 'application/json',
             }});
