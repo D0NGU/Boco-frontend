@@ -23,7 +23,11 @@
           <v-avatar size="x-large">
             <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
           </v-avatar>
-          <p class="text-button"> {{name}} </p>
+          <div>
+            <p class="text-button">{{name}}
+              <v-icon v-if="isVerified">mdi-account-check-outline</v-icon>
+            </p>
+          </div>
 
           <div>
             <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
@@ -116,7 +120,7 @@ export default {
   data() {
     return {
       //TODO Hent rating fra backend
-      name: '',
+      name: 'Test Name',
       ratingSeller: 5,
       ratingRenter: 5,
       reviewsCount: '',
@@ -124,6 +128,7 @@ export default {
       userInfo: '',
       userDescription: 'En veldig snill kar som liker å låne bort gjenstander :)', //TODO Hent "user description" fra backend
       edit: false,
+      isVerified: false,
     }
   },
 
@@ -140,11 +145,18 @@ export default {
       //TODO send tom "user description" til backend
       this.userDescription = '';
       this.edit = false
+    },
+    getVerifiedUser() {
+      // TODO: get data from database and check if user is verified
     }
   },
   async beforeMount() {
     const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
+
+    //TODO: get "user description" and if user is verified
+    //this.getVerifiedUser()
+
   }
 }
 </script>
