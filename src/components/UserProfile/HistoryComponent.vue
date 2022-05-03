@@ -1,9 +1,9 @@
 <template>
-  <div>
-   <br>
-   <h3>Min historikk</h3>
+  <div v-if="!noRentals">
+    <br>
+    <h3>Min historikk</h3>
 
-    <div v-if="!noRentals" v-for="rental in historyRentedProducts">
+    <div v-for="(rental,index) in historyRentedProducts" :key="index">
       <ListingCard
           :itemName="rental.title"
           :itemOwner="rental.userId"
@@ -47,6 +47,7 @@ export default {
           .then(res => this.historyRentedProducts = res.data)
           .catch((err) => {
             this.error = "En feil har skjedd"
+            console.error(err);
           })
 
       if (!this.historyRentedProducts.length){
@@ -61,10 +62,3 @@ export default {
   }
 }
 </script>
-
-
-
-<style scoped>
-
-
-</style>

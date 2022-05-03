@@ -6,8 +6,8 @@ export default {
         const params = new URLSearchParams();
         params.append('username', email);
         params.append('password', password);
-        return axios.post(baseURL + `login`, params,{
-            headers: {
+        return axios.post(baseURL + `login`, params,
+            { headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }});
     },
@@ -15,7 +15,7 @@ export default {
     handleClickSignUp(firstname, lastname, email, password) {
         const registerNewUserRequest = {fname: firstname, lname: lastname, email: email, password: password};
         return axios.post(baseURL + `user/save`, registerNewUserRequest,
-            {headers: {
+            { headers: {
                 'Content-Type': 'application/json',
             }});
     },
