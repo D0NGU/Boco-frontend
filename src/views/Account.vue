@@ -107,6 +107,7 @@ import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
+import {getApiClient} from "@/service/ApiService";
 
 export default {
     name: 'account',
@@ -116,8 +117,8 @@ export default {
     return {
       //TODO Hent rating fra backend
       name: 'Bruker',
-      ratingSeller: 5,
-      ratingRenter: 5,
+      ratingSeller: '',
+      ratingRenter: '',
       reviewsCount: '',
       tab: null,
       userInfo: '',
@@ -150,7 +151,15 @@ export default {
       this.snackbar = true
       this.edit = false
     },
-
+    async getNumberOfReviews() {
+      this.reviewsCount = (await UserAccountService.getNumberOfReviews(this.$store.getters.myUserId)).data;
+    },
+    async getAverageScoreAsOwner() {
+      this.ratingSeller = (await UserAccountService.getAverageScoreAsOwner(this.$store.getters.myUserId)).data;
+    },
+    async getAverageScoreAsRenter() {
+      this.ratingRenter = (await UserAccountService.getAverageScoreAsRenter(this.$store.getters.myUserId)).data;
+    },
     async updateUserDescription() {
       let myUserId = this.$store.getters.myUserId;
       let temp = ''
@@ -185,6 +194,9 @@ export default {
           console.log(err)
         })
 
+    await this.getNumberOfReviews()
+    await this.getAverageScoreAsOwner()
+    await this.getAverageScoreAsRenter()
   }
 }
 </script>

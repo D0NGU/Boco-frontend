@@ -95,7 +95,7 @@ export default {
       // HttpStatus 403 (FORBIDDEN)
       else if (status === 403) {
         this.dialog = true;
-        this.loginStatus = "Feil passord";
+        this.loginStatus = "Feil email eller passord";
       }
       // HttpStatus 403 (NOT FOUND)
       else if (status === 404) {
