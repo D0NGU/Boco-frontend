@@ -19,12 +19,18 @@
 </p>
 <hr>
 
+## Requirements
+
+- Node.js v16.14.0
+- npm 8.3.1
+
+
 ## Project setup
 
 Clone repository locally, browse to project folder and execute:
 
 ```cmd
-  npm install
+  npm ci
   npm run serve
 ```
 Run unit tests:
@@ -36,11 +42,11 @@ Run unit tests:
 ## Authors
 
 - [@minhdn](https://gitlab.stud.idi.ntnu.no/minhdn)
-- [@matssg](https://gitlab.stud.idi.ntnu.no/matssg)
-- [@dominykm](https://gitlab.stud.idi.ntnu.no/dominykm)
-- [@hannagn](https://gitlab.stud.idi.ntnu.no/hannagn)
-- [@henriesu](https://gitlab.stud.idi.ntnu.no/henriesu)
-- [@joelmt](https://gitlab.stud.idi.ntnu.no/joelmt)
 - [@krihaan](https://gitlab.stud.idi.ntnu.no/krihaan)
 - [@mathangp](https://gitlab.stud.idi.ntnu.no/mathangp)
+- [@dominykm](https://gitlab.stud.idi.ntnu.no/dominykm)
+- [@joelmt](https://gitlab.stud.idi.ntnu.no/joelmt)
 - [@oskareid](https://gitlab.stud.idi.ntnu.no/oskareid)
+- [@hannagn](https://gitlab.stud.idi.ntnu.no/hannagn)
+- [@henriesu](https://gitlab.stud.idi.ntnu.no/henriesu)
+- [@matssg](https://gitlab.stud.idi.ntnu.no/matssg)

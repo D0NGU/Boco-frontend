@@ -1,5 +1,5 @@
-import axios from 'axios'
 import {baseURL} from "@/service/ApiService";
+import axios from 'axios';
 
 export default {
     handleClickSignIn(email, password) {

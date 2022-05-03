@@ -1,16 +1,15 @@
 <template>
-  <sort-and-search
-      @search="updateList"
-  />
-  <div v-for="product in activeProducts">
+  <sort-and-search @search="updateList"/>
+  <div v-for="(product, index) in activeProducts" :key="index" class="item-list">
     <ListingCard
-        :itemName="product.title"
-        :itemOwner="product.userId"
-        :itemPrice="product.price"
-        :itemId="product.productId"
-    />
+      :itemName="product.title"
+      :itemOwner="product.userId"
+      :itemPrice="product.price"
+      :itemId="product.productId"/>
   </div>
 </template>
+
+
 
 <script>
 import ProductService from "@/service/ProductService";
@@ -50,7 +49,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

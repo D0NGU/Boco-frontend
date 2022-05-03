@@ -118,6 +118,8 @@
         </v-row>
       </v-container>
 -->
+        <Datepicker id="datepicker" :disabled="updating" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
+
         <v-text-field
             v-model="adAddress"
             type="text"
@@ -134,7 +136,7 @@
         />
   </v-form>
         <v-switch
-            v-model="listed"
+            v-model="unListed"
             inset=""
             color="indigo"
             :label="`Skjul annonse`"
@@ -208,9 +210,12 @@
 import ListingsService from "@/service/ListingsService";
 import router from "@/router";
 import ProductService from "@/service/ProductService";
+import { ref } from 'vue';
+import Datepicker from "@vuepic/vue-datepicker";
 
 export default {
   name: "AdPage",
+  components: {Datepicker},
   props: {
     itemId: String
   },
@@ -223,11 +228,10 @@ export default {
       adCategory: '',
       adPrice: '',
       pricePer: '',
-      dateFrom: '',
-      dateTo: '',
+      date: ref(),
       adAddress: '',
       adPhone: '',
-      listed: false,
+      unListed: false,
       categories: [],
       dialog: false,
       statusMessage: '',
@@ -259,41 +263,45 @@ export default {
         this.adDescription = productInfo.description;
         this.adPrice = productInfo.price;
         this.adAddress = productInfo.address;
-        this.selectedCategory = productInfo.category
-        this.listed = !(productInfo.unlisted);
-        this.dateFrom = productInfo.dateFrom;
-        this.dateTo = productInfo.dateTo;
+        this.adCategory = productInfo.category
+        this.unListed = productInfo.unlisted;
+        this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)]
+
       }
     },
 
     async createAd() {
       console.log("Listing was created.")
       let tempStat = '';
-      await ListingsService.create(4,this.adName, this.adDescription, this.adAddress, this.adPrice,this.listed, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk').then(response => {
-        tempStat = response.status;
-      }).catch((error) => {
-        if(error.response) {
-          tempStat = error.response.status;
-          this.statusMessage = error.response.data;
-        }
-      })
-      this.statusMessage = "Annonsen ble opprettet!";
-      this.dialog = true;
+      if(this.date !== undefined && this.date !== null) {
+        const dateFrom = new Date(this.date[0].getFullYear() + "/" + (this.date[0].getMonth() + 1) + "/" + this.date[0].getDate());
+        const dateTo = new Date(this.date[1].getFullYear() + "/" + (this.date[1].getMonth() + 1) + "/" + this.date[1].getDate());
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, dateFrom, dateTo, this.$store.state.myUserId, 'elektronikk').then(response => {
+          tempStat = response.status;
+        }).catch((error) => {
+          if (error.response) {
+            tempStat = error.response.status;
+            this.statusMessage = error.response.data;
+          }
+        })
+        this.statusMessage = "Annonsen ble opprettet!";
+        this.dialog = true;
+      }
     },
     async updateAd(){
-      let tempStat;
-      this.dialog = true;
-      this.createdStatus = true;
-      console.log("Listing was updated.")
-      await ListingsService.edit(this.itemId, this.adName, this.adDescription, this.adAddress, this.adPrice, this.switch1, this.dateFrom, this.dateTo, this.$store.state.myUserId, this.categories).then(response => {
-        tempStat = response.data
-      }).catch((error) => {
-        if(error.response){
-          this.statusMessage = error.response.data;
-        }
-      })
-      this.statusMessage = "Endringen var vellykket!";
-      this.dialog = true;
+        let tempStat;
+        this.dialog = true;
+        this.createdStatus = true;
+        console.log("Listing was updated.")
+        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory).then(response => {
+          tempStat = response.data
+        }).catch((error) => {
+          if (error.response) {
+            this.statusMessage = error.response.data;
+          }
+        })
+        this.statusMessage = "Endringen var vellykket!";
+        this.dialog = true;
     },
     async deleteAd(){
       await ListingsService.delete(this.$store.state.myUserId, this.itemId)
@@ -336,6 +344,9 @@ h1 {
   margin-bottom: 20px;
 }
 
+#datepicker{
+  margin-bottom: 22px;
+}
 .createAdButton{
 background-color: var(--bocoBlue);
 color: white;
@@ -347,6 +358,6 @@ font-weight: bold;
 }
 
 button {
-  margin: 5px;
+  margin: 0.4em;
 }
 </style>

@@ -39,7 +39,7 @@
             </template>
             <v-card>
               <v-item-group selected-class="bg-primary">
-                <v-item v-for="category in categories" >
+                <v-item v-for="(category, index) in categories" :key="index">
                   <div
                       class= 'sortOption categoryOption'
                       @click="selectCategory(category)"
@@ -61,7 +61,7 @@
             </template>
             <v-card>
               <v-item-group selected-class="bg-primary">
-                <v-item v-for="option in sortByOptions">
+                <v-item v-for="(option, index) in sortByOptions" :key="index">
                   <div
                       class='sortOption sortByOption'
                       @click="selectSortByOption(option.option)"
@@ -193,7 +193,7 @@ export default {
     margin: 10px;
     padding: 20px;
   }
-  >>>.v-expansion-panel-text__wrapper {
+  :deep()#v-expansion-panel-text__wrapper {
     padding: 0;
   }
   .v-col {
