@@ -206,6 +206,7 @@
 
 <script>
 import ListingsService from "@/service/ListingsService";
+import ImageService from "@/service/ImageService";
 import router from "@/router";
 import ProductService from "@/service/ProductService";
 import { ref } from 'vue';
@@ -265,11 +266,20 @@ export default {
         this.adAddress = productInfo.address;
         this.adCategory = productInfo.category
         this.unListed = productInfo.unlisted;
-        this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)]
-
+        this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)];
+        this.image = (await ImageService.getImagesByProductId(this.itemId)).data;
+        for (let x of this.image) {
+          this.files.push(this.urlToFile(x.img64, x.imgData, x.imgName, {type: x.imgData.split(";")[0].split(":")[1]}))
+        }
       }
     },
-
+    urlToFile(base64, data, filename, mimeType){
+      let url = data +","+base64;
+      return (fetch(url)
+          .then(function(res){return res.arrayBuffer();})
+          .then(function(buf){return new File([buf], filename,{type:mimeType});})
+      );
+    },
     async createAd() {
       console.log("Listing was created.")
       for (let x = 0; x < this.files.length; x++) {
@@ -297,7 +307,11 @@ export default {
         let tempStat;
         this.dialog = true;
         this.createdStatus = true;
-        console.log("Listing was updated.")
+        this.image = [];
+      for (let x = 0; x < this.files.length; x++) {
+        this.image.push( await this.getBase64(this.files[0]));
+      }
+      console.log("Listing was updated.")
         await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
           tempStat = response.data
         }).catch((error) => {
@@ -312,9 +326,11 @@ export default {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
+        let blob;
         reader.onload = () => resolve({
           imgName: file.name,
           img64: reader.result.split(",")[1],
+          imgData: reader.result.split(",")[0],
           productId: 0,
         },
         console.log(reader.result),
