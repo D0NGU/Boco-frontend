@@ -8,6 +8,7 @@
           :itemOwner="rental.userId"
           :itemId="rental.productId"
           :write-review-to-loaner="true"
+          :if-editing=true
       />
     </div>
 
