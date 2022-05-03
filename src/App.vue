@@ -2,6 +2,15 @@
   <nav v-if="this.$store.state.loggedIn">
     <Navbar id="navBar"/>
   </nav>
+  <div class="text-center">
+    <v-overlay v-model="isLoading">
+      <v-card>
+        <v-card-header>
+          test
+        </v-card-header>
+      </v-card>
+    </v-overlay>
+  </div>
   <router-view />
   <Footer/>
 </template>
@@ -15,6 +24,17 @@ import Footer from "./components/Misc/Footer.vue"
 
 export default {
   components: {Login, Navbar, Footer},
+  data () {
+    return {
+      isLoading: true
+    }
+  },
+  beforeMount() {
+    this.isLoading = true;
+  },
+  mounted(){
+    this.isLoading = false
+  }
 }
 </script>
 
