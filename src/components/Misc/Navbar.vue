@@ -78,9 +78,9 @@ export default {
     },
   },
   mounted(){
-    setInterval(function () {
+    /*setInterval(function () {
       this.loadData();
-    }.bind(this), 15000);
+    }.bind(this), 15000);*/
   },
 }
 </script>

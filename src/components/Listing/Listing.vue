@@ -39,10 +39,18 @@
           v-model="files"
           label="Last opp bildene"
           hide-details="auto"
-          multiple="true"
+          multiple
+          small chips
           accept="image/*"
           prepend-icon="mdi-camera"
         />
+        <div v-if="this.updating" v-for="(file, index) in files">
+          <ImageCards
+            :file="file"
+            :id="index"
+            @deleteClick="this.deleteImage(file)"
+          />
+        </div>
       </div>
         <v-select
             v-model="adCategory"
@@ -211,10 +219,11 @@ import router from "@/router";
 import ProductService from "@/service/ProductService";
 import { ref } from 'vue';
 import Datepicker from "@vuepic/vue-datepicker";
+import ImageCards from "@/components/Listing/ImageCards";
 
 export default {
   name: "AdPage",
-  components: {Datepicker},
+  components: {ImageCards, Datepicker},
   props: {
     itemId: String
   },
@@ -235,6 +244,7 @@ export default {
       dialog: false,
       files: [],
       image: [],
+      shownImages: [],
       statusMessage: '',
       rules: [
         value => !!value || 'Påkrevd.',
@@ -269,16 +279,24 @@ export default {
         this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)];
         this.image = (await ImageService.getImagesByProductId(this.itemId)).data;
         for (let x of this.image) {
-          this.files.push(this.urlToFile(x.img64, x.imgData, x.imgName, {type: x.imgData.split(";")[0].split(":")[1]}))
+          this.files.push(await (this.urlToFile(x.img64, x.imgData, x.imgName)));
+          this.shownImages.push(x.imgData + "," + x.img64);
         }
+        console.log(this.files);
       }
     },
-    urlToFile(base64, data, filename, mimeType){
+    urlToFile(base64, data, filename){
       let url = data +","+base64;
       return (fetch(url)
           .then(function(res){return res.arrayBuffer();})
-          .then(function(buf){return new File([buf], filename,{type:mimeType});})
+          .then(function(buf){return new File([buf], filename,{type: "image/jpeg"});})
       );
+    },
+    async dataUrlToFile(base64, data, fileName) {
+      const dataUrl = data +","+base64;
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      return new File([blob], fileName, { type: 'image/png' });
     },
     async createAd() {
       console.log("Listing was created.")
@@ -348,6 +366,11 @@ export default {
     close(){
       this.dialog = false;
       router.back();
+    },
+    deleteImage(file) {
+      this.files = this.files.filter(function (ele){
+        return ele != file;
+      })
     }
   },
    beforeMount(){
