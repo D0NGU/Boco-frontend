@@ -33,6 +33,7 @@ export default {
 
   props: {
     listingName: String,
+    productId: Number
   },
 
   data () {
@@ -45,8 +46,7 @@ export default {
 
   methods: {
     async getProductRentals() {
-      let productId = 2;
-      await ProductService.getOwnerProductAcceptedRentals(productId)
+      await ProductService.getOwnerProductAcceptedRentals(this.productId)
           .then(res => this.productRentals = res.data)
           .catch((err) => {
             this.error = "En feil har skjedd"

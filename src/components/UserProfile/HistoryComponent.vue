@@ -1,7 +1,6 @@
 <template>
   <div>
-   <br>
-   <h3>Min historikk</h3>
+   <h1>Min historikk</h1>
 
     <div v-if="!noRentals" v-for="rental in historyRentedProducts">
       <ListingCard
@@ -66,6 +65,9 @@ export default {
 
 
 <style scoped>
-
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
 </style>
