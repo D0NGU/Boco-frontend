@@ -102,6 +102,11 @@ export default {
         this.dialog = true;
         this.loginStatus = "Bruker eksisterer ikke!";
       }
+      // HttpStatus 500 (INTERNAL SERVER ERROR)
+      else if (status === 500) {
+        this.dialog = true;
+        this.loginStatus = "En feil har oppstått. Prøv igjen";
+      }
     },
 
     goToRegisterPage() {

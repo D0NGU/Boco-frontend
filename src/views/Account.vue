@@ -31,11 +31,7 @@
           <div>
             <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
             <v-btn v-if="!edit" class="my-2" id="editDescription"
-                   rounded
-                   color="grey"
-                   fab
-                   small
-                   dark
+                   rounded color="grey" fab small dark
                    @click="editDescription"
             >
               <v-icon>mdi-pencil</v-icon>
@@ -43,21 +39,14 @@
 
             <div>
               <v-btn v-if="edit"
-                     rounded
-                     class="ma-2"
-                     color="green"
-                     dark
+                     rounded class="ma-2" color="green" dark
                      @click="saveDescription"
               >
                 <v-icon dark right>
                   mdi-checkbox-marked-circle
                 </v-icon>
               </v-btn>
-              <v-btn v-if="edit"
-                     rounded
-                     class="ma-2"
-                     color="red"
-                     dark
+              <v-btn v-if="edit" rounded class="ma-2" color="red" dark
                      @click="deleteDescription"
               >
                 <v-icon dark right>
@@ -73,6 +62,11 @@
                           maxlength="190"
                           :rules="rules"
               ></v-textarea>
+
+              <v-snackbar v-model="snackbar" :timeout="timeout">
+                {{ statusForEditUserDescription }}
+              </v-snackbar>
+
             </div>
           </div>
 
@@ -132,6 +126,9 @@ export default {
       isVerified: false,
       rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
       background_img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd53l9d6fqlxs2.cloudfront.net%2Fphotos%2F75616-adobestock_63768956jpeg.jpeg&f=1&nofb=1',
+      statusForEditUserDescription: '',
+      snackbar: false,
+      timeout: 2000,
     }
   },
 
@@ -144,21 +141,29 @@ export default {
         this.userDescription = ' ';
       }
       this.updateUserDescription()
+      this.snackbar = true
       this.edit = false
     },
     deleteDescription() {
       this.userDescription = ' ';
       this.updateUserDescription()
+      this.snackbar = true
       this.edit = false
     },
 
     async updateUserDescription() {
       let myUserId = this.$store.getters.myUserId;
+      let temp = ''
       await UserAccountService.updateUserDescription(myUserId, this.userDescription)
-          .then(res => console.log(res.status))
+          .then(res => temp = res.status)
           .catch((err) => {
             console.log(err)
           })
+      if (temp === 200) {
+        this.statusForEditUserDescription = "Oppdatert bruker beskrivelse"
+      } else {
+        this.statusForEditUserDescription = "Noe gikk galt. Prøv igjen"
+      }
     }
   },
   async beforeMount() {
