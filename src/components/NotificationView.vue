@@ -8,6 +8,7 @@
         :optionalId="alert.optionalId"
         :userId="alert.userId"
         @update="getAlerts"
+        @close="closeDialog"
     />
   </div>
 </template>
@@ -28,6 +29,9 @@ export default {
     async getAlerts() {
       this.alerts = (await getApiClient.get("/alerts/user/" + this.$store.getters.myUserId)).data;
     },
+    closeDialog() {
+      this.$emit("close")
+    }
   },
   beforeMount() {
     this.getAlerts()

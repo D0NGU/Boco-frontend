@@ -35,7 +35,8 @@
 
           <v-card id="notificationDialog">
             <v-card-text>
-              <NotificationView />
+              <NotificationView
+              @close="dialog = false"/>
             </v-card-text>
             <v-card-actions>
               <v-btn
