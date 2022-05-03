@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     redirect() {
-      if(this.itemOwner !== this.$store.state.myUserId){
+      if(this.itemOwner !== parseInt(this.$store.getters.myUserId)){
         router.push({name: 'ListingDetails', params: { itemId: this.itemId }})
       } else {
         router.push({name: 'Listing', params: { itemId: this.itemId }})
