@@ -10,7 +10,7 @@
         <v-dialog
             v-model="dialog"
             fullscreen=""
-            v-if="ifRented && !ifReviewed"
+            v-if="(ifRented && !ifReviewed) || ifEditing"
         >
           <template v-slot:activator="{ props }">
             <v-btn icon="" id="writeReviewBtn" size="x-small" v-bind="props"><v-icon size="small">mdi-message-draw</v-icon></v-btn>
@@ -31,8 +31,13 @@
         </v-dialog>
 
         <p class="text-caption" v-else>{{itemPrice}} kr/dag</p>
-        <div v-if="isOwner" id="editIcon">
-          <v-icon style="padding: 10px">mdi-pencil</v-icon> Rediger
+        <div v-if="isOwner">
+          <p  id="editIcon">
+            <v-avatar size="x-small">
+              <v-icon>mdi-pencil</v-icon>
+            </v-avatar>
+            Rediger
+          </p>
         </div>
         <div v-else>
         <p class="text-overline" id="itemOwner">
@@ -62,6 +67,7 @@ export default {
     ifReviewed: Boolean,
     writeReviewToLoaner: Boolean,
     ifRented: Boolean,
+    ifEditing: Boolean,
   },
   data () {
     return {
@@ -122,11 +128,6 @@ export default {
 }
 #editIcon {
   position: absolute;
-  border: solid 1px black;
-  border-radius: 20px;
-  display: inline-block;
-  padding: 6px;
-  bottom: 3px;
-  right: 3px;
+  bottom: 0;
 }
 </style>

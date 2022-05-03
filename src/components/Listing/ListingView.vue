@@ -23,7 +23,8 @@
       :itemName="product.title"
       :itemOwner="product.userId"
       :itemPrice="product.price"
-      :itemId="product.productId"/>
+      :itemId="product.productId"
+    />
   </div>-->
 </template>
 

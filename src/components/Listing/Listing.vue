@@ -37,12 +37,14 @@
                   :rules="rules"
                   hide-details="auto"
               ></v-text-field>
-              <v-text-field
+              <v-textarea
+                  rows="5"
+                  no-resize
                   v-model="adDescription"
                   label="Beskrivelse"
                   :rules="rules"
                   hide-details="auto"
-              ></v-text-field>
+              ></v-textarea>
               <div>
                 <!--        <v-file-input
                             v-bind:value="adPicture"
@@ -389,7 +391,7 @@ export default {
   padding: 1em;
 }
 
-.v-text-field, .v-file-input {
+.v-text-field, .v-file-input, .v-textarea, #datepicker {
   margin-bottom: 22px;
 }
 
