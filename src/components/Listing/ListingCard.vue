@@ -3,7 +3,8 @@
 <template>
   <v-card class="rounded-xl itemCard" @click="redirect">
     <div class="itemContainer">
-      <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
+      <img v-if="thumbnail" v-bind:src="thumbnail" id="itemImage"/>
+      <img v-else src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
       <v-divider vertical />
       <div class="itemDetail">
         <p class="text-subtitle-1">{{ itemName }}</p>
@@ -54,6 +55,7 @@
 import router from "@/router";
 import UserAccountService from "@/service/UserAccountService";
 import Review from "@/components/UserProfile/Review";
+import ImageService from "@/service/ImageService";
 
 export default {
   components: {Review},
@@ -74,6 +76,7 @@ export default {
       itemOwnerName: '',
       dialog: false,
       isOwner: false,
+      thumbnail: ''
     }
   },
   methods: {
@@ -89,6 +92,8 @@ export default {
   },
   async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
+    const raw = (await ImageService.getImagesByProductId(this.itemId)).data[0]
+    this.thumbnail = raw.imgData + "," + raw.img64;
     this.itemOwnerName = userInfo.fname + " " + userInfo.lname
     this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
   }
