@@ -18,7 +18,7 @@
 
           <v-card>
             <v-card-text>
-              <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" />
+              <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" @close="dialog=false" />
             </v-card-text>
             <v-card-actions>
               <v-btn

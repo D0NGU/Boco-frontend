@@ -24,6 +24,22 @@
     Send
   </v-btn>
   </div>
+
+  <v-dialog id="popOut" v-model="dialog">
+    <v-card>
+      <v-card-title class="text-h5"> Anmeldelse sendt! </v-card-title>
+      <v-card-actions>
+        <v-btn
+            color="red"
+            text
+            @click=close()
+        >
+          Lukk
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
 </template>
 
 <script>
@@ -40,12 +56,18 @@ export default {
     return {
       review: '',
       comment: '',
+      dialog: false,
     }
   },
   methods: {
     async sendReview() {
       await ReviewService.create(this.comment, this.review, this.owner, this.$store.state.myUserId, this.ownerId);
+      this.dialog = true;
     },
+    close() {
+      this.dialog = false;
+      this.$emit("close");
+    }
   },
 }
 </script>
