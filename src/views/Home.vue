@@ -12,11 +12,6 @@ import cookies from "vue-cookie";
 export default {
     name: 'Home',
   components: {Footer, ListingView},
-  async beforeMount() {
-      //TODO Flytt denne til innlogging
-    const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
-    cookies.set("userId", userInfo.id);
-  }
 }
 </script>
 

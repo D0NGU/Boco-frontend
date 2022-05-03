@@ -14,4 +14,8 @@ export default {
             //params: {searchParams}
         })
     },
+
+    getOwnerProductAcceptedRentals(productId) {
+        return getApiClient.get("rentals/product/"+ productId + "/true")
+    },
 }

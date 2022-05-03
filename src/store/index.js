@@ -39,8 +39,8 @@ export default createStore({
   state: {
     loggedIn: false,
     token: '',
-    myUserId: cookies.get("userId"),
-    email: cookies.get("email"),
+    myUserId: '',
+    email: '',
   },
   getters: getters,
   mutations: mutations,

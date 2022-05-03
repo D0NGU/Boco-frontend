@@ -74,13 +74,15 @@ export default {
   methods: {
     handleSaveClick(){
       if(this.newPassword === this.newPasswordRepeat){
-        UserAccountService.editPassword(this.email, this.oldPassword, this.newPassword);
+        UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword);
         this.confirmationSnackBar = true;
       }
     },
     logOut() {
       this.$store.commit('SET_STATUS', false);
       cookies.set('token', "", { path: '/' });
+      cookies.set('userId', "", {path: '/'})
+      cookies.set('email', "", {path: '/'})
       setTimeout( () => this.$router.push({ path: '/login'}), 1500);
     },
   },

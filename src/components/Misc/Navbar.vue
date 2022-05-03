@@ -35,7 +35,8 @@
 
           <v-card id="notificationDialog">
             <v-card-text>
-              <NotificationView />
+              <NotificationView
+              @close="dialog = false"/>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -67,7 +68,7 @@ export default {
   },
   methods: {
     async loadData() {
-      await getApiClient.get('alerts/user/' + this.$store.state.myUserId + '/unseen').then(response => {
+      await getApiClient.get('alerts/user/' + this.$store.getters.myUserId + '/unseen').then(response => {
         if (response.data !== "") {
           console.log("New alert")
           this.notification = true;
@@ -78,7 +79,7 @@ export default {
     },
   },
   mounted(){
-    setInterval(function () {
+      setInterval(function () {
       this.loadData();
     }.bind(this), 15000);
   },
