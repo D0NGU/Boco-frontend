@@ -16,7 +16,7 @@ const store = createStore({
     },
 })
 
-describe('RegisterForm.vue', () => {
+describe('Testing RegisterForm.vue', () => {
 
     it('Test if title renders', () => {
         const wrapper = mount(RegisterForm);
@@ -42,8 +42,6 @@ describe('RegisterForm.vue', () => {
         expect(lastname.text()).toBe('')
         expect(email.text()).toBe('')
         expect(password.text()).toBe('')
-
-
     });
 
     it('Test if buttons renders', () => {
@@ -57,12 +55,12 @@ describe('RegisterForm.vue', () => {
         expect(registerButton.text()).toBe('Opprett bruker')
         expect(backToLoginBtn.text()).toContain('Logg inn')
     });
+
     it('Test for disabled "Opprett bruker" button', () => {
         const wrapper = mount(RegisterForm);
         expect(wrapper.find("#rBtn").exists()).toBe(true);
         const registerBtn = wrapper.find("#rBtn");
         expect(registerBtn.attributes()).toHaveProperty('disabled');
-
     });
 
     it('Testing routing from RegisterForm.vue to LoginForm.vue', async () => {
@@ -80,7 +78,6 @@ describe('RegisterForm.vue', () => {
         await wrapper.find("#backToLoginButton").trigger('click');
         await flushPromises();
         expect(wrapper.html()).toContain('Logg inn');
-
     });
 
 })

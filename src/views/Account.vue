@@ -29,7 +29,7 @@
           </div>
 
           <div>
-            <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
+            <p id="userDescription" v-if="!edit" class="text-body-1">{{ userDescription }}</p>
             <v-btn v-if="!edit" class="my-2" id="editDescription"
                    rounded color="grey" fab small dark
                    @click="editDescription"
@@ -53,10 +53,12 @@
                   mdi-delete
                 </v-icon>
               </v-btn>
-              <v-textarea v-if="edit"
+              <v-textarea id="userDescriptionInput"
+                          v-if="edit"
                           rows="2"
+                          no-resize
                           outlined
-                          label="User description"
+                          label="Beskrivelse"
                           v-model="userDescription"
                           counter="190"
                           maxlength="190"
@@ -107,6 +109,7 @@ import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
+import {getApiClient} from "@/service/ApiService";
 
 export default {
     name: 'account',
@@ -116,8 +119,8 @@ export default {
     return {
       //TODO Hent rating fra backend
       name: 'Bruker',
-      ratingSeller: 5,
-      ratingRenter: 5,
+      ratingSeller: '',
+      ratingRenter: '',
       reviewsCount: '',
       tab: null,
       userInfo: '',
@@ -150,7 +153,15 @@ export default {
       this.snackbar = true
       this.edit = false
     },
-
+    async getNumberOfReviews() {
+      this.reviewsCount = (await UserAccountService.getNumberOfReviews(this.$store.getters.myUserId)).data;
+    },
+    async getAverageScoreAsOwner() {
+      this.ratingSeller = (await UserAccountService.getAverageScoreAsOwner(this.$store.getters.myUserId)).data;
+    },
+    async getAverageScoreAsRenter() {
+      this.ratingRenter = (await UserAccountService.getAverageScoreAsRenter(this.$store.getters.myUserId)).data;
+    },
     async updateUserDescription() {
       let myUserId = this.$store.getters.myUserId;
       let temp = ''
@@ -185,6 +196,9 @@ export default {
           console.log(err)
         })
 
+    await this.getNumberOfReviews()
+    await this.getAverageScoreAsOwner()
+    await this.getAverageScoreAsRenter()
   }
 }
 </script>
@@ -240,6 +254,11 @@ export default {
 }
 .v-card-text {
   padding: 0;
+}
+
+#userDescription {
+  width: 350px;
+  margin: 0 auto;
 }
 
 </style>

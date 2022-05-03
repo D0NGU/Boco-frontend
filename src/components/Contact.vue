@@ -1,29 +1,32 @@
 <template>
   <h1 id="header">Kontakt oss</h1>
-  <div id="textFieldWrapper">
-    <v-text-field id="name" v-model="name" readonly label="Fullt navn"></v-text-field>
-    <v-text-field id="email" v-model="email" readonly label="E-postadresse"></v-text-field>
-    <v-text-field id="feedbackField" v-model="feedback" label="Kommentar" type="text" hide-details="auto" :rules="rules"></v-text-field>
+  <div id="container">
+    <div id="textFieldWrapper">
+      <v-text-field id="name" v-model="name" readonly label="Fullt navn"></v-text-field>
+      <v-text-field id="email" v-model="email" readonly label="E-postadresse"></v-text-field>
+      <v-text-field id="feedbackField" v-model="feedback" label="Kommentar" type="text" hide-details="auto" :rules="rules"></v-text-field>
+    </div>
+
+    <v-row>
+      <v-col
+          cols="12"
+      >
+        <v-btn
+            id="sendForm"
+            @click="sendContact"
+        >Send kontaktskjema</v-btn>
+      </v-col>
+      <v-col
+          cols="12"
+      >
+        <v-btn
+            id="dismiss"
+            @click="$router.back()"
+        >Avbryt</v-btn>
+      </v-col>
+    </v-row>
   </div>
 
-  <v-row>
-    <v-col
-      cols="12"
-    >
-      <v-btn
-          id="sendForm"
-          @click="sendContact"
-      >Send kontaktskjema</v-btn>
-    </v-col>
-    <v-col
-      cols="12"
-      >
-      <v-btn
-          id="dismiss"
-          @click="$router.back()"
-      >Avbryt</v-btn>
-    </v-col>
-  </v-row>
 
 
 </template>
@@ -68,24 +71,33 @@ export default {
 </script>
 
 <style scoped>
-#header{
-  padding: 0.5em;
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-.v-text-field{
-  padding: 0.5em;
+
+#container {
+  width: 350px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 1em;
 }
+
 #textFieldWrapper{
-  padding: 0.5em;
   margin: 0 auto;
 }
+
 #sendForm{
   margin-top: 1.5em;
   background-color: var(--bocoBlue);
   color: white;
   font-weight: bold;
 }
+
 #dismiss{
   color: var(--bocoBlue);
   font-weight: bold;
+  margin-top: -0.5em;
 }
+
 </style>
