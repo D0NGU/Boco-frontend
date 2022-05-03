@@ -3,6 +3,7 @@
 <template>
   <v-tabs v-if="updating" id="tabContainer" v-model="tab" grow="">
     <v-tab class="tabHeader" value="updateListing">Oppdater</v-tab>
+    <v-tab class="tabHeader" value="rentalRequests">Forespørsler</v-tab>
     <v-tab class="tabHeader" value="sendReviewToLoaner">Leieavtaler</v-tab>
   </v-tabs>
 
@@ -214,9 +215,23 @@
         </div>
 
 
+
       </v-window-item>
+
+      <v-window-item value="rentalRequests">
+        <RentalRequestView
+            v-if="this.render"
+            :productId="this.itemId"
+            :rental-list="this.rentalList"
+            @update="getRentals()"
+        ></RentalRequestView>
+      </v-window-item>
+
       <v-window-item value="sendReviewToLoaner">
-        <ShowRentals :listing-name="this.adName"></ShowRentals>
+        <ShowRentals
+            :listing-name="this.adName"
+            :product-id="this.itemId"
+        ></ShowRentals>
       </v-window-item>
     </v-window>
   </v-card-text>
@@ -232,15 +247,18 @@ import ProductService from "@/service/ProductService";
 import { ref } from 'vue';
 import Datepicker from "@vuepic/vue-datepicker";
 import ShowRentals from "@/components/UserProfile/ShowRentals";
+import RentalRequestView from "@/components/Listing/RentalRequestView";
+import RentalService from "@/service/RentalService";
 
 export default {
   name: "AdPage",
-  components: {Datepicker, ShowRentals},
+  components: {Datepicker, RentalRequestView, ShowRentals},
   props: {
     itemId: String
   },
   data() {
     return {
+      rentalList: [],
       valid: false,
       updating: false,
       adName: '',
@@ -270,9 +288,17 @@ export default {
       ],
       deleteDialog: false,
       tab: null,
+      render: true,
     }
   },
   methods: {
+    forceRerender() {
+      this.render = false;
+
+      this.$nextTick(() => {
+        this.render = true;
+      });
+    },
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
@@ -336,12 +362,17 @@ export default {
     close(){
       this.dialog = false;
       router.back();
+    },
+
+    async getRentals() {
+      this.rentalList = (await RentalService.getRentals(this.itemId)).data
     }
   },
    beforeMount(){
      if(this.itemId !== undefined){
        this.updating = true;
      }
+     this.getRentals();
     this.getInfo();
     /*if(this.itemId > 0){
       this.updating = true;

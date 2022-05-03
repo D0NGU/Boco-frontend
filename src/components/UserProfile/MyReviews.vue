@@ -1,4 +1,5 @@
 <template>
+  <h1>Anmeldelser om meg</h1>
   <div v-for="review in reviews">
     <ReviewCard
         :rating="review.rating"
@@ -32,5 +33,8 @@ export default {
 </script>
 
 <style scoped>
-
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 </style>
