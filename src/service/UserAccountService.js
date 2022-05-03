@@ -24,6 +24,11 @@ export default {
 
     getUserId(email){
         return getApiClient.get(`user/get/`+email)
+    },
+
+    sendContactForm(name, email, comment){
+        const contactForm = { name: name, email: email, comment: comment};
+        return getApiClient.post(UNKNOWN, {params: {contactForm}})
     }
 }
 

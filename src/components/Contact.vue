@@ -1,15 +1,9 @@
 <template>
   <h1 id="header">Kontakt oss</h1>
   <div id="textFieldWrapper">
-    <v-text-field id="name" v-model="name" readonly label="Navn"></v-text-field>
-    <v-text-field id="email" v-model="email" readonly label="E-postadresse"></v-text-field>
-    <v-text-field
-        id="feedbackField"
-        v-model="feedback"
-        label="Kommentar"
-        type="text"
-        hide-details="auto"
-    ></v-text-field>
+    <v-text-field id="name" v-model="name" label="Fullt navn" hide-details="auto" :rules="rules"></v-text-field>
+    <v-text-field id="email" v-model="email" label="E-postadresse" hide-details="auto" :rules="emailRules"></v-text-field>
+    <v-text-field id="feedbackField" v-model="feedback" label="Kommentar" type="text" hide-details="auto" :rules="rules"></v-text-field>
   </div>
 
   <v-row>
@@ -44,10 +38,27 @@ export default {
       name: '',
       email: '',
       feedback: '',
+      rules: [
+          value => !!value || 'Påkrevd.',
+          value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
+      ],
+      emailRules: [
+        v => !!v || 'Påkrevd.',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-post må være gyldig.',
+      ],
     }
   },
   methods: {
-    sendContact(){
+    async sendContact(){
+      //TODO: Legg til tilbakemelding i backend!
+      let tempStat = '';
+      await UserAccountService.sendContactForm(this.name, this.email, this.feedback).then(response => {
+        tempStat = response.status;
+      }).catch((error) => {
+        if(error.response){
+          tempStat = error.response.status;
+        }
+      })
       setTimeout(() => this.$router.push('/home'), 500);
     },
   },
