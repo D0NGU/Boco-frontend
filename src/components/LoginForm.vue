@@ -61,6 +61,7 @@
 <script>
 import LoginService from '@/service/LoginService'
 import cookies from 'vue-cookie'
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
   methods: {
@@ -85,9 +86,12 @@ export default {
       // HttpStatus 200 (OK)
       if (status === 200) {
         this.loginStatus = "Successfull login";
-        this.$store.dispatch("login", {token:token, email:this.email});
         cookies.set("email", this.email);
-        await this.$router.push('/home');
+        this.$store.dispatch("login", {token:cookies.get("token"), email:cookies.get("email")});
+        const userInfo = (await UserAccountService.getUserId(this.email)).data
+        cookies.set("userId", userInfo.id);
+        this.$store.commit("SET_MYUSERID", cookies.get("userId"))
+        await window.location.replace('/home');
       } 
       // HttpStatus 403 (FORBIDDEN)
       else if (status === 403) {

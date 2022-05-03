@@ -7,8 +7,7 @@ export default {
         return getApiClient.get("products/user/" + myUserId + "/history")
     },
 
-    delete(userId, fname, lname, email, password){
-        const userToDelete = { id: userId, fname: fname, lname: lname, email: email, password: password };
+    delete(userId){
         return getApiClient.delete('user/delete/', {params: {userId}} )
     },
 

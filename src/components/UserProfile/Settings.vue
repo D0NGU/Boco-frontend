@@ -81,6 +81,8 @@ export default {
     logOut() {
       this.$store.commit('SET_STATUS', false);
       cookies.set('token', "", { path: '/' });
+      cookies.set('userId', "", {path: '/'})
+      cookies.set('email', "", {path: '/'})
       setTimeout( () => this.$router.push({ path: '/login'}), 1500);
     },
   },
