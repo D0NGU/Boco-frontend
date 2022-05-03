@@ -80,8 +80,7 @@ export default {
   async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
     this.itemOwnerName = userInfo.fname + " " + userInfo.lname
-    console.log((this.itemOwner === this.$store.state.myUserId))
-    this.isOwner = (this.itemOwner === this.$store.state.myUserId)
+    this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
   }
 }
 </script>
