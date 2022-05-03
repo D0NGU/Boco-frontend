@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!--Todo endre id itemImage-->
     <v-img v-if="images" v-bind:src="images[0]" id="itemImage"></v-img>
     <v-img v-else src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Hammer.jpg" id="itemImage"></v-img>
     <div id="details">
