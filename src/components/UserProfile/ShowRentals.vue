@@ -34,7 +34,7 @@ export default {
 
   props: {
     listingName: String,
-    productId: Number
+    productId: [Number, String]
   },
 
   data () {
@@ -52,7 +52,7 @@ export default {
           .catch((err) => {
             this.error = "En feil har skjedd"
           })
-
+      console.log(this.productId)
       if (!this.productRentals.length){
         this.noRentals = true;
       } else {

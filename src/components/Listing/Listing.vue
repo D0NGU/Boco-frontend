@@ -264,7 +264,7 @@ export default {
   name: "AdPage",
   components: {ImageCards, Datepicker, RentalRequestView, ShowRentals},
   props: {
-    itemId: String
+    itemId: [String, Number]
   },
   data() {
     return {
