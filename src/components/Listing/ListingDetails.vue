@@ -6,6 +6,7 @@
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
       <p>{{ productInfo.description }}</p>
       <v-chip color="indigo"><p>{{ productInfo.category }}</p></v-chip>
+      <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <v-divider style="margin: 10px"/>
       <p id="itemOwner">
         <v-avatar>
@@ -59,10 +60,23 @@ export default {
       ownerInfo: '',
       showMap: false,
       startDate: new Date(),
+      priceRange: '',
     }
   },
 
   methods: {
+
+    async setPriceRange() {
+      const product = (await ListingsService.getListing(this.itemId)).data
+      this.productInfo = product.product;
+      if(this.productInfo.price >= 0 && this.productInfo.price < 200){
+        this.priceRange = '$'
+      } else if (this.productInfo.price >= 200 && this.productInfo.price < 500){
+        this.priceRange = '$$'
+      } else {
+        this.priceRange = '$$$'
+      }
+    },
 
     async getListingInfo(){
       const product = (await ListingsService.getListing(this.itemId)).data
@@ -93,6 +107,7 @@ export default {
 
   beforeMount() {
     this.getListingInfo()
+    this.setPriceRange()
   }
 }
 </script>
