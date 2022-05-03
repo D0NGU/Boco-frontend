@@ -27,6 +27,7 @@
           v-model="files"
           label="Last opp bildene"
           hide-details="auto"
+          multiple="true"
           accept="image/*"
           prepend-icon="mdi-camera"
         />
@@ -204,11 +205,13 @@ export default {
     async saveAd() {
       this.dialog = true;
       console.log("Listing was created.")
-      this.image.push( await this.getBase64(this.files[0]));
+      for (let x = 0; x < this.files.length; x++) {
+        this.image.push( await this.getBase64(this.files[0]));
+      }
       console.log(this.image)
 
       let tempStat = '';
-      await ListingsService.create(0,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, this.$store.state.myUserId, 'elektronikk', this.image[0]).then(response => {
+      await ListingsService.create(0,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, 1, this.adCategory, this.image).then(response => {
         tempStat = response.status;
       }).catch((error) => {
         if(error.response) {
