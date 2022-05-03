@@ -24,7 +24,7 @@
           </v-avatar>
           <div>
             <p class="text-button">{{name}}
-              <v-icon v-if="isVerified">mdi-account-check-outline</v-icon>
+              <v-icon v-if="isVerified">mdi-shield-check</v-icon>
             </p>
           </div>
 
@@ -183,18 +183,9 @@ export default {
     this.name = userInfo.data.fname + " " + userInfo.data.lname
 
     //check if user is verified
-    await UserAccountService.getVerifiedUser(myUserId)
-        .then(res => this.isVerified = res.data)
-        .catch((err) => {
-          console.log(err)
-        })
-
+    this.isVerified = (await UserAccountService.getVerifiedUser(myUserId)).data
     //get user description
-    await UserAccountService.getUserDescription(myUserId)
-        .then(res => this.userDescription = res.data)
-        .catch((err) => {
-          console.log(err)
-        })
+    this.userDescription =  (await UserAccountService.getUserDescription(myUserId)).data
 
     await this.getNumberOfReviews()
     await this.getAverageScoreAsOwner()

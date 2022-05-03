@@ -1,7 +1,7 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
-  <v-card class="rounded-xl itemCard" @click="redirect">
+  <v-card class="rounded-xl itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
     <div class="itemContainer">
       <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
       <v-divider vertical />
@@ -43,7 +43,8 @@
         <p class="text-overline" id="itemOwner">
           <v-avatar size="x-small">
           <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-        </v-avatar> {{itemOwnerName}} </p>
+        </v-avatar> {{itemOwnerName}}
+          <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
         </div>
       </div>
     </div>
@@ -74,13 +75,12 @@ export default {
       itemOwnerName: '',
       dialog: false,
       isOwner: false,
+      ownerVerified: false,
     }
   },
   methods: {
     redirect() {
-      if (this.writeReviewToLoaner) {
-        // do nothing here
-      } else if(this.itemOwner !== parseInt(this.$store.state.myUserId)){
+      if(this.itemOwner !== parseInt(this.$store.state.myUserId)){
         router.push({name: 'ListingDetails', params: { itemId: this.itemId }})
       } else {
         router.push({name: 'Listing', params: { itemId: this.itemId }})
@@ -91,6 +91,7 @@ export default {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
     this.itemOwnerName = userInfo.fname + " " + userInfo.lname
     this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
+    this.ownerVerified = (await UserAccountService.getVerifiedUser(this.itemOwner)).data
   }
 }
 </script>
