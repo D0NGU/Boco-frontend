@@ -4,7 +4,7 @@
   <v-card class="rounded-xl itemCard" @click="redirect">
     <div class="itemContainer">
       <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
-      <v-divider vertical="" />
+      <v-divider vertical />
       <div class="itemDetail">
         <p class="text-subtitle-1">{{ itemName }}</p>
         <v-dialog
@@ -61,6 +61,7 @@ export default {
     ifHistory: Boolean,
     ifReviewed: Boolean,
     writeReviewToLoaner: Boolean,
+    ifRented: Boolean,
   },
   data () {
     return {
