@@ -87,7 +87,7 @@ export default {
         this.loginStatus = "Successfull login";
         this.$store.dispatch("login", {token:token, email:this.email});
         cookies.set("email", this.email);
-        await this.$router.push('/home');
+        await window.location.replace('/home');
       } 
       // HttpStatus 403 (FORBIDDEN)
       else if (status === 403) {
