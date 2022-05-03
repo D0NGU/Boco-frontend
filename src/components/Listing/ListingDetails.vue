@@ -42,7 +42,7 @@ import Map from "@/components/Map";
 export default {
   name: "ListingDetails",
   components: {
-    Map, 
+    Map,
     Datepicker
   },
 

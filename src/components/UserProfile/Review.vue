@@ -27,7 +27,9 @@
 
   <v-dialog id="popOut" v-model="dialog">
     <v-card>
-      <v-card-title class="text-h5"> Anmeldelse sendt! </v-card-title>
+      <v-card-title v-if="reviewSent" class="text-h5"> Anmeldelse sendt! </v-card-title>
+      <v-card-title v-if="!reviewSent" class="text-h5"> Anmeldelse kan ikke sendes </v-card-title>
+      <v-card-text v-if="!reviewSent"> En feil har oppstått! Velg en stjerne-rating og skrive inn kommentar før du sender på nytt </v-card-text>
       <v-card-actions>
         <v-btn
             color="red"
@@ -57,11 +59,14 @@ export default {
       review: '',
       comment: '',
       dialog: false,
+      reviewSent: false
     }
   },
   methods: {
     async sendReview() {
-      await ReviewService.create(this.comment, this.review, this.owner, this.$store.state.myUserId, this.ownerId);
+      await ReviewService.create(this.comment, this.review, this.owner, this.$store.state.myUserId, this.ownerId)
+          .then(res => this.reviewSent = true)
+          .catch((err) => this.reviewSent = false);
       this.dialog = true;
     },
     close() {
