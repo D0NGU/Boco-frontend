@@ -56,7 +56,7 @@ export default {
   methods: {
     async deleteUser(){
       this.clicked = true;
-      await UserAccountService.delete(this.$store.getters.myUserId).then(response => {
+      await UserAccountService.delete(this.$store.getters.myUserId, this.password).then(response => {
         console.warn(response)
       }).catch((error) => {
         console.warn(error.response);
