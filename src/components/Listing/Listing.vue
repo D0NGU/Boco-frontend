@@ -2,8 +2,8 @@
 
 <template>
   <v-tabs v-if="updating" id="tabContainer" v-model="tab" grow="">
-    <v-tab class="tabHeader" value="updateListing"> Oppdatere </v-tab>
-    <v-tab class="tabHeader" value="sendReviewToLoaner"> Send review </v-tab>
+    <v-tab class="tabHeader" value="updateListing">Oppdater</v-tab>
+    <v-tab class="tabHeader" value="sendReviewToLoaner">Leieavtaler</v-tab>
   </v-tabs>
 
   <v-card-text>
@@ -382,8 +382,11 @@ button {
 }
 
 #tabContainer {
-  background-color: grey;
-  color: white;
+  background-color: white;
+  color: var(--bocoBlue);
+}
 
+.tabHeader {
+  margin-top: 0;
 }
 </style>

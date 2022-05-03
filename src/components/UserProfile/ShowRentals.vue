@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Utleie av {{ this.listingName }}</h3>
+    <h1>Utleie av {{ this.listingName }}</h1>
 
     <div v-if="!noRentals" v-for="rental in productRentals">
       <ListingCard
@@ -12,7 +12,7 @@
     </div>
 
     <div v-if="noRentals">
-      <p v-if="!error">Ingen har utleid produktet</p>
+      <p v-if="!error">Ingen har leid produktet enda.</p>
       <p v-else> {{ error }} </p>
     </div>
 
@@ -68,6 +68,9 @@ export default {
 
 
 <style scoped>
-
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
 </style>
