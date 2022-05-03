@@ -93,7 +93,9 @@ export default {
   async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
     const raw = (await ImageService.getImagesByProductId(this.itemId)).data[0]
-    this.thumbnail = raw.imgData + "," + raw.img64;
+    if (raw) {
+      this.thumbnail = raw.imgData + "," + raw.img64;
+    }
     this.itemOwnerName = userInfo.fname + " " + userInfo.lname
     this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
   }
