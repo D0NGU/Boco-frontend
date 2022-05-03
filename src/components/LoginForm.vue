@@ -4,20 +4,20 @@
 
     <div id="inputWrapper">
       <div>
-        <v-text-field 
-          :rules="emailRules" 
-          id="email" 
-          v-model="email" 
+        <v-text-field
+          :rules="emailRules"
+          id="email"
+          v-model="email"
           label="E-postadresse">
         </v-text-field>
       </div>
       <div>
-        <v-text-field 
-          :rules="rulesApplyToAll" 
-          id="password" v-model="password" 
-          v-on:keyup.enter="logInButton()" 
-          :type="show ?'text': 'password'" 
-          @click:append="show=!show" 
+        <v-text-field
+          :rules="rulesApplyToAll"
+          id="password" v-model="password"
+          v-on:keyup.enter="logInButton()"
+          :type="show ?'text': 'password'"
+          @click:append="show=!show"
           label="Passord">
         </v-text-field>
       </div>
@@ -25,15 +25,15 @@
 
     <div id="loginButton" class="text-center">
       <v-row justify="center">
-        <v-btn id="loginBtn" 
-          :disabled="!valid" 
-          dark color="#CFD8DC" 
+        <v-btn id="loginBtn"
+          :disabled="!valid"
+          dark color="#CFD8DC"
           @click="logInButton()">
           Logg inn
         </v-btn>
         <v-dialog v-model="dialog">
           <v-card>
-            <v-card-title class="text-h5" v-if="loginStatus !=='Successfull login'"> Login failed! </v-card-title>
+            <v-card-title class="text-h5" v-if="loginStatus !=='Påloggingen var vellykket'"> Innlogging feilet </v-card-title>
             <v-card-text id="loginStatusLabel"> {{loginStatus}} </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -70,7 +70,6 @@ export default {
       let token = '';
       // Check if login-info (email, password) is valid and not empty
       if (this.$refs.loginform.validate()) {
-        console.info("Form is validated");
         await LoginService.handleClickSignIn(this.email, this.password).then(response => {
           status = response.status;
           console.log(response.data);
@@ -85,23 +84,23 @@ export default {
       console.info("Status: " + status)
       // HttpStatus 200 (OK)
       if (status === 200) {
-        this.loginStatus = "Successfull login";
+        this.loginStatus = "Påloggingen var vellykket";
         cookies.set("email", this.email);
         this.$store.dispatch("login", {token:cookies.get("token"), email:cookies.get("email")});
         const userInfo = (await UserAccountService.getUserId(this.email)).data
         cookies.set("userId", userInfo.id);
         this.$store.commit("SET_MYUSERID", cookies.get("userId"))
         await window.location.replace('/home');
-      } 
+      }
       // HttpStatus 403 (FORBIDDEN)
       else if (status === 403) {
         this.dialog = true;
-        this.loginStatus = "Wrong password";
-      } 
+        this.loginStatus = "Feil passord";
+      }
       // HttpStatus 403 (NOT FOUND)
       else if (status === 404) {
         this.dialog = true;
-        this.loginStatus = "User does not exist";
+        this.loginStatus = "Bruker eksisterer ikke!";
       }
     },
 
