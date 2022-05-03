@@ -47,7 +47,7 @@
               ></v-textarea>
               <div>
                 <v-file-input
-                    v-bind:value="adPicture"
+                    v-bind:value="files"
                     v-on:input="adPicture = $event.target.value"
                     label="Last opp bildene"
                     hide-details="auto"
@@ -427,14 +427,11 @@ export default {
     }
   },
    beforeMount(){
-     if(this.itemId !== undefined){
-       this.updating = true;
-     }
-     this.getRentals();
     this.getInfo();
-    /*if(this.itemId > 0){
+    if(this.itemId > 0){
       this.updating = true;
-    }*/
+      this.getRentals();
+    }
   }
 }
 </script>
