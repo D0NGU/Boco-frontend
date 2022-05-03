@@ -50,6 +50,7 @@ export default {
       this.$emit("update");
     },
     routeToProduct(optionalId) {
+      this.$emit("close");
       if (this.description === "Ny forespørsel om utleie.") {
         this.$router.push('/listing/edit/' + optionalId);
       } else if (this.description === "Din forespørsel om utleie ble godtatt!" || this.description === "Din forespørsel om utleie ble avslått!") {

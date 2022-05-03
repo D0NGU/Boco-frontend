@@ -5,6 +5,8 @@
       <p class="text-h4">{{productInfo.title}}</p>
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
       <p>{{ productInfo.description }}</p>
+      <v-chip color="indigo"><p>{{ productInfo.category }}</p></v-chip>
+      <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <v-divider style="margin: 10px"/>
       <p id="itemOwner">
         <v-avatar>
@@ -58,10 +60,23 @@ export default {
       ownerInfo: '',
       showMap: false,
       startDate: new Date(),
+      priceRange: '',
     }
   },
 
   methods: {
+
+    async setPriceRange() {
+      const product = (await ListingsService.getListing(this.itemId)).data
+      this.productInfo = product.product;
+      if(this.productInfo.price >= 0 && this.productInfo.price < 200){
+        this.priceRange = '$'
+      } else if (this.productInfo.price >= 200 && this.productInfo.price < 500){
+        this.priceRange = '$$'
+      } else {
+        this.priceRange = '$$$'
+      }
+    },
 
     async getListingInfo(){
       const product = (await ListingsService.getListing(this.itemId)).data
@@ -74,9 +89,7 @@ export default {
 
     async sendRequest() {
       if(this.date !== undefined && this.date !== null){
-        const dateFrom = new Date(this.date[0].getFullYear()+"/"+(this.date[0].getMonth()+1)+"/"+this.date[0].getDate());
-        const dateTo = new Date(this.date[1].getFullYear()+"/"+(this.date[1].getMonth()+1)+"/"+this.date[1].getDate());
-        await RentalService.newRental(dateFrom, dateTo, this.itemId, this.$store.state.myUserId)
+        await RentalService.newRental(this.date[0],this.date[1], this.itemId, this.$store.state.myUserId)
         this.requestSent = true;
       } else {
         this.invalidDate = true;
@@ -92,6 +105,7 @@ export default {
 
   beforeMount() {
     this.getListingInfo()
+    this.setPriceRange()
   }
 }
 </script>
