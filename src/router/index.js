@@ -8,6 +8,7 @@ import RegisterForm from "@/components/RegisterForm";
 import DeleteUser from "@/components/UserProfile/DeleteUser";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
+import Contact from "@/components/Contact";
 import {getApiClient} from "@/service/ApiService";
 
 const routes = [
@@ -54,6 +55,11 @@ const routes = [
     name: "Listing",
     component: Listing,
     props: true,
+  },
+  {
+    path: "/contact",
+    name: "Contact",
+    component: Contact
   },
   // Redirect any none-existing path to 404 page
   {
