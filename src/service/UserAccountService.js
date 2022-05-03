@@ -8,14 +8,12 @@ export default {
     },
 
     delete(userId, fname, lname, email, password){
-        const userToDelete = {  fname: fname, lname: lname, email: email, password: password };
-        return getApiClient.delete('user/', {
-            params: {userToDelete}
-        })
+        const userToDelete = { id: userId, fname: fname, lname: lname, email: email, password: password };
+        return getApiClient.delete('user/delete/', {params: {userId}} )
     },
 
-    editPassword (email, oldPassword, newPassword) {
-        const userDetails = {email: email, oldPassword: oldPassword, newPassword: newPassword}
+    editPassword (id, email, oldPassword, newPassword) {
+        const userDetails = {id: id, email: email, oldPassword: oldPassword, newPassword: newPassword}
         return getApiClient.post('user/edit/', userDetails )
     },
 
