@@ -1,7 +1,7 @@
 <template>
     <v-row id="footer" justify="center">
       <v-col cols="12">
-        <svg id="logo" version="1.0" xmlns="http://www.w3.org/2000/svg" width="50.000000pt" height="50.000000pt" viewBox="0 0 500.000000 500.000000" preserveAspectRatio="xMidYMid meet">
+        <svg id="logo" version="1.0" xmlns="http://www.w3.org/2000/svg" width="50.000000pt" height="50.000000pt" viewBox="0 0 500.000000 500.000000" preserveAspectRatio="xMidYMid meet" @click="scrollToTop">
           <g transform="translate(0.000000,500.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
             <path d="M2705 3697 c-115 -30 -189 -91 -237 -194 -77 -163 -54 -396 50 -514 89 -101 287 -137 452 -82 l55 18 3 88 c1 48 -1 87 -5 87 -4 0 -37 -9 -71 -20 -35 -11 -92 -20 -126 -20 -80 0 -121 25 -156 95 -21 42 -25 64 -25 141 0 77 4 98 26 140 48 93 132 118 256 74 32 -11 60 -20 64 -20 7 0 72 161 67 166 -2 1 -32 12 -67 24 -81 27 -216 35 -286 17z" fill="#004aab"/>
             <path d="M780 3295 l0 -407 208 4 c219 4 256 11 326 59 55 37 80 83 84 155 2 35 2 75 -2 88 -9 37 -56 87 -99 106 l-39 18 39 18 c102 51 123 210 37 291 -57 53 -112 65 -346 70 l-208 5 0 -407z m368 208 c17 -19 22 -33 17 -52 -10 -44 -40 -61 -106 -61 l-59 0 0 68 c0 38 3 72 8 76 4 4 32 5 62 1 42 -5 61 -12 78 -32z m-9 -288 c49 -25 57 -90 16 -130 -21 -22 -33 -25 -90 -25 l-65 0 0 85 0 85 55 0 c31 0 69 -7 84 -15z" fill="#004aab"/>
@@ -32,6 +32,14 @@ export default {
     return {
     }
   },
+  methods: {
+    scrollToTop() {
+      window.scroll({
+        top:0,
+        behavior: "smooth",
+      });
+    }
+  }
 }
 </script>
 

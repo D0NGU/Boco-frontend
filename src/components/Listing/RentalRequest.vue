@@ -28,12 +28,14 @@ export default {
     }
   },
   methods: {
-    acceptRental(){
-      RentalService.accept(this.id);
+    async acceptRental(){
+      await RentalService.accept(this.id);
+      this.$emit("update");
       // location.reload();
     },
-    denyRental(){
-      RentalService.deny(this.id)
+    async denyRental(){
+      await RentalService.deny(this.id)
+      this.$emit("update");
       // location.reload();
     }
   },

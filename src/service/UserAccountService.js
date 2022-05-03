@@ -44,11 +44,28 @@ export default {
         var config = {
             headers: {
                 'Content-Type': 'text/plain',
-                 Authorization: 'Bearer ' + VueCookie.get('token'),
+                Authorization: 'Bearer ' + VueCookie.get('token'),
             }
         };
         return axios.post(url, description, config)
-    }
+    },
+
+    sendContactForm(name, email, comment){
+        const contactForm = { name: name, email: email, comment: comment};
+        return getApiClient.post(UNKNOWN, {params: {contactForm}})
+    },
+
+    getNumberOfReviews(userId) {
+        return getApiClient.get("review/user/" + userId + "/amount");
+    },
+
+    getAverageScoreAsOwner(userId) {
+        return getApiClient.get("review/user/" + userId + "/average/owner")
+    },
+
+    getAverageScoreAsRenter(userId) {
+        return getApiClient.get("review/user/" + userId + "/average/renter")
+    },
 }
 
 

@@ -8,6 +8,7 @@
           :itemOwner="rental.userId"
           :itemId="rental.productId"
           :write-review-to-loaner="true"
+          :if-editing=true
       />
     </div>
 
@@ -33,6 +34,7 @@ export default {
 
   props: {
     listingName: String,
+    productId: [Number, String]
   },
 
   data () {
@@ -45,13 +47,12 @@ export default {
 
   methods: {
     async getProductRentals() {
-      let productId = 2;
-      await ProductService.getOwnerProductAcceptedRentals(productId)
+      await ProductService.getOwnerProductAcceptedRentals(this.productId)
           .then(res => this.productRentals = res.data)
           .catch((err) => {
             this.error = "En feil har skjedd"
           })
-
+      console.log(this.productId)
       if (!this.productRentals.length){
         this.noRentals = true;
       } else {

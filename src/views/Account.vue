@@ -31,11 +31,7 @@
           <div>
             <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
             <v-btn v-if="!edit" class="my-2" id="editDescription"
-                   rounded
-                   color="grey"
-                   fab
-                   small
-                   dark
+                   rounded color="grey" fab small dark
                    @click="editDescription"
             >
               <v-icon>mdi-pencil</v-icon>
@@ -43,21 +39,14 @@
 
             <div>
               <v-btn v-if="edit"
-                     rounded
-                     class="ma-2"
-                     color="green"
-                     dark
+                     rounded class="ma-2" color="green" dark
                      @click="saveDescription"
               >
                 <v-icon dark right>
                   mdi-checkbox-marked-circle
                 </v-icon>
               </v-btn>
-              <v-btn v-if="edit"
-                     rounded
-                     class="ma-2"
-                     color="red"
-                     dark
+              <v-btn v-if="edit" rounded class="ma-2" color="red" dark
                      @click="deleteDescription"
               >
                 <v-icon dark right>
@@ -73,6 +62,11 @@
                           maxlength="190"
                           :rules="rules"
               ></v-textarea>
+
+              <v-snackbar v-model="snackbar" :timeout="timeout">
+                {{ statusForEditUserDescription }}
+              </v-snackbar>
+
             </div>
           </div>
 
@@ -113,6 +107,7 @@ import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
+import {getApiClient} from "@/service/ApiService";
 
 export default {
     name: 'account',
@@ -122,8 +117,8 @@ export default {
     return {
       //TODO Hent rating fra backend
       name: 'Bruker',
-      ratingSeller: 5,
-      ratingRenter: 5,
+      ratingSeller: '',
+      ratingRenter: '',
       reviewsCount: '',
       tab: null,
       userInfo: '',
@@ -132,6 +127,9 @@ export default {
       isVerified: false,
       rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
       background_img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd53l9d6fqlxs2.cloudfront.net%2Fphotos%2F75616-adobestock_63768956jpeg.jpeg&f=1&nofb=1',
+      statusForEditUserDescription: '',
+      snackbar: false,
+      timeout: 2000,
     }
   },
 
@@ -144,21 +142,37 @@ export default {
         this.userDescription = ' ';
       }
       this.updateUserDescription()
+      this.snackbar = true
       this.edit = false
     },
     deleteDescription() {
       this.userDescription = ' ';
       this.updateUserDescription()
+      this.snackbar = true
       this.edit = false
     },
-
+    async getNumberOfReviews() {
+      this.reviewsCount = (await UserAccountService.getNumberOfReviews(this.$store.getters.myUserId)).data;
+    },
+    async getAverageScoreAsOwner() {
+      this.ratingSeller = (await UserAccountService.getAverageScoreAsOwner(this.$store.getters.myUserId)).data;
+    },
+    async getAverageScoreAsRenter() {
+      this.ratingRenter = (await UserAccountService.getAverageScoreAsRenter(this.$store.getters.myUserId)).data;
+    },
     async updateUserDescription() {
       let myUserId = this.$store.getters.myUserId;
+      let temp = ''
       await UserAccountService.updateUserDescription(myUserId, this.userDescription)
-          .then(res => console.log(res.status))
+          .then(res => temp = res.status)
           .catch((err) => {
             console.log(err)
           })
+      if (temp === 200) {
+        this.statusForEditUserDescription = "Oppdatert bruker beskrivelse"
+      } else {
+        this.statusForEditUserDescription = "Noe gikk galt. Prøv igjen"
+      }
     }
   },
   async beforeMount() {
@@ -180,6 +194,9 @@ export default {
           console.log(err)
         })
 
+    await this.getNumberOfReviews()
+    await this.getAverageScoreAsOwner()
+    await this.getAverageScoreAsRenter()
   }
 }
 </script>

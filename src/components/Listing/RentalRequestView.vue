@@ -1,11 +1,14 @@
 <template>
+  <h1>Forespørsler om utleie</h1>
   <div v-for="(rental, i) in rentalList" :key="i">
     <RentalRequest
         :id="rental.rentalId"
         :renter="rental.userId"
         :date="rental.dateFrom + ' - ' + rental.dateTo"
+        @update="sendEvent()"
     />
   </div>
+  <p v-if="!rentalList">Du har ingen forespørsler om utleie.</p>
 </template>
 
 <script>
@@ -16,18 +19,21 @@ import UserAccountService from "@/service/UserAccountService";
 export default {
   name: "RentalRequestView",
   components: {RentalRequest},
-  props: {productId: Number},
-  data () {
-    return {
-      rentalList: [],
-    }
+  props: {
+    productId: [Number, String],
+    rentalList: Array
   },
-  async beforeMount() {
-    this.rentalList = (await RentalService.getRentals(this.productId)).data
+  methods: {
+    sendEvent() {
+      this.$emit("update");
+    },
   }
 }
 </script>
 
 <style scoped>
-
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 </style>

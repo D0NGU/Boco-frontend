@@ -1,7 +1,6 @@
 <template>
   <div>
-    <br>
-    <h3>Min historikk</h3>
+   <h1>Min historikk</h1>
 
     <div v-if="!noRentals" v-for="(rental,index) in historyRentedProducts" :key="index">
       <ListingCard
@@ -9,6 +8,8 @@
           :itemOwner="rental.userId"
           :itemPrice="rental.price"
           :itemId="rental.productId"
+          :ifRented=true
+
       />
     </div>
 
@@ -62,3 +63,13 @@ export default {
   }
 }
 </script>
+
+
+
+<style scoped>
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+</style>

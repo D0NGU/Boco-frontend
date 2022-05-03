@@ -53,7 +53,7 @@
 
 
 <script>
-import NotificationView from "@/components/NotificationView";
+import NotificationView from "@/components/Notification/NotificationView";
 import {getApiClient} from "@/service/ApiService";
 export default {
   components: {NotificationView},
@@ -79,6 +79,7 @@ export default {
     },
   },
   mounted(){
+    this.loadData();
       setInterval(function () {
       this.loadData();
     }.bind(this), 15000);

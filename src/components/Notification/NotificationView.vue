@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Notification from "@/components/Notification";
+import Notification from "@/components/Notification/Notification";
 import {getApiClient} from "@/service/ApiService";
 export default {
   name: "NotificationView",
