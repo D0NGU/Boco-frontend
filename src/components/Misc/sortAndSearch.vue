@@ -5,12 +5,12 @@
         Filtrering
       </v-expansion-panel-title>
       <v-expansion-panel-text>
-        <v-card id="sort-and-search-container" elevation="2">
+        <v-card id="sort-and-search-container" elevation="2" v-bind:style="{ 'box-shadow' : 'none !important'}">
           <v-text-field
               v-model="searchBar"
               id="searchBar"
               density="comfortable"
-              color="primary"
+              color="var(--bocoBlue)"
               label="Søk..."
               variant="outlined"
               ></v-text-field>
@@ -39,11 +39,11 @@
             </template>
             <v-card>
               <v-item-group selected-class="bg-primary">
-                <v-item v-for="category in categories" >
+                <v-item v-for="(category, index) in categories" :key="index">
                   <div
                       class= 'sortOption categoryOption'
                       @click="selectCategory(category)"
-                  v-bind:style="category.active ? {'background-color' : 'lightblue'} : null">
+                  v-bind:style="category.active ? {'background-color' : 'var(--bocoBlue)', 'color' : 'white'} : null">
 <!--                    <v-icon color="blue">{{category.icon}}</v-icon>-->
                     {{ category }}
                   </div>
@@ -61,11 +61,11 @@
             </template>
             <v-card>
               <v-item-group selected-class="bg-primary">
-                <v-item v-for="option in sortByOptions">
+                <v-item v-for="(option, index) in sortByOptions" :key="index">
                   <div
                       class='sortOption sortByOption'
                       @click="selectSortByOption(option.option)"
-                      v-bind:style="option.active ? {'background-color' : 'lightblue'} : null">
+                      v-bind:style="option.active ? {'background-color' : 'var(--bocoBlue)', 'color' : 'white'} : null">
                     {{ option.option }}
                   </div>
                   <v-divider />
@@ -89,7 +89,7 @@
               </v-col>
             </v-row>
           </v-container>
-          <v-btn @click="handleSearchButton">Søk</v-btn>
+          <v-btn id="searchBtn" v-bind:style="{'background-color' : 'var(--bocoBlue)', 'color' : 'white'}" @click="handleSearchButton">Søk</v-btn>
         </v-card>
       </v-expansion-panel-text>
     </v-expansion-panel>
@@ -193,7 +193,7 @@ export default {
     margin: 10px;
     padding: 20px;
   }
-  >>>.v-expansion-panel-text__wrapper {
+  :deep()#v-expansion-panel-text__wrapper {
     padding: 0;
   }
   .v-col {

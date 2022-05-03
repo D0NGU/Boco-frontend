@@ -1,9 +1,9 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
-  <v-card class="rounded-xl itemCard">
+  <v-card class="rounded-xl itemCard" @click="redirect">
     <div class="itemContainer">
-      <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
+      <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage" />
       <v-divider vertical="" />
       <div class="itemDetail">
         <p class="text-subtitle-1">{{ itemName }}</p>
@@ -24,8 +24,7 @@
             <v-card-actions>
               <v-btn
                   id="closeButton"
-                  block="" @click="dialog = false"
-              >Lukk
+                  block="" @click="dialog = false">Lukk
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -67,10 +66,10 @@ export default {
   },
   methods: {
     redirect() {
-      if(this.itemOwner !== this.$store.state.myUserId){
+      if(this.itemOwner !== parseInt(this.$store.getters.myUserId)){
         router.push({name: 'ListingDetails', params: { itemId: this.itemId }})
       } else {
-        router.push({name: 'ListingEdit', params: { itemId: this.itemId }})
+        router.push({name: 'Listing', params: { itemId: this.itemId }})
       }
     }
   },
@@ -95,7 +94,7 @@ export default {
   align-items: center;
 }
 #itemImage {
-  width: 40%;
+  width: 30%;
   object-fit: contain;
   max-height: 100%;
   z-index: 1;

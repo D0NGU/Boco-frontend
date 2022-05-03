@@ -8,7 +8,6 @@ import RegisterForm from "@/components/RegisterForm";
 import DeleteUser from "@/components/UserProfile/DeleteUser";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
-import EditListing from "@/views/EditListing";
 import {getApiClient} from "@/service/ApiService";
 
 const routes = [
@@ -51,14 +50,9 @@ const routes = [
     props: true
   },
   {
-    path: "/listing",
+    path: "/listing/edit/:itemId?",
     name: "Listing",
-    component: Listing
-  },
-  {
-    path: "/listing/edit/:itemId",
-    name: "ListingEdit",
-    component: EditListing,
+    component: Listing,
     props: true,
   },
   // Redirect any none-existing path to 404 page
@@ -77,12 +71,12 @@ const router = createRouter({
 getApiClient.interceptors.response.use(null, error => {
   let path = '/error';
   switch (error.response.status) {
-    case 403: path =   router.push('/login');  return Promise.reject(error);
-      break;
+    case 403: 
+      path = router.push('/login');  
+      return Promise.reject(error);
   }
   return Promise.reject(error);
 })
 
 export { routes };
-
 export default router

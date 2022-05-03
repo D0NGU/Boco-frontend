@@ -1,11 +1,26 @@
 <!-- inneholder listing component -->
 
 <template>
-  <h1 id="createListingHeadline">Opprett en ny annonse</h1>
+  <h1 v-if="updating">Oppdater annonse</h1>
+  <h1 v-else >Opprett en ny annonse</h1>
   <div class="flex-column mb-6">
     <v-card class="container">
-      <div>
+      <v-form
+          v-model="valid"
+          lazy-validation
+          @submit.prevent="createAd"
+          ref="form">
         <v-text-field
+            v-if="updating"
+            type="text"
+            id="adName"
+            v-model="adName"
+            readonly
+            label="Navn på annonse"
+            hide-details="auto"
+        ></v-text-field>
+        <v-text-field
+            v-else
             data-testid="name-input"
             type="text"
             v-model="adName"
@@ -13,15 +28,12 @@
             :rules="rules"
             hide-details="auto"
         ></v-text-field>
-      </div>
-      <div>
         <v-text-field
             v-model="adDescription"
             label="Beskrivelse"
             :rules="rules"
             hide-details="auto"
-        />
-      </div>
+        ></v-text-field>
       <div>
         <v-file-input
           v-model="files"
@@ -32,7 +44,6 @@
           prepend-icon="mdi-camera"
         />
       </div>
-      <div>
         <v-select
             v-model="adCategory"
             :items="categories"
@@ -40,8 +51,6 @@
             outlined
             prepend-icon="mdi-widgets"
         ></v-select>
-      </div>
-      <div>
         <v-text-field
             v-model="adPrice"
             type="text"
@@ -49,9 +58,6 @@
             :rules="rulesNumber"
             hide-details="auto"
         />
-      </div>
-
-      <div>
         <v-radio-group
             v-model="pricePer"
             column
@@ -67,8 +73,8 @@
               value="set"
           ></v-radio>
         </v-radio-group>
-      </div>
 
+<!--
       <v-container class="grey lighten-5">
         <v-row no-gutters>
           <v-col order="1">
@@ -109,9 +115,9 @@
           </v-col>
         </v-row>
       </v-container>
+-->
+        <Datepicker id="datepicker" :disabled="updating" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
 
-
-      <div>
         <v-text-field
             v-model="adAddress"
             type="text"
@@ -119,8 +125,6 @@
             :rules="rules"
             hide-details="auto"
         />
-      </div>
-      <div>
         <v-text-field
             v-model="adPhone"
             type="text"
@@ -128,56 +132,109 @@
             :rules="rulesPhone"
             hide-details="auto"
         />
-      </div>
-      <div>
+  </v-form>
         <v-switch
-            v-model="switch1"
-            inset
+            v-model="unListed"
+            inset=""
             color="indigo"
             :label="`Skjul annonse`"
         ></v-switch>
-      </div>
-      <div>
+        <div v-if="updating">
         <v-btn
-            id="createAdButton"
-            @click="saveAd()"
-        >Opprett annonse
+            class="createAdButton"
+            @click="updateAd()"
+        >Oppdater annonse
         </v-btn>
-      </div>
-      <div>
+          <v-btn
+              @click="deleteDialog=true"
+              color="error">
+            Slett
+          </v-btn>
+        </div>
+      <v-btn
+          :disabled="!valid"
+          class="createAdButton"
+          @click="createAd()"
+          v-else
+      >Opprett annonse
+      </v-btn>
         <v-btn
             id="cancelButton"
-            onclick="location.href='/'"
+            @click="$router.back()"
         >Avbryt
         </v-btn>
-      </div>
+      <v-dialog id="popOut" v-model="dialog">
+        <v-card>
+          <v-card-title class="text-h5"> {{statusMessage}} </v-card-title>
+          <v-card-actions>
+            <v-btn
+                color="red"
+                text
+                @click=close()
+            >
+              Lukk
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-spacer />
+      <v-dialog v-model="deleteDialog">
+        <v-card>
+          <v-card-title class="text-h5"> Er du sikker på at du vil slette denne annonsen? </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red"
+                text
+                @click="deleteDialog=false"
+            >
+              Avbryt
+            </v-btn>
+            <v-btn
+                color="red"
+                text
+                @click=deleteAd
+            >
+              Slett
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import ListingsService from "@/service/ListingsService";
+import router from "@/router";
+import ProductService from "@/service/ProductService";
+import { ref } from 'vue';
+import Datepicker from "@vuepic/vue-datepicker";
 
 export default {
   name: "AdPage",
+  components: {Datepicker},
+  props: {
+    itemId: String
+  },
   data() {
     return {
-      adCategory: '',
+      valid: false,
+      updating: false,
       adName: '',
       adDescription: '',
+      adCategory: '',
       adPrice: '',
       pricePer: '',
-      fromDate: '',
-      toDate: '',
+      date: ref(),
       adAddress: '',
       adPhone: '',
-      switch1: false,
+      unListed: false,
       categories: [],
-      createdStatus: false,
       dialog: false,
       files: [],
       image: [],
+      statusMessage: '',
       rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
@@ -191,19 +248,29 @@ export default {
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
+      deleteDialog: false,
     }
   },
   methods: {
-    async getCategoriesSelect() {
+    async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
         this.categories.push(cat.category)
       })
+      if(this.updating) {
+        const productInfo = (await ProductService.getProductById(this.itemId)).data
+        this.adName = productInfo.title;
+        this.adDescription = productInfo.description;
+        this.adPrice = productInfo.price;
+        this.adAddress = productInfo.address;
+        this.adCategory = productInfo.category
+        this.unListed = productInfo.unlisted;
+        this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)]
+
+      }
     },
 
-    //This works, but won't run because of backend
-    async saveAd() {
-      this.dialog = true;
+    async createAd() {
       console.log("Listing was created.")
       for (let x = 0; x < this.files.length; x++) {
         this.image.push( await this.getBase64(this.files[0]));
@@ -211,13 +278,35 @@ export default {
       console.log(this.image)
 
       let tempStat = '';
-      await ListingsService.create(0,this.adName, this.adDescription, this.adAddress, this.adPrice,this.switch1, this.fromDate, this.toDate, 1, this.adCategory, this.image).then(response => {
-        tempStat = response.status;
-      }).catch((error) => {
-        if(error.response) {
-          tempStat = error.response.status;
-        }
-      })
+      if(this.date !== undefined && this.date !== null) {
+        const dateFrom = new Date(this.date[0].getFullYear() + "/" + (this.date[0].getMonth() + 1) + "/" + this.date[0].getDate());
+        const dateTo = new Date(this.date[1].getFullYear() + "/" + (this.date[1].getMonth() + 1) + "/" + this.date[1].getDate());
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, dateFrom, dateTo, this.$store.state.myUserId, 'elektronikk', this.image).then(response => {
+          tempStat = response.status;
+        }).catch((error) => {
+          if (error.response) {
+            tempStat = error.response.status;
+            this.statusMessage = error.response.data;
+          }
+        })
+        this.statusMessage = "Annonsen ble opprettet!";
+        this.dialog = true;
+      }
+    },
+    async updateAd(){
+        let tempStat;
+        this.dialog = true;
+        this.createdStatus = true;
+        console.log("Listing was updated.")
+        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
+          tempStat = response.data
+        }).catch((error) => {
+          if (error.response) {
+            this.statusMessage = error.response.data;
+          }
+        })
+        this.statusMessage = "Endringen var vellykket!";
+        this.dialog = true;
     },
     getBase64(file) {
       return new Promise((resolve, reject) => {
@@ -232,13 +321,29 @@ export default {
       );
         reader.onerror = error => reject(error);
       });
+    },
+    async deleteAd(){
+      await ListingsService.delete(this.$store.state.myUserId, this.itemId)
+      this.deleteDialog = false;
+      this.statusMessage = "Annonsen ble slettet.";
+      this.dialog = true;
+    },
+
+    close(){
+      this.dialog = false;
+      router.back();
     }
   },
    beforeMount(){
-    this.getCategoriesSelect();
+     if(this.itemId !== undefined){
+       this.updating = true;
+     }
+    this.getInfo();
+    /*if(this.itemId > 0){
+      this.updating = true;
+    }*/
   }
 }
-//TODO Få den valgte kategorien til å vises for bruker
 </script>
 
 <style scoped>
@@ -258,7 +363,10 @@ h1 {
   margin-bottom: 20px;
 }
 
-#createAdButton{
+#datepicker{
+  margin-bottom: 22px;
+}
+.createAdButton{
 background-color: var(--bocoBlue);
 color: white;
 font-weight: bold;
@@ -268,7 +376,7 @@ color: var(--bocoBlue);
 font-weight: bold;
 }
 
-#createAdButton {
-  margin-bottom: 10px;
+button {
+  margin: 0.4em;
 }
 </style>
