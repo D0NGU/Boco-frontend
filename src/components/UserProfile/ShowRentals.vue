@@ -1,20 +1,19 @@
 <template>
   <div>
-   <h1>Min historikk</h1>
+    <h1>Utleie av {{ this.listingName }}</h1>
 
-    <div v-if="!noRentals" v-for="rental in historyRentedProducts">
+    <div v-if="!noRentals" v-for="rental in productRentals">
       <ListingCard
-          :itemName="rental.title"
+          :itemName=this.listingName
           :itemOwner="rental.userId"
-          :itemPrice="rental.price"
           :itemId="rental.productId"
-          :ifRented=true
-
+          :write-review-to-loaner="true"
+          :if-editing=true
       />
     </div>
 
     <div v-if="noRentals">
-      <p v-if="!error">Du har ikke leid noen produkter enda</p>
+      <p v-if="!error">Ingen har leid produktet enda.</p>
       <p v-else> {{ error }} </p>
     </div>
 
@@ -24,33 +23,37 @@
 
 <script>
 import ListingCard from "@/components/Listing/ListingCard";
-import UserAccountService from "@/service/UserAccountService";
+import ProductService from "@/service/ProductService";
 
 export default {
-  name: "HistoryComponent",
+  name: "ShowRentals",
 
   components: {
     ListingCard
   },
 
+  props: {
+    listingName: String,
+    productId: Number
+  },
+
   data () {
     return {
-      historyRentedProducts: [],
+      productRentals: [],
       noRentals: true,
       error: '',
     }
   },
 
   methods: {
-    async getHistory() {
-      let myUserId = this.$store.getters.myUserId;
-      await UserAccountService.getUserRentalHistory(myUserId)
-          .then(res => this.historyRentedProducts = res.data)
+    async getProductRentals() {
+      await ProductService.getOwnerProductAcceptedRentals(this.productId)
+          .then(res => this.productRentals = res.data)
           .catch((err) => {
             this.error = "En feil har skjedd"
           })
 
-      if (!this.historyRentedProducts.length){
+      if (!this.productRentals.length){
         this.noRentals = true;
       } else {
         this.noRentals = false
@@ -58,7 +61,7 @@ export default {
     },
   },
   beforeMount() {
-    this.getHistory();
+    this.getProductRentals();
   }
 }
 </script>

@@ -1,4 +1,6 @@
 import { createStore } from 'vuex'
+import cookies from "vue-cookie";
+import createPersistedState from "vuex-persistedstate";
 
 export const mutations = {
   SET_STATUS(state, status) {
@@ -33,6 +35,7 @@ export const getters = {
 };
 
 export default createStore({
+  plugins: [createPersistedState()],
   state: {
     loggedIn: false,
     token: '',
@@ -44,4 +47,4 @@ export default createStore({
   actions: actions,
   modules: {
   }
-})
+});

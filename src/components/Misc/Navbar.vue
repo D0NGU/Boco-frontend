@@ -35,7 +35,8 @@
 
           <v-card id="notificationDialog">
             <v-card-text>
-              <NotificationView />
+              <NotificationView
+              @close="dialog = false"/>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -52,7 +53,7 @@
 
 
 <script>
-import NotificationView from "@/components/NotificationView";
+import NotificationView from "@/components/Notification/NotificationView";
 import {getApiClient} from "@/service/ApiService";
 export default {
   components: {NotificationView},
@@ -67,7 +68,7 @@ export default {
   },
   methods: {
     async loadData() {
-      await getApiClient.get('alerts/user/' + this.$store.state.myUserId + '/unseen').then(response => {
+      await getApiClient.get('alerts/user/' + this.$store.getters.myUserId + '/unseen').then(response => {
         if (response.data !== "") {
           console.log("New alert")
           this.notification = true;
@@ -78,7 +79,8 @@ export default {
     },
   },
   mounted(){
-    setInterval(function () {
+    this.loadData();
+      setInterval(function () {
       this.loadData();
     }.bind(this), 15000);
   },
@@ -96,7 +98,11 @@ export default {
   flex-direction: row;
   background-color: var(--bocoBlue);
   margin: 0;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
 }
+
 #navBar a {
   color: white;
   text-decoration: none;
@@ -113,6 +119,9 @@ export default {
   padding: 12px;
 }
 #notificationDialog {
+  background-color: #edf1f5;
+}
+#chatDialog {
   background-color: #edf1f5;
 }
 #closeButton {

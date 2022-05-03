@@ -4,8 +4,7 @@
   <div id="grid">
     <div id="topProfileContainer">
       <div>
-        <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" class="profileImage"
-               cover=""> </v-img>
+        <v-img :src="background_img" class="profileImage" cover=""> </v-img>
       </div>
       <v-tabs id="tabContainer"
               v-model="tab" grow="">
@@ -32,11 +31,7 @@
           <div>
             <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
             <v-btn v-if="!edit" class="my-2" id="editDescription"
-                   rounded
-                   color="grey"
-                   fab
-                   small
-                   dark
+                   rounded color="grey" fab small dark
                    @click="editDescription"
             >
               <v-icon>mdi-pencil</v-icon>
@@ -44,21 +39,14 @@
 
             <div>
               <v-btn v-if="edit"
-                     rounded
-                     class="ma-2"
-                     color="green"
-                     dark
+                     rounded class="ma-2" color="green" dark
                      @click="saveDescription"
               >
                 <v-icon dark right>
                   mdi-checkbox-marked-circle
                 </v-icon>
               </v-btn>
-              <v-btn v-if="edit"
-                     rounded
-                     class="ma-2"
-                     color="red"
-                     dark
+              <v-btn v-if="edit" rounded class="ma-2" color="red" dark
                      @click="deleteDescription"
               >
                 <v-icon dark right>
@@ -74,6 +62,11 @@
                           maxlength="190"
                           :rules="rules"
               ></v-textarea>
+
+              <v-snackbar v-model="snackbar" :timeout="timeout">
+                {{ statusForEditUserDescription }}
+              </v-snackbar>
+
             </div>
           </div>
 
@@ -122,16 +115,20 @@ export default {
   data() {
     return {
       //TODO Hent rating fra backend
-      name: 'Test Name',
+      name: 'Bruker',
       ratingSeller: 5,
       ratingRenter: 5,
       reviewsCount: '',
       tab: null,
       userInfo: '',
-      userDescription: 'En veldig snill kar som liker å låne bort gjenstander :)', //TODO Hent "user description" fra backend
+      userDescription: '',
       edit: false,
       isVerified: false,
       rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
+      background_img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd53l9d6fqlxs2.cloudfront.net%2Fphotos%2F75616-adobestock_63768956jpeg.jpeg&f=1&nofb=1',
+      statusForEditUserDescription: '',
+      snackbar: false,
+      timeout: 2000,
     }
   },
 
@@ -140,24 +137,53 @@ export default {
         this.edit = true;
     },
     saveDescription() {
-      //TODO send "user description" til backend
+      if (!this.userDescription.length){
+        this.userDescription = ' ';
+      }
+      this.updateUserDescription()
+      this.snackbar = true
       this.edit = false
     },
     deleteDescription() {
-      //TODO send tom "user description" til backend
-      this.userDescription = '';
+      this.userDescription = ' ';
+      this.updateUserDescription()
+      this.snackbar = true
       this.edit = false
     },
-    getVerifiedUser() {
-      // TODO: get data from database and check if user is verified
+
+    async updateUserDescription() {
+      let myUserId = this.$store.getters.myUserId;
+      let temp = ''
+      await UserAccountService.updateUserDescription(myUserId, this.userDescription)
+          .then(res => temp = res.status)
+          .catch((err) => {
+            console.log(err)
+          })
+      if (temp === 200) {
+        this.statusForEditUserDescription = "Oppdatert bruker beskrivelse"
+      } else {
+        this.statusForEditUserDescription = "Noe gikk galt. Prøv igjen"
+      }
     }
   },
   async beforeMount() {
-    const userInfo = await UserAccountService.getUser(this.$store.state.myUserId)
+    let myUserId = this.$store.getters.myUserId;
+    const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
 
-    //TODO: get "user description" and if user is verified
-    //this.getVerifiedUser()
+    //check if user is verified
+    await UserAccountService.getVerifiedUser(myUserId)
+        .then(res => this.isVerified = res.data)
+        .catch((err) => {
+          console.log(err)
+        })
+
+    //get user description
+    await UserAccountService.getUserDescription(myUserId)
+        .then(res => this.userDescription = res.data)
+        .catch((err) => {
+          console.log(err)
+        })
 
   }
 }
@@ -166,11 +192,13 @@ export default {
 <style scoped>
 #grid {
   display: grid;
-  height: 500px;
+  height: 400px;
 }
-
+#components {
+  min-height: 30%;
+}
 #topProfileContainer {
-  height: 500px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -178,14 +206,14 @@ export default {
   position: relative;
 }
 .profileImage {
-  filter: blur(6px);
-  height: 500px;
+  height: 400px;
   width: 100%;
-  z-index: -1;
+  z-index: 0;
+  background-color: #004aab;
 }
 .profileImageCover {
   background-color: black;
-  opacity: 0.6;
+  opacity: 0.7;
   grid-area: 1/1;
   height: 100%;
   width: 100%;
@@ -193,9 +221,9 @@ export default {
 }
 .profileDetails {
   position: absolute;
-  height: 500px;
+  height: 400px;
   width: 100%;
-  top: 20px;
+  top: 40px;
   left: 0;
   color: white;
   display: flex;

@@ -1,4 +1,4 @@
-import {getApiClient} from "@/service/ApiService";
+import {baseURL, getApiClient} from "@/service/ApiService";
 
 export default {
     getCategories() {
@@ -17,16 +17,17 @@ export default {
             userId: userId,
             category: category
         };
-        return getApiClient.post('http://localhost:8080/api/products', createdProduct)
+        return getApiClient.post(baseURL + 'products', createdProduct)
     },
-    edit(productId, title, description, address, price, unlisted, availableFrom, availableTo, userId, category){
-        const productToEdit = { productId: productId, title: title, description: description, address: address, price: price, unlisted: unlisted, availableFrom: availableFrom, availableTo: null, userId: userId, category: category };
-        return getApiClient.put('products/'+productId, { productToEdit })
+    editProduct(productId, description, address, price, unlisted, category) {
+        const product = { description: description, address: address, price: price, unlisted: unlisted, category: category };
+        console.log(product)
+        return getApiClient.put('products/' + productId,  product)
     },
     getListing(id) {
-        return getApiClient.get('listing/'+id)
+        return getApiClient.get('listing/' + id)
     },
     delete(userId, itemId) {
-        return getApiClient.delete('products/'+userId+'/delete/?productId='+itemId)
+        return getApiClient.delete('products/' + userId + '/delete/?productId=' + itemId)
     }
 }

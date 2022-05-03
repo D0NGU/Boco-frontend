@@ -54,8 +54,8 @@
 
         <v-dialog id="popOut" v-model="dialog">
           <v-card>
-            <v-card-title class="text-h5" v-if="regisState ==='Registered successfully!'"> Registered! </v-card-title>
-            <v-card-title class="text-h5" v-if="regisState !=='Registered successfully!' && !(regisState === '')"> Registering failed </v-card-title>
+            <v-card-title class="text-h5" v-if="regisState ==='Brukeren ble opprettet!'"> Registrert! </v-card-title>
+            <v-card-title class="text-h5" v-if="regisState !=='Brukeren ble opprettet!' && !(regisState === '')"> Registrering mislyktes </v-card-title>
             <v-card-text> {{regisState}} </v-card-text>
 
             <v-card-actions>
@@ -139,7 +139,7 @@ export default {
       this.dialog = false
       this.$refs.form.reset()
       this.$refs.form.resetValidation()
-      if (this.regisState === "Registered successfully!"){
+      if (this.regisState === "Brukeren ble opprettet!"){
         this.$router.push("/login")
       }
     },

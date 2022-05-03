@@ -8,6 +8,7 @@ import RegisterForm from "@/components/RegisterForm";
 import DeleteUser from "@/components/UserProfile/DeleteUser";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
+import Contact from "@/components/Contact";
 import {getApiClient} from "@/service/ApiService";
 import Landing from "@/views/Landing";
 
@@ -55,6 +56,11 @@ const routes = [
     component: Listing,
     props: true,
   },
+  {
+    path: "/contact",
+    name: "Contact",
+    component: Contact
+  },
   // Redirect any none-existing path to 404 page
   {
     path: '/:catchAll(.*)',
@@ -71,12 +77,12 @@ const router = createRouter({
 getApiClient.interceptors.response.use(null, error => {
   let path = '/error';
   switch (error.response.status) {
-    case 403: path =   router.push('/login');  return Promise.reject(error);
-      break;
+    case 403: 
+      path = router.push('/login');  
+      return Promise.reject(error);
   }
   return Promise.reject(error);
 })
 
 export { routes };
-
 export default router
