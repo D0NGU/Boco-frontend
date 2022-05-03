@@ -19,7 +19,7 @@
 
           <v-card>
             <v-card-text>
-              <Review :item-name="itemName" :owner-id="itemOwner"/>
+              <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" />
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -57,6 +57,7 @@ export default {
     itemId: [Number, String],
     ifHistory: Boolean,
     ifReviewed: Boolean,
+    writeReviewToLoaner: Boolean,
   },
   data () {
     return {
@@ -67,7 +68,9 @@ export default {
   },
   methods: {
     redirect() {
-      if(this.itemOwner !== this.$store.state.myUserId){
+      if (this.writeReviewToLoaner === true) {
+        // do nothing here
+      } else if(this.itemOwner !== this.$store.state.myUserId){
         router.push({name: 'ListingDetails', params: { itemId: this.itemId }})
       } else {
         router.push({name: 'Listing', params: { itemId: this.itemId }})
