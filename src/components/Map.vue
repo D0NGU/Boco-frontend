@@ -1,5 +1,5 @@
 <template>
-  <div @click="closeMap()" class="backdrop">
+  <div @click="closeMap()" class="backdrop" id="map">
     <iframe class="mapFrame"
         width="600"
         height="450"
@@ -53,6 +53,10 @@ export default {
   top: 0; right: 0; bottom: 0; left: 0;
   position: fixed;
   background: rgba(0,0,0,0.5);
+}
+
+#map {
+  z-index: 10000;
 }
 
 </style>
