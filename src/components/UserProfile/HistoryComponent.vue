@@ -1,5 +1,6 @@
 <template>
   <div>
+   <br>
    <h3>Min historikk</h3>
 
     <div v-if="!noRentals" v-for="rental in historyRentedProducts">
