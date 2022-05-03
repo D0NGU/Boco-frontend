@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!noRentals">
+  <div>
     <br>
     <h3>Min historikk</h3>
 
-    <div v-for="(rental,index) in historyRentedProducts" :key="index">
+    <div v-if="!noRentals" v-for="(rental,index) in historyRentedProducts" :key="index">
       <ListingCard
           :itemName="rental.title"
           :itemOwner="rental.userId"
