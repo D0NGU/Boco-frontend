@@ -7,11 +7,10 @@
       <v-divider vertical="" />
       <div class="itemDetail">
         <p class="text-subtitle-1">{{ itemName }}</p>
-        <!--<p class="text-caption" >{{itemPrice}} kr/dag</p>-->
-
         <v-dialog
             v-model="dialog"
             fullscreen=""
+            v-if="ifRented && !ifReviewed"
         >
           <template v-slot:activator="{ props }">
             <v-btn icon="" id="writeReviewBtn" size="x-small" v-bind="props"><v-icon size="small">mdi-message-draw</v-icon></v-btn>
@@ -31,12 +30,16 @@
           </v-card>
         </v-dialog>
 
-        <!-- TODO HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
+        <p class="text-caption" v-else>{{itemPrice}} kr/dag</p>
+        <div v-if="isOwner" id="editIcon">
+          <v-icon style="padding: 10px">mdi-pencil</v-icon> Rediger
+        </div>
+        <div v-else>
         <p class="text-overline" id="itemOwner">
           <v-avatar size="x-small">
           <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
         </v-avatar> {{itemOwnerName}} </p>
-
+        </div>
       </div>
     </div>
   </v-card>
@@ -45,7 +48,7 @@
 <script>
 import router from "@/router";
 import UserAccountService from "@/service/UserAccountService";
-import Review from "@/components/Review";
+import Review from "@/components/UserProfile/Review";
 
 export default {
   components: {Review},
@@ -57,12 +60,13 @@ export default {
     itemId: [Number, String],
     ifHistory: Boolean,
     ifReviewed: Boolean,
+    ifRented: Boolean,
   },
   data () {
     return {
       itemOwnerName: '',
       dialog: false,
-      ifOwner: false,
+      isOwner: false,
     }
   },
   methods: {
@@ -77,7 +81,8 @@ export default {
   async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
     this.itemOwnerName = userInfo.fname + " " + userInfo.lname
-    this.ifOwner = (this.itemOwner === this.$store.state.myUserId)
+    console.log((this.itemOwner === this.$store.state.myUserId))
+    this.isOwner = (this.itemOwner === this.$store.state.myUserId)
   }
 }
 </script>
@@ -93,6 +98,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
 }
 #itemImage {
   width: 40%;
@@ -112,6 +118,13 @@ export default {
   position: absolute;
   bottom: 0;
 }
-#writeReviewBtn {
+#editIcon {
+  position: absolute;
+  border: solid 1px black;
+  border-radius: 20px;
+  display: inline-block;
+  padding: 6px;
+  bottom: 3px;
+  right: 3px;
 }
 </style>

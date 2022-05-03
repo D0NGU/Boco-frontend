@@ -8,6 +8,7 @@
           :itemOwner="rental.userId"
           :itemPrice="rental.price"
           :itemId="rental.productId"
+          :ifRented="true"
       />
     </div>
 
