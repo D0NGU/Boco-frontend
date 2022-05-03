@@ -20,7 +20,7 @@
       >
       <v-btn
           id="dismiss"
-          onclick="location.href='/home'"
+          @click="$router.back()"
       >Avbryt</v-btn>
     </v-col>
   </v-row>
@@ -30,6 +30,7 @@
 
 <script>
 import UserAccountService from "@/service/UserAccountService";
+import router from "@/router";
 
 export default {
   name: "Contact",
