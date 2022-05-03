@@ -55,9 +55,8 @@ export default {
   },
   methods: {
     async deleteUser(){
-      this.userInfo = UserAccountService.getUser(this.$store.state.myUserId)
       this.clicked = true;
-      await UserAccountService.delete(this.$store.state.myUserId, this.userInfo.fname, this.userInfo.lname, this.userInfo.email, this.password).then(response => {
+      await UserAccountService.delete(this.$store.getters.myUserId).then(response => {
         console.warn(response)
       }).catch((error) => {
         console.warn(error.response);

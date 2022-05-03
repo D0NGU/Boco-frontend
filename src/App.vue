@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="$store.state.loggedIn">
+  <nav v-if="this.$store.state.loggedIn">
     <Navbar id="navBar"/>
   </nav>
   <router-view />
