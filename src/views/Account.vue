@@ -29,7 +29,7 @@
           </div>
 
           <div>
-            <p v-if="!edit" class="text-body-1">{{ userDescription }}</p>
+            <p id="userDescription" v-if="!edit" class="text-body-1">{{ userDescription }}</p>
             <v-btn v-if="!edit" class="my-2" id="editDescription"
                    rounded color="grey" fab small dark
                    @click="editDescription"
@@ -53,10 +53,12 @@
                   mdi-delete
                 </v-icon>
               </v-btn>
-              <v-textarea v-if="edit"
+              <v-textarea id="userDescriptionInput"
+                          v-if="edit"
                           rows="2"
+                          no-resize
                           outlined
-                          label="User description"
+                          label="Beskrivelse"
                           v-model="userDescription"
                           counter="190"
                           maxlength="190"
@@ -252,6 +254,11 @@ export default {
 }
 .v-card-text {
   padding: 0;
+}
+
+#userDescription {
+  width: 350px;
+  margin: 0 auto;
 }
 
 </style>
