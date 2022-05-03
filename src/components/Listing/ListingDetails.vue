@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Hammer.jpg" id="itemImage"></v-img>
+    <v-img v-if="images" v-bind:src="images[0]" id="itemImage"></v-img>
+    <v-img v-else src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Hammer.jpg" id="itemImage"></v-img>
     <div id="details">
       <p class="text-h4">{{productInfo.title}}</p>
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
@@ -61,6 +62,7 @@ export default {
       showMap: false,
       startDate: new Date(),
       priceRange: '',
+      images: []
     }
   },
 
@@ -82,6 +84,9 @@ export default {
       const product = (await ListingsService.getListing(this.itemId)).data
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
+      for (let image of product.images) {
+        this.images.push(image.imgData + "," + image.img64);
+      }
       if(new Date(this.productInfo.availableFrom) > new Date()){
         this.startDate = this.productInfo.availableFrom
       }
