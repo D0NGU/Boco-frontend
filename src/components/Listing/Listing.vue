@@ -47,8 +47,7 @@
               ></v-textarea>
               <div>
                 <v-file-input
-                    v-bind:value="files"
-                    v-on:input="adPicture = $event.target.value"
+                    v-model="files"
                     label="Last opp bildene"
                     hide-details="auto"
                     accept="image/*"
@@ -56,7 +55,7 @@
                     chips
                     prepend-icon="mdi-camera"
                 />
-                <div v-if="this.updating" v-for="(file, index) in files">
+                <div v-if="files" v-for="file in files">
                   <ImageCards
                       :file="file"
                       :id="index"
@@ -349,8 +348,10 @@ export default {
     },
     async createAd() {
       console.log("Listing was created.")
-      for (let x = 0; x < this.files.length; x++) {
-        this.image.push( await this.getBase64(this.files[0]));
+      console.log(this.files)
+      for (let file of this.files) {
+        console.log(file);
+        this.image.push( await this.getBase64(file));
       }
       console.log(this.image)
 
@@ -388,6 +389,11 @@ export default {
         })
         this.statusMessage = "Endringen var vellykket!";
         this.dialog = true;
+    },
+    addFiles(files) {
+      for (let file of files){
+        this.files.push(file)
+      }
     },
     getBase64(file) {
       return new Promise((resolve, reject) => {
