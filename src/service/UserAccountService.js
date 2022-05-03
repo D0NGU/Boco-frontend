@@ -54,6 +54,18 @@ export default {
         const contactForm = { name: name, email: email, comment: comment};
         return getApiClient.post(UNKNOWN, {params: {contactForm}})
     },
+
+    getNumberOfReviews(userId) {
+        return getApiClient.get("review/user/" + userId + "/amount");
+    },
+
+    getAverageScoreAsOwner(userId) {
+        return getApiClient.get("review/user/" + userId + "/average/owner")
+    },
+
+    getAverageScoreAsRenter(userId) {
+        return getApiClient.get("review/user/" + userId + "/average/renter")
+    },
 }
 
 
