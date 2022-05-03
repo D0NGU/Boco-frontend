@@ -14,23 +14,6 @@
               label="Søk..."
               variant="outlined"
               ></v-text-field>
-
-        <!--
-          PC Versjon?
-        <div id="filteringButtons">
-            <v-select class="filterButton"
-                      label="Filtrer"
-                      variant="contained"
-                      prepend-inner-icon="mdi-filter-outline"
-            ></v-select>
-            <v-select class="filterButton"
-                      label="Sorter"
-                      variant="contained"
-                      prepend-inner-icon="mdi-sort"
-            ></v-select>
-          </div>
-        -->
-
           <v-dialog v-model="filterDialog" id="filterDialog">
             <template v-slot:activator="{ props }">
               <v-btn v-bind="props" class="filterButton">
@@ -44,8 +27,7 @@
                       class= 'sortOption categoryOption'
                       @click="selectCategory(category)"
                   v-bind:style="category.active ? {'background-color' : 'var(--bocoBlue)', 'color' : 'white'} : null">
-<!--                    <v-icon color="blue">{{category.icon}}</v-icon>-->
-                    {{ category }}
+                    {{ category.category }}
                   </div>
                   <v-divider />
                 </v-item>
@@ -76,16 +58,14 @@
 
           <v-container>
             <v-row>
-              <v-col>
-<!--
- v-for="(category, i) in chosenCategories"
-                  :key="category.category"<v-chip
-                    closable=""
-                    @click:close="chosenCategories.splice(i, 1)"
-                >
-                  <v-icon> {{category.icon}} </v-icon>
-                  {{ category.category }}
-                </v-chip>-->
+              <v-col v-for="(category, i) in chosenCategory"
+              :key="category.category">
+              <v-chip
+                closable=""
+                @click:close="chosenCategory.splice(i, 1)">
+
+                {{ category.category }}
+              </v-chip>
               </v-col>
             </v-row>
           </v-container>
@@ -112,15 +92,17 @@ export default {
       sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
       chosenSortBy: 'price',
       ascending: false,
-      //categories: [{icon: 'mdi-basketball', category: 'Sport', active: false}, {icon: 'mdi-flower', category: 'Hage', active: false}, {icon: 'mdi-sofa-single', category: 'Møbler', active: false}, {icon: 'mdi-hammer-wrench', category: 'Verktøy', active: false}],
       categories: [],
-      //TODO fiks dette når backend støtter flere kategorier
-      chosenCategories: '',
+      chosenCategory: [],
     };
   },
   methods: {
     handleSearchButton(){
-      this.$emit('search', this.searchBar, this.chosenCategories, this.chosenSortBy, this.ascending)
+      let category = '';
+      if(this.chosenCategory.length > 0){
+        category = this.chosenCategory[0].category
+      }
+      this.$emit('search', this.searchBar, category, this.chosenSortBy, this.ascending)
     },
 
     selectSortByOption(selectedOption) {
@@ -141,22 +123,20 @@ export default {
     },
 
     selectCategory(selectedCategory) {
-      this.chosenCategories = selectedCategory;
-      setTimeout(() => this.sortByDialog = false, 300);
-      /*if(!this.chosenCategories.includes(selectedCategory)){
-      this.chosenCategories.push(selectedCategory)
-      } else {
-        const index = this.chosenCategories.indexOf(selectedCategory);
-        if (index > -1) {
-          this.chosenCategories.splice(index, 1); // 2nd parameter means remove one item only
-        }
-      }*/
+      this.categories.forEach((category) => {
+        category.active = (category.category === selectedCategory.category);
+      })
+      if(this.chosenCategory.length > 0){
+        this.chosenCategory = [];
+      }
+      this.chosenCategory.push(selectedCategory);
+      setTimeout(() => this.filterDialog = false, 300);
     }
   },
   async beforeMount() {
     const categories = (await ListingsService.getCategories()).data
     categories.forEach(cat => {
-      this.categories.push(cat.category)
+      this.categories.push({category: cat.category, active: false})
     })
   }
 }
