@@ -5,6 +5,7 @@
       <p class="text-h4">{{productInfo.title}}</p>
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
       <p>{{ productInfo.description }}</p>
+      <v-chip color="indigo"><p>{{ productInfo.category }}</p></v-chip>
       <v-divider style="margin: 10px"/>
       <p id="itemOwner">
         <v-avatar>
