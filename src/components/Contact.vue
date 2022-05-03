@@ -74,6 +74,9 @@ export default {
 #header{
   padding: 0.5em;
 }
+.v-text-field{
+  padding: 0.5em;
+}
 #textFieldWrapper{
   padding: 0.5em;
   margin: 0 auto;
