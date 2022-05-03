@@ -10,6 +10,7 @@ import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
 import Contact from "@/components/Contact";
 import {getApiClient} from "@/service/ApiService";
+import Lessor from "@/views/Lessor";
 
 const routes = [
   /*{
@@ -60,6 +61,11 @@ const routes = [
     path: "/contact",
     name: "Contact",
     component: Contact
+  },
+  {
+    path: "/lessor",
+    name: "Lessor",
+    component: Lessor
   },
   // Redirect any none-existing path to 404 page
   {

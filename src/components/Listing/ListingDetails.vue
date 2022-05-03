@@ -8,10 +8,16 @@
       <v-chip color="indigo"><p>{{ productInfo.category }}</p></v-chip>
       <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <v-divider style="margin: 10px"/>
-      <p id="itemOwner">
-        <v-avatar>
-          <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-        </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
+        <div>
+         <router-link :to="{name: 'Lessor'}">
+           <div>
+             <p id="itemOwner">
+             <v-avatar>
+               <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
+             </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
+           </div>
+         </router-link>
+        </div>
       <v-divider style="margin: 10px"/>
     </div>
     <div id="requestForm">
