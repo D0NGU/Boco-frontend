@@ -4,7 +4,8 @@
     <v-divider />
   <h2 class="reviewHeadline">{{ itemName }}</h2>
 
-    <p>Hvor fornøyd var du med eieren?</p>
+    <p v-if="!owner">Hvor fornøyd var du med eieren?</p>
+    <p v-if="owner">Hvor fornøyd var du med leietakeren?</p>
   <v-rating
       v-model="review"
   ></v-rating>
@@ -42,8 +43,8 @@ export default {
   methods: {
     async sendReview() {
       await ReviewService.create(this.comment, this.review, this.owner, this.$store.state.myUserId, this.ownerId);
-    }
-  }
+    },
+  },
 }
 </script>
 
