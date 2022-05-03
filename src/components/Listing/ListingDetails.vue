@@ -89,9 +89,7 @@ export default {
 
     async sendRequest() {
       if(this.date !== undefined && this.date !== null){
-        const dateFrom = new Date(this.date[0].getFullYear()+"/"+(this.date[0].getMonth()+1)+"/"+this.date[0].getDate());
-        const dateTo = new Date(this.date[1].getFullYear()+"/"+(this.date[1].getMonth()+1)+"/"+this.date[1].getDate());
-        await RentalService.newRental(dateFrom, dateTo, this.itemId, this.$store.state.myUserId)
+        await RentalService.newRental(this.date[0],this.date[1], this.itemId, this.$store.state.myUserId)
         this.requestSent = true;
       } else {
         this.invalidDate = true;
