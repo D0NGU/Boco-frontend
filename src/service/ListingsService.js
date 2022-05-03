@@ -4,7 +4,7 @@ export default {
     getCategories() {
         return getApiClient.get('/categories')
     },
-    create(productId, title, description, address, price, unlisted, availableFrom, availableTo, userId, category) {
+    create(productId, title, description, address, price, unlisted, availableFrom, availableTo, userId, category, images) {
         const createdProduct = {
             productId: productId,
             title: title,
@@ -15,12 +15,13 @@ export default {
             availableFrom: availableFrom,
             availableTo: availableTo,
             userId: userId,
-            category: category
+            category: category,
+            images: images
         };
         return getApiClient.post(baseURL + 'products', createdProduct)
     },
-    editProduct(productId, description, address, price, unlisted, category) {
-        const product = { description: description, address: address, price: price, unlisted: unlisted, category: category };
+    editProduct(productId, description, address, price, unlisted, category, images) {
+        const product = { description: description, address: address, price: price, unlisted: unlisted, category: category, images: images };
         console.log(product)
         return getApiClient.put('products/' + productId,  product)
     },
