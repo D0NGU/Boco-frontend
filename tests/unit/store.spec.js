@@ -1,7 +1,7 @@
 import { mutations, actions, getters } from "@/store";
-import {createStore} from "vuex";
+import { createStore } from "vuex";
 
-describe('testing store', () => {
+describe('Testing Vuex-Store', () => {
 
     it('Test SET_STATUS mutation in store', () => {
         const state = {
@@ -59,7 +59,6 @@ describe('testing store', () => {
 
         actions.login(testStore,{token: "token", userID: 1});
         expect(testStore.state.loggedIn).toBe(true);
-
     });
 
 });

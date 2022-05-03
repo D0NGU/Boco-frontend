@@ -1,0 +1,19 @@
+image: node:latest
+
+stages:
+  - build
+  - test
+
+compile:
+  stage: build
+  script:
+    - echo "BUILD"
+    - npm ci
+    - npm run build
+
+test:
+  stage: test
+  script:
+    - echo "TEST"
+    - npm ci
+    - npm run test:unit
