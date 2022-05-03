@@ -166,12 +166,12 @@ export default {
     const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
 
-    //check if user is verified TODO: getting error on backend Cannot invoke "java.lang.Double.doubleValue()" because the return value of getAverageUserReviews(int)" is null
-    /*await UserAccountService.getVerifiedUser(myUserId)
+    //check if user is verified
+    await UserAccountService.getVerifiedUser(myUserId)
         .then(res => this.isVerified = res.data)
         .catch((err) => {
           console.log(err)
-        })*/
+        })
 
     //get user description
     await UserAccountService.getUserDescription(myUserId)
