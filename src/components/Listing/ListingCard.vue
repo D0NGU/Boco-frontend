@@ -72,8 +72,6 @@
   </v-card>
   </div>
       <div id="wideScreen">
-
-
           <v-card class="mx-auto my-12 rounded-xl"
                   max-width="374"
                   @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
@@ -108,9 +106,9 @@
               </v-card-header-text>
             </v-card-header>
             <v-card-text>
-              <v-divider />
+              <v-divider style="margin: 10px"/>
 
-              <div v-if="isOwner" style="margin: 10px">
+              <div v-if="isOwner">
                 <p  class="text-subtitle-1">
                   <v-avatar size="x-small">
                     <v-icon>mdi-pencil</v-icon>
@@ -125,7 +123,7 @@
                 v-if="(ifRented && !ifReviewed) || ifEditing"
             >
               <template v-slot:activator="{ props }">
-                <v-btn icon="" class="writeReviewBtn" size="x-small" v-bind="props"><v-icon size="small">mdi-message-draw</v-icon></v-btn>
+                <v-btn append-icon="mdi-message-draw" class="writeReviewBtn" v-bind="props">Skriv en anmeldelse</v-btn>
               </template>
 
               <v-card>
