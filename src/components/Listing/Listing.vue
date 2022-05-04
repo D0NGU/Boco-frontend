@@ -55,13 +55,19 @@
                     chips
                     prepend-icon="mdi-camera"
                 />
-                <div v-if="files" v-for="file in files">
-                  <ImageCards
-                      :file="file"
-                      :id="index"
-                      @deleteClick="this.deleteImage(file)"
-                  />
+
+                <div id="pictures">
+                <v-row no-gutters>
+                  <v-col v-if="files" v-for="file in files" cols="auto">
+                    <ImageCards
+                        :file="file"
+                        :id="index"
+                        @deleteClick="this.deleteImage(file)"
+                    />
+                  </v-col>
+                </v-row>
                 </div>
+
               </div>
               <v-select
                   v-model="adCategory"
@@ -357,9 +363,7 @@ export default {
 
       let tempStat = '';
       if(this.date !== undefined && this.date !== null) {
-        const dateFrom = new Date(this.date[0].getFullYear() + "/" + (this.date[0].getMonth() + 1) + "/" + this.date[0].getDate());
-        const dateTo = new Date(this.date[1].getFullYear() + "/" + (this.date[1].getMonth() + 1) + "/" + this.date[1].getDate());
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, dateFrom, dateTo, this.$store.state.myUserId, 'elektronikk', this.image).then(response => {
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory).then(response => {
           tempStat = response.status;
         }).catch((error) => {
           if (error.response) {
@@ -480,5 +484,9 @@ button {
 
 .tabHeader {
   margin-top: 0;
+}
+
+#pictures {
+  padding-bottom: 10px;
 }
 </style>

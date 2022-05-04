@@ -1,27 +1,44 @@
 <template>
   <div>
-    <!--Todo endre id itemImage-->
-    <v-img v-if="images" v-bind:src="images[0]" id="itemImage"></v-img>
-    <v-img v-else src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Hammer.jpg" id="itemImage"></v-img>
-    <div id="details">
+    <!-- Carousel for å scrolle gjennom bilder -->
+    <v-carousel
+      :continuous="true"
+      :show-arrows="false"
+      height="400px">
+      <!-- Standardbilde hvis det ikke er lagt til noen bilder -->
+      <v-carousel-item v-if="images.length == 0" src="../../assets/images/missing_img.png"></v-carousel-item>
+      <!-- Legger til det første bildet - Nødvendig for å få frem bilde i starten -->
+      <v-carousel-item
+        v-if="images.length != 0"
+        :src="images[0]"
+      ></v-carousel-item>
+      <!-- Legger til alle andre bilder i listen -->
+      <v-carousel-item
+         v-for="(item,i) in images.slice(1)"
+        :key="i"
+        :src="images[i]"
+      ></v-carousel-item>
+    </v-carousel>
+      <div id="details">
       <p class="text-h4">{{productInfo.title}}</p>
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
       <p>{{ productInfo.description }}</p>
       <v-chip color="indigo"><p>{{ productInfo.category }}</p></v-chip>
       <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <v-divider style="margin: 10px"/>
-      <p id="itemOwner">
-        <v-avatar>
-          <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-        </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}
-        <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
+        <div>
+          <p id="itemOwner" @click="redirect">
+            <v-avatar>
+              <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
+            </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
+        </div>
       <v-divider style="margin: 10px"/>
     </div>
     <div id="requestForm">
       <v-alert type="error" v-if="invalidDate" id="errorBox">Du må legge til en dato</v-alert>
       <v-alert type="success" v-if="requestSent" id="requestSent">Forespørselen ble sendt!</v-alert>
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
-      <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :min-date="productInfo.availableFrom" :max-date="productInfo.availableTo" :start-date="startDate"></Datepicker>
+      <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :start-date="startDate" :allowedDates="availabilityWindow" ></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
       <v-btn id="mapBtn" @click="mapClick">Kart</v-btn>
       <div v-if="this.showMap">
@@ -42,6 +59,7 @@ import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
 import Map from "@/components/Map";
 import UserAccountService from "@/service/UserAccountService";
+import router from "@/router";
 
 export default {
   name: "ListingDetails",
@@ -52,7 +70,6 @@ export default {
 
   props: {
     itemId: [Number, String],
-    userId: Number,
   },
 
   data () {
@@ -62,19 +79,45 @@ export default {
       requestSent: false,
       productInfo: '',
       ownerInfo: '',
+      userId: '',
       ownerVerified: false,
       showMap: false,
       startDate: new Date(),
       priceRange: '',
-      images: []
+      images: [],
+      availabilityWindow: [],
     }
   },
 
   methods: {
 
-    async setPriceRange() {
+    redirect() {
+      console.log(this.userId)
+      router.push({name: 'Lessor', params: { userId: this.userId }})
+    },
+
+    async getListingInfo(){
       const product = (await ListingsService.getListing(this.itemId)).data
       this.productInfo = product.product;
+      this.ownerInfo = product.owner;
+      this.userId = product.owner.id;
+      for (let image of product.images) {
+        this.images.push(image.imgData + "," + image.img64);
+      }
+      if(new Date(this.productInfo.availableFrom) > new Date()){
+        this.startDate = this.productInfo.availableFrom
+      }
+      for(let i = 0; i<product.availabilityWindows.length; i++){
+        const start = new Date(product.availabilityWindows[i].from);
+        const end = new Date(product.availabilityWindows[i].to);
+        let loop = new Date(start);
+        while (loop <= end) {
+          this.availabilityWindow.push(new Date(loop))
+          let newDate = loop.setDate(loop.getDate() + 1);
+          loop = new Date(newDate);
+        }
+      }
+      this.ownerVerified = (await UserAccountService.getVerifiedUser(this.ownerInfo.id)).data
       if(this.productInfo.price >= 0 && this.productInfo.price < 200){
         this.priceRange = '$'
       } else if (this.productInfo.price >= 200 && this.productInfo.price < 500){
@@ -82,20 +125,6 @@ export default {
       } else {
         this.priceRange = '$$$'
       }
-    },
-
-    async getListingInfo(){
-      const product = (await ListingsService.getListing(this.itemId)).data
-      this.productInfo = product.product;
-      this.ownerInfo = product.owner;
-      for (let image of product.images) {
-        this.images.push(image.imgData + "," + image.img64);
-      }
-      if(new Date(this.productInfo.availableFrom) > new Date()){
-        this.startDate = this.productInfo.availableFrom
-      }
-      this.ownerVerified = (await UserAccountService.getVerifiedUser(this.ownerInfo.id)).data
-
     },
 
     async sendRequest() {
@@ -116,7 +145,6 @@ export default {
 
   beforeMount() {
     this.getListingInfo()
-    this.setPriceRange()
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <h1 id="header">Kontakt oss</h1>
   <div id="container">
     <div id="textFieldWrapper">
-      <v-text-field id="name" v-model="name" readonly label="Fullt navn"></v-text-field>
+      <v-text-field id="name" v-model="fullname" readonly label="Fullt navn"></v-text-field>
       <v-text-field id="email" v-model="email" readonly label="E-postadresse"></v-text-field>
       <v-text-field id="feedbackField" v-model="feedback" label="Kommentar" type="text" hide-details="auto" :rules="rules"></v-text-field>
     </div>
@@ -39,7 +39,9 @@ export default {
   name: "Contact",
   data () {
     return {
-      name: '',
+      fullname: '',
+      fname: '',
+      lname: '',
       email: '',
       feedback: '',
       rules: [
@@ -50,9 +52,8 @@ export default {
   },
   methods: {
     async sendContact(){
-      //TODO: Legg til tilbakemelding i backend!
       let tempStat = '';
-      await UserAccountService.sendContactForm(this.name, this.email, this.feedback).then(response => {
+      await UserAccountService.sendContactForm(1, this.fname, this.lname, this.email, this.feedback, this.$store.getters.myUserId).then(response => {
         tempStat = response.status;
       }).catch((error) => {
         if(error.response){
@@ -64,7 +65,9 @@ export default {
   },
   async beforeMount() {
     const userInfo = (await UserAccountService.getUserId(this.$store.state.email)).data
-    this.name = userInfo.fname + " " + userInfo.lname
+    this.fullname = userInfo.fname + " " + userInfo.lname;
+    this.fname = userInfo.fname
+    this.lname = userInfo.lname
     this.email = userInfo.email
   }
 }

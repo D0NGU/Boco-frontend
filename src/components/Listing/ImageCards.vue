@@ -1,8 +1,9 @@
 <template>
-  <v-card @click="this.$emit('deleteClick')">
-    <img v-bind:src="image.img">
-    <p>{{file.name}}</p>
-    <v-icon>mdi-trash-can-outline</v-icon>
+  <v-card id="card" height="70" width="70" elevation="0" @click="this.$emit('deleteClick')">
+    <v-img v-bind:src="image.img">
+      <v-icon color="red">mdi-close-circle</v-icon>
+    </v-img>
+    <v-card-text>{{file.name}}</v-card-text>
   </v-card>
 </template>
 
@@ -43,9 +44,5 @@ export default {
 </script>
 
 <style scoped>
-img {
-  height: 40px;
-  width: 40px;
-  object-fit: cover;
-}
+
 </style>
