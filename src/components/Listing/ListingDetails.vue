@@ -10,11 +10,12 @@
       <v-chip color="indigo"><p>{{ productInfo.category }}</p></v-chip>
       <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <v-divider style="margin: 10px"/>
-      <p id="itemOwner">
-        <v-avatar>
-          <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-        </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}
-        <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
+        <div>
+          <p id="itemOwner" @click="redirect">
+            <v-avatar>
+              <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
+            </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
+        </div>
       <v-divider style="margin: 10px"/>
     </div>
     <div id="requestForm">
@@ -41,7 +42,11 @@ import { ref } from 'vue';
 import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
 import Map from "@/components/Map";
+<<<<<<< HEAD
 import UserAccountService from "@/service/UserAccountService";
+=======
+import router from "@/router";
+>>>>>>> 2a5145f166f0d31c415d230a1e065c07df0c0cbb
 
 export default {
   name: "ListingDetails",
@@ -71,6 +76,10 @@ export default {
   },
 
   methods: {
+
+    redirect() {
+      router.push({name: 'Lessor', params: { userId: this.userId }})
+    },
 
     async setPriceRange() {
       const product = (await ListingsService.getListing(this.itemId)).data
