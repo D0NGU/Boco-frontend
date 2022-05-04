@@ -20,6 +20,7 @@ export default {
 <style>
 
 #loginPage {
-
+  display: grid;
+  justify-content: center;
 }
 </style>

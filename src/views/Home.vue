@@ -1,15 +1,17 @@
 <!-- Hovedside med annonser -->
 
 <template>
-  <h1>Home page</h1>
   <ListingView />
 </template>
 
 <script>
 import ListingView from "@/components/Listing/ListingView";
+import UserAccountService from "@/service/UserAccountService";
+import Footer from "@/components/Misc/Footer";
+import cookies from "vue-cookie";
 export default {
     name: 'Home',
-  components: {ListingView},
+  components: {Footer, ListingView},
 }
 </script>
 
