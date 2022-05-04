@@ -1,9 +1,25 @@
 <template>
   <div>
-    <!--Todo endre id itemImage-->
-    <v-img v-if="images" v-bind:src="images[0]" id="itemImage"></v-img>
-    <v-img v-else src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Hammer.jpg" id="itemImage"></v-img>
-    <div id="details">
+    <!-- Carousel for å scrolle gjennom bilder -->
+    <v-carousel 
+      :continuous="true"
+      :show-arrows="false"
+      height="400px">
+      <!-- Standardbilde hvis det ikke er lagt til noen bilder -->
+      <v-carousel-item v-if="images.length == 0" src="../../assets/images/missing_img.png"></v-carousel-item>
+      <!-- Legger til det første bildet - Nødvendig for å få frem bilde i starten -->
+      <v-carousel-item
+        v-if="images.length != 0"
+        :src="images[0]"
+      ></v-carousel-item>
+      <!-- Legger til alle andre bilder i listen -->
+      <v-carousel-item
+         v-for="(item,i) in images.slice(1)"
+        :key="i"
+        :src="images[i]"
+      ></v-carousel-item>
+    </v-carousel>
+      <div id="details">
       <p class="text-h4">{{productInfo.title}}</p>
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
       <p>{{ productInfo.description }}</p>
