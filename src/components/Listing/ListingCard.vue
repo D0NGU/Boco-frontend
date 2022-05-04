@@ -4,8 +4,21 @@
   <v-card class="rounded-l itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
     <div class="itemContainer">
       <!-- Annonse thumbnail -->
-      <img v-if="thumbnail" v-bind:src="thumbnail" id="itemImage"/>
-      <img v-else src="../../assets/images/missing_img.png" id="itemImage"/>
+      <v-img v-if="imgExist" v-bind:src="thumbnail" id="itemImage">
+        <template v-slot:placeholder>
+          <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+          >
+            <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
+      <img v-else :src="defaultimage" id="itemImage">
 
       <v-divider vertical />
       <div class="itemDetail">
@@ -83,8 +96,9 @@ export default {
       isOwner: false,
       thumbnail: '',
       ownerVerified: false,
-      profilePicSrc: ''
-
+      profilePicSrc: '',
+      imgExist: true,
+      defaultimage: require('@/assets/images/product.png')
     }
   },
   methods: {
@@ -96,17 +110,23 @@ export default {
       }
     }
   },
-  async mounted() {
+  async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
-    const raw = (await ImageService.getImagesByProductId(this.itemId)).data[0]
-    if (raw) {
-      this.thumbnail = raw.imgData + "," + raw.img64;
-    }
     this.itemOwnerName = userInfo.fname
     this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
     this.ownerVerified = (await UserAccountService.getVerifiedUser(this.itemOwner)).data
     if (userInfo.profile64 !== "" && userInfo.profile64 !== null) {
       this.profilePicSrc = "data:image/jpeg;base64," +userInfo.profile64;
+    }
+
+  },
+  async mounted() {
+    const raw = (await ImageService.getImagesByProductId(this.itemId)).data[0]
+    if (raw) {
+      this.thumbnail = raw.imgData + "," + raw.img64;
+    }
+    else {
+      this.imgExist = false
     }
   }
 }

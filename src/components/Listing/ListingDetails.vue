@@ -6,7 +6,7 @@
       :show-arrows="false"
       height="400px">
       <!-- Standardbilde hvis det ikke er lagt til noen bilder -->
-      <v-carousel-item v-if="images.length == 0" src="../../assets/images/missing_img.png" cover=""></v-carousel-item>
+      <v-carousel-item v-if="images.length == 0" :src="defaultimage" cover=""></v-carousel-item>
       <!-- Legger til alle andre bilder i listen -->
       <v-carousel-item
          v-for="(item,i) in this.images"
@@ -89,6 +89,7 @@ export default {
       priceRange: '',
       images: [],
       availabilityWindow: [],
+      defaultimage: require('@/assets/images/product.png')
     }
   },
 
