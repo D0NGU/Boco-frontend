@@ -19,9 +19,15 @@
     <div class="profileDetails">
       <v-carousel id="carousel" height="300px" hide-delimiter-background="" :show-arrows="false">
         <v-carousel-item class="carouselItem">
-          <v-avatar size="x-large">
-            <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
-          </v-avatar>
+          <div>
+            <v-avatar size="x-large">
+              <v-img @click="setProfilePic" src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png">
+                <v-btn icon><v-icon>mdi-camera</v-icon></v-btn>
+              </v-img>
+            </v-avatar>
+
+          </div>
+
           <div>
             <p class="text-button">{{name}}
               <v-icon v-if="isVerified">mdi-shield-check</v-icon>
@@ -94,7 +100,7 @@
           <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
-          <MyReviews/>
+          <MyReviews :user-id="this.$store.state.myUserId"/>
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
@@ -175,6 +181,10 @@ export default {
       } else {
         this.statusForEditUserDescription = "Noe gikk galt. Prøv igjen"
       }
+    },
+
+    setProfilePic() {
+
     }
   },
   async beforeMount() {
