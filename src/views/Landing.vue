@@ -87,10 +87,6 @@ export default {
   height: 100px;
   margin: 20px;
 }
-#title {
-  color: white;
-  font-size: 2em;
-}
 
 @keyframes title-fade  {
   from {opacity: 0}
