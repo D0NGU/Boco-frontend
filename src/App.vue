@@ -53,5 +53,21 @@ body {
   text-align: center;
   color: #2c3e50;
 }
-
+#loadingPage {
+  margin: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+#loadingBar {
+  width: 100%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
 </style>

@@ -1,4 +1,13 @@
 <template>
+  <div v-if="isLoading">
+    <div id="app">
+      <div id="loadingPage">
+        <h1>Loading ...</h1>
+        <img src="/img/loading_boxonly_final.gif" alt="Box swiping" id="loadingBar">
+      </div>
+    </div>
+  </div>
+
   <sort-and-search @search="updateList"/>
     <!--<h5><span v-text="visibleListings"></span> of <span>{{ activeProducts.length }}</span> listings shown</h5>-->
       <div v-for="(product, index) in activeProducts" :key="index">
@@ -46,7 +55,8 @@ export default {
   data () {
     return {
       pageNumber: 1,
-      activeProducts: []
+      activeProducts: [],
+      isLoading: false,
     }
   },
   /**computed: {
@@ -63,8 +73,9 @@ export default {
       }
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
-      console.log(searchBar, chosenCategories, chosenSortBy, ascending)
-      this.activeProducts = (await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)).data
+      this.isLoading = true;
+      setTimeout(async () => this.activeProducts = (await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)).data, 500);
+      setTimeout(() => this.isLoading = false, 1500);
     }
   },
   created(){
