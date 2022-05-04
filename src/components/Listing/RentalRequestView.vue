@@ -6,6 +6,7 @@
         :renter="rental.userId"
         :date="rental.dateFrom + ' - ' + rental.dateTo"
         @update="sendEvent()"
+        :product-id="rental.productId"
     />
   </div>
   <p v-if="!rentalList">Du har ingen forespørsler om utleie.</p>

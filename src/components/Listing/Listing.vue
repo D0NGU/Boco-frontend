@@ -341,6 +341,7 @@ export default {
         this.unListed = productInfo.unlisted;
         this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)];
         this.image = (await ImageService.getImagesByProductId(this.itemId)).data;
+        console.log(this.image)
         for (let x of this.image) {
           this.files.push(await (this.urlToFile(x.img64, x.imgData, x.imgName)));
           this.shownImages.push(x.imgData + "," + x.img64);
@@ -366,7 +367,7 @@ export default {
     async createAd() {
       console.log("Listing was created.")
       for (let file of this.files) {
-        this.image.push( await this.getBase64(file));
+        this.images.push( await this.getBase64(file));
       }
 
       let tempStat = '';

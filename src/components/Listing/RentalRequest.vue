@@ -8,6 +8,22 @@
       <v-btn color="error" class="rentalButton" @click="denyRental">Avslå</v-btn>
     </div>
   </v-card>
+
+  <v-dialog v-model="dialog">
+    <v-card>
+      <v-card-title v-if="errorAccept" class="text-h5"> Kan ikke godkjennes </v-card-title>
+      <v-card-text v-if="errorAccept"> {{ errorAccept }} </v-card-text>
+      <v-card-actions>
+        <v-btn
+            color="red"
+            text
+            @click=close()
+        >
+          Lukk
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -20,16 +36,22 @@ export default {
     id: Number,
     renter: '',
     date: '',
+    productId: [Number, String],
   },
   data () {
     return {
       fname: '',
       lname: '',
+      errorAccept: '',
+      dialog: false,
     }
   },
   methods: {
     async acceptRental(){
-      await RentalService.accept(this.id);
+      await RentalService.accept(this.id).then().catch((err) => this.errorAccept = "Den produkt er allerede lånt av en annen på gitt dato: " + this.date);
+      if (this.errorAccept !== ''){
+        this.dialog = true
+      }
       this.$emit("update");
       // location.reload();
     },
@@ -37,6 +59,10 @@ export default {
       await RentalService.deny(this.id)
       this.$emit("update");
       // location.reload();
+    },
+    close() {
+      this.dialog = false;
+      this.$emit("close");
     }
   },
   async beforeMount() {
