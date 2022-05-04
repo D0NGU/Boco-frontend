@@ -105,7 +105,7 @@ export default {
     this.itemOwnerName = userInfo.fname
     this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
     this.ownerVerified = (await UserAccountService.getVerifiedUser(this.itemOwner)).data
-    if (userInfo.profile64 !== "") {
+    if (userInfo.profile64 !== "" && userInfo.profile64 !== null) {
       this.profilePicSrc = "data:image/jpeg;base64," +userInfo.profile64;
     }
   }
