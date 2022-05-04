@@ -23,8 +23,11 @@ export default {
       reviews: [],
     }
   },
+  props: {
+    userId: Number,
+  },
   async beforeMount(){
-    const reviews = (await ReviewService.getMyReviews(this.$store.state.myUserId)).data;
+    const reviews = (await ReviewService.getMyReviews(this.userId)).data;
     reviews.forEach(review => {
       this.reviews.push({rating: review.stars, comment: review.text, author: review.author})
     })

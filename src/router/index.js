@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-//import Landing from '../views/Landing.vue'
 import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
 import NotFound from '../views/NotFoundPage.vue'
@@ -11,6 +10,7 @@ import Listing from "@/components/Listing/Listing";
 import Contact from "@/components/Contact";
 import {getApiClient} from "@/service/ApiService";
 import Landing from "@/views/Landing";
+import Lessor from "@/views/Lessor";
 
 const routes = [
   {
@@ -60,6 +60,12 @@ const routes = [
     path: "/contact",
     name: "Contact",
     component: Contact
+  },
+  {
+    path: "/lessor/:userId",
+    name: "Lessor",
+    component: Lessor,
+    props: true,
   },
   // Redirect any none-existing path to 404 page
   {

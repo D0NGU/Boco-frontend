@@ -3,7 +3,7 @@
     <div id="imageCover"></div>
     <img src="/img/flowers.jpg" alt="picture" id="coverImage">
     <div id="coverText">
-    <h1>Borrow <br> Community</h1>
+    <h1 id="title">Borrow <br> Community</h1>
     <h3>- for å skape et
       <br>bærekraftigere samfunn</h3>
     <v-btn class="button" @click="$router.push({name: 'Login'})">Start nå</v-btn>

@@ -38,7 +38,7 @@ export default {
 
 
 
-<style>
+<style scoped>
 h1 {
   color: black;
   font-size:calc(12px + 1.5vw);
