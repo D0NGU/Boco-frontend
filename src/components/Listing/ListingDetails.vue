@@ -13,7 +13,8 @@
       <p id="itemOwner">
         <v-avatar>
           <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-        </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
+        </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}
+        <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
       <v-divider style="margin: 10px"/>
     </div>
     <div id="requestForm">
@@ -40,6 +41,7 @@ import { ref } from 'vue';
 import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
 import Map from "@/components/Map";
+import UserAccountService from "@/service/UserAccountService";
 
 export default {
   name: "ListingDetails",
@@ -49,7 +51,7 @@ export default {
   },
 
   props: {
-    itemId: Number,
+    itemId: [Number, String],
     userId: Number,
   },
 
@@ -60,6 +62,7 @@ export default {
       requestSent: false,
       productInfo: '',
       ownerInfo: '',
+      ownerVerified: false,
       showMap: false,
       startDate: new Date(),
       priceRange: '',
@@ -91,6 +94,8 @@ export default {
       if(new Date(this.productInfo.availableFrom) > new Date()){
         this.startDate = this.productInfo.availableFrom
       }
+      this.ownerVerified = (await UserAccountService.getVerifiedUser(this.ownerInfo.id)).data
+
     },
 
     async sendRequest() {

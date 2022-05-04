@@ -40,7 +40,7 @@ export default {
   props: {
     ownerId: {
       default: 0,
-      type: Number,
+      type: [Number, String],
     },
   },
   data () {
