@@ -1,18 +1,20 @@
 <!-- En "listing" instans. (En annonseboks) -->
-
 <template>
+  <!-- Selve annonseboksen -->
   <v-card class="rounded-xl itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
     <div class="itemContainer">
+      <!-- Annonse thumbnail -->
       <img v-if="thumbnail" v-bind:src="thumbnail" id="itemImage"/>
-      <img v-else src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
+      <img v-else src="../../assets/images/missing_img.png" id="itemImage"/>
+
       <v-divider vertical />
       <div class="itemDetail">
+        <!-- Produktnavn -->
         <p class="text-subtitle-1">{{ itemName }}</p>
         <v-dialog
             v-model="dialog"
             fullscreen=""
-            v-if="(ifRented && !ifReviewed) || ifEditing"
-        >
+            v-if="(ifRented && !ifReviewed) || ifEditing">
           <template v-slot:activator="{ props }">
             <v-btn icon="" id="writeReviewBtn" size="x-small" v-bind="props"><v-icon size="small">mdi-message-draw</v-icon></v-btn>
           </template>
@@ -30,8 +32,8 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
         <p class="text-caption" v-else>{{itemPrice}} kr/dag</p>
+
         <div v-if="isOwner">
           <p  id="editIcon">
             <v-avatar size="x-small">
@@ -43,8 +45,9 @@
         <div v-else>
         <p class="text-overline" id="itemOwner">
           <v-avatar size="x-small">
-          <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
-        </v-avatar> {{itemOwnerName}}
+            <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
+          </v-avatar>
+            {{itemOwnerName}}
           <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
         </div>
       </div>
@@ -96,7 +99,7 @@ export default {
     if (raw) {
       this.thumbnail = raw.imgData + "," + raw.img64;
     }
-    this.itemOwnerName = userInfo.fname + " " + userInfo.lname
+    this.itemOwnerName = userInfo.fname
     this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
     this.ownerVerified = (await UserAccountService.getVerifiedUser(this.itemOwner)).data
   }
@@ -105,11 +108,15 @@ export default {
 
 <style scoped>
 .itemCard {
-  margin: 20px;
   background-color: white;
+  max-width: 450px;
+  margin: auto;
+  margin-top: 15px;
+  margin-bottom: 15px
 }
 .itemContainer {
-  height: 120px;
+  align-content: center;
+  height: 115px;
   padding: 10px;
   display: flex;
   flex-direction: row;
@@ -117,9 +124,11 @@ export default {
   position: relative;
 }
 #itemImage {
-  width: 40%;
-  object-fit: contain;
-  max-height: 100%;
+  width: 100px;
+  object-fit: cover;
+  max-height: 100px;
+  margin-right: 10px;
+  border-radius: 15%;
   z-index: 1;
 }
 .itemDetail {
@@ -133,6 +142,8 @@ export default {
 #itemOwner {
   position: absolute;
   bottom: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 #editIcon {
   position: absolute;

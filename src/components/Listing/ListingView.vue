@@ -2,7 +2,7 @@
   <sort-and-search @search="updateList"/>
     <!--<h5><span v-text="visibleListings"></span> of <span>{{ activeProducts.length }}</span> listings shown</h5>-->
       <div v-for="(product, index) in activeProducts" :key="index">
-        <v-sheet min-height="150" class="fill-height" color="transparent">
+        <v-sheet min-height="115" class="fill-height" color="transparent">
           <v-lazy
               v-model="product.isActive" :options="{
               threshold: .5
