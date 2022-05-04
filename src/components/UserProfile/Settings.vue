@@ -99,7 +99,7 @@ export default {
         reader.readAsDataURL(file);
         let blob;
         reader.onload = () => resolve({
-              img64: reader.result.split(",")[1],
+              img: reader.result.split(",")[1],
             },
         );
         reader.onerror = error => reject(error);
