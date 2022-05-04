@@ -1,4 +1,8 @@
 <template>
+  <h1 class="center">Varsler</h1>
+  <div v-if="alerts.length < 1" class="center">
+    Du har ingen varsler.
+  </div>
   <div v-for="alert in alerts">
     <Notification
         :alertId="alert.alertId"
@@ -40,5 +44,8 @@ export default {
 </script>
 
 <style scoped>
-
+.center {
+  margin: auto;
+  text-align: center;
+}
 </style>
