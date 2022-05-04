@@ -9,7 +9,7 @@
       <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
         <template v-slot:placeholder>
           <v-row
-              class="fill-height ma-0"
+              class="fill-height ma-0 itemImage"
               align="center"
               justify="center"
           >
@@ -223,6 +223,7 @@ export default {
 .itemImage {
   height: 250px;
   object-fit: cover;
+  margin: 10px;
 }
 @media only screen and (max-width: 600px) {
   #wideScreen {
@@ -233,15 +234,14 @@ export default {
     height: 100px;
     object-fit: cover;
     max-height: 100px;
+    max-width: 100px;
     margin-right: 10px;
     border-radius: 5%;
     z-index: 1;
   }
   .itemCard {
     max-width: 450px;
-    margin: auto;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin: 15px auto;
     background-color: white;
   }
   .itemContainer {

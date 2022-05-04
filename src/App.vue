@@ -35,7 +35,7 @@ body {
 }
 #loadingPage {
   margin: 0;
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 100%;
   top: 0;
@@ -49,5 +49,10 @@ body {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
+}
+@media screen and (min-width: 600px){
+  #loadingBar {
+    width: 60%;
+  }
 }
 </style>

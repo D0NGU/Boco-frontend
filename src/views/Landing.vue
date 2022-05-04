@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-<!-- Hovedside uten å være logget inn -->
-
-<template v-cloak>
-=======
 <template>
   <div v-if="isLoading">
     <div id="loadingBackground">
@@ -12,7 +7,6 @@
     </div>
   </div>
 <div :class="{hideOverflow: isLoading}">
->>>>>>> 383f6751af7be33a25aca7aee4564eaa22b7f12f
   <div id="cover">
     <div id="imageCover"></div>
     <img src="/img/flowers.jpg" alt="picture" id="coverImage" @load="handleLoad">
