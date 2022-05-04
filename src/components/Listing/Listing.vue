@@ -357,9 +357,7 @@ export default {
 
       let tempStat = '';
       if(this.date !== undefined && this.date !== null) {
-        const dateFrom = new Date(this.date[0].getFullYear() + "/" + (this.date[0].getMonth() + 1) + "/" + this.date[0].getDate());
-        const dateTo = new Date(this.date[1].getFullYear() + "/" + (this.date[1].getMonth() + 1) + "/" + this.date[1].getDate());
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, dateFrom, dateTo, this.$store.state.myUserId, 'elektronikk', this.image).then(response => {
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory).then(response => {
           tempStat = response.status;
         }).catch((error) => {
           if (error.response) {

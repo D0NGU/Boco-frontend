@@ -21,7 +21,7 @@
       <v-alert type="error" v-if="invalidDate" id="errorBox">Du må legge til en dato</v-alert>
       <v-alert type="success" v-if="requestSent" id="requestSent">Forespørselen ble sendt!</v-alert>
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
-      <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :min-date="productInfo.availableFrom" :max-date="productInfo.availableTo" :start-date="startDate"></Datepicker>
+      <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :start-date="startDate" :allowedDates="availabilityWindow" ></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
       <v-btn id="mapBtn" @click="mapClick">Kart</v-btn>
       <div v-if="this.showMap">
@@ -66,23 +66,12 @@ export default {
       showMap: false,
       startDate: new Date(),
       priceRange: '',
-      images: []
+      images: [],
+      availabilityWindow: [],
     }
   },
 
   methods: {
-
-    async setPriceRange() {
-      const product = (await ListingsService.getListing(this.itemId)).data
-      this.productInfo = product.product;
-      if(this.productInfo.price >= 0 && this.productInfo.price < 200){
-        this.priceRange = '$'
-      } else if (this.productInfo.price >= 200 && this.productInfo.price < 500){
-        this.priceRange = '$$'
-      } else {
-        this.priceRange = '$$$'
-      }
-    },
 
     async getListingInfo(){
       const product = (await ListingsService.getListing(this.itemId)).data
@@ -94,9 +83,26 @@ export default {
       if(new Date(this.productInfo.availableFrom) > new Date()){
         this.startDate = this.productInfo.availableFrom
       }
+      for(let i = 0; i<product.availabilityWindows.length; i++){
+        const start = new Date(product.availabilityWindows[i].from);
+        const end = new Date(product.availabilityWindows[i].to);
+        let loop = new Date(start);
+        while (loop <= end) {
+          this.availabilityWindow.push(new Date(loop))
+          let newDate = loop.setDate(loop.getDate() + 1);
+          loop = new Date(newDate);
+        }
+      }
       this.ownerVerified = (await UserAccountService.getVerifiedUser(this.ownerInfo.id)).data
-
+      if(this.productInfo.price >= 0 && this.productInfo.price < 200){
+        this.priceRange = '$'
+      } else if (this.productInfo.price >= 200 && this.productInfo.price < 500){
+        this.priceRange = '$$'
+      } else {
+        this.priceRange = '$$$'
+      }
     },
+
 
     async sendRequest() {
       if(this.date !== undefined && this.date !== null){
@@ -116,7 +122,6 @@ export default {
 
   beforeMount() {
     this.getListingInfo()
-    this.setPriceRange()
   }
 }
 </script>
