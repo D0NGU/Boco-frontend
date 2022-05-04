@@ -50,6 +50,7 @@
                     v-model="files"
                     label="Last opp bilder"
                     hide-details="auto"
+                    :rules="rulesImage"
                     accept="image/x-png, image/jpeg"
                     multiple
                     chips
@@ -248,9 +249,6 @@
       </v-window-item>
     </v-window>
   </v-card-text>
-
-
-
 </template>
 
 <script>
@@ -294,7 +292,10 @@ export default {
       rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
-
+      ],
+      rulesImage: [
+        /* REGEL: Bilde kan ikke være større enn gitt størrelse */
+        files => !files || !files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
       ],
       rulesNumber: [
         value => !isNaN(value) || 'Må være tall.',
@@ -309,6 +310,7 @@ export default {
       render: true,
     }
   },
+
   methods: {
     forceRerender() {
       this.render = false;
@@ -317,6 +319,7 @@ export default {
         this.render = true;
       });
     },
+
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
@@ -339,6 +342,7 @@ export default {
         console.log(this.files);
       }
     },
+
     urlToFile(base64, data, filename){
       let url = data +","+base64;
       return (fetch(url)
@@ -346,12 +350,14 @@ export default {
           .then(function(buf){return new File([buf], filename,{type: "image/jpeg"});})
       );
     },
+
     async dataUrlToFile(base64, data, fileName) {
       const dataUrl = data +","+base64;
       const response = await fetch(dataUrl);
       const blob = await response.blob();
       return new File([blob], fileName, { type: 'image/png' });
     },
+
     async createAd() {
       console.log("Listing was created.")
       console.log(this.files)
@@ -394,11 +400,13 @@ export default {
         this.statusMessage = "Endringen var vellykket!";
         this.dialog = true;
     },
+
     addFiles(files) {
       for (let file of files){
         this.files.push(file)
       }
     },
+
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -414,6 +422,7 @@ export default {
         reader.onerror = error => reject(error);
       });
     },
+
     async deleteAd(){
       await ListingsService.delete(this.$store.state.myUserId, this.itemId)
       this.deleteDialog = false;
@@ -425,6 +434,7 @@ export default {
       this.dialog = false;
       router.back();
     },
+
     deleteImage(file) {
       this.files = this.files.filter(function (ele){
         return ele != file;
@@ -435,6 +445,7 @@ export default {
       this.rentalList = (await RentalService.getRentals(this.itemId)).data
     }
   },
+
    beforeMount(){
     this.getInfo();
     if(this.itemId > 0){
