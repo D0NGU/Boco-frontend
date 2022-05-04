@@ -7,14 +7,9 @@
       height="400px">
       <!-- Standardbilde hvis det ikke er lagt til noen bilder -->
       <v-carousel-item v-if="images.length == 0" src="../../assets/images/missing_img.png" cover=""></v-carousel-item>
-      <!-- Legger til det første bildet - Nødvendig for å få frem bilde i starten -->
-      <v-carousel-item
-        v-if="images.length != 0"
-        :src="images[0]"
-      ></v-carousel-item>
       <!-- Legger til alle andre bilder i listen -->
       <v-carousel-item
-         v-for="(item,i) in images.slice(1)"
+         v-for="(item,i) in this.images"
         :key="i"
         :src="images[i]"
       ></v-carousel-item>
