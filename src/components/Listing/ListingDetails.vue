@@ -54,7 +54,6 @@ export default {
 
   props: {
     itemId: [Number, String],
-    userId: Number,
   },
 
   data () {
@@ -64,6 +63,7 @@ export default {
       requestSent: false,
       productInfo: '',
       ownerInfo: '',
+      userId: '',
       ownerVerified: false,
       showMap: false,
       startDate: new Date(),
@@ -75,6 +75,7 @@ export default {
   methods: {
 
     redirect() {
+      console.log(this.userId)
       router.push({name: 'Lessor', params: { userId: this.userId }})
     },
 
@@ -94,6 +95,8 @@ export default {
       const product = (await ListingsService.getListing(this.itemId)).data
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
+      console.log(product.owner.id);
+      this.userId = product.owner.id;
       for (let image of product.images) {
         this.images.push(image.imgData + "," + image.img64);
       }

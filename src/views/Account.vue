@@ -100,7 +100,7 @@
           <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
-          <MyReviews/>
+          <MyReviews :user-id="this.$store.state.myUserId"/>
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
