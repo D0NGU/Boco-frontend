@@ -1,5 +1,5 @@
 <template>
-  <v-card class="rounded-xl itemCard">
+  <v-card class="rounded-l itemCard">
     <div class="itemContainer">
       <div id="rating">
       <v-icon size="x-large">mdi-star</v-icon>

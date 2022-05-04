@@ -45,7 +45,7 @@
       <v-alert type="success" v-if="requestSent" id="requestSent">Forespørselen ble sendt!</v-alert>
       <!-- Legg til en leieforespørsel -->
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
-      <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :start-date="startDate" :allowedDates="availabilityWindow" ></Datepicker>
+      <Datepicker id="datePicker" range v-model="date" :enableTimePicker="false" showNowButton :start-date="startDate" :allowedDates="availabilityWindow" ></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
       <!-- GMaps -->
       <v-btn id="mapBtn" @click="mapClick">Kart</v-btn>
@@ -167,11 +167,22 @@ export default {
 }
 #requestBtn {
   margin: 0 5px 20px;
+  color: white;
+  background-color: var(--bocoBlue);
 }
 #mapBtn {
   margin: 0 5px 20px;
 }
 #requestForm > *{
   padding: 10px;
+}
+
+#itemOwner {
+  cursor: pointer;
+}
+
+#datePicker {
+  width: 80%;
+  margin: 0 auto;
 }
 </style>

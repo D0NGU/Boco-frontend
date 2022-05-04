@@ -73,5 +73,10 @@ export default {
   /**beforeMount() {
     this.getProducts()
   }*/
+
 }
 </script>
+
+<style scoped>
+
+</style>

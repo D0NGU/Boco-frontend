@@ -1,7 +1,7 @@
 <!-- En "listing" instans. (En annonseboks) -->
 <template>
   <!-- Selve annonseboksen -->
-  <v-card class="rounded-xl itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
+  <v-card class="rounded-l itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
     <div class="itemContainer">
       <!-- Annonse thumbnail -->
       <img v-if="thumbnail" v-bind:src="thumbnail" id="itemImage"/>
