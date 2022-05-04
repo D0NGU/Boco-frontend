@@ -24,6 +24,10 @@
           </p>
         </div>
 
+        <div>
+          <p id="userDescription" v-if="!edit" class="text-body-1">{{ userDescription }}</p>
+        </div>
+
       </v-carousel-item>
       <v-carousel-item class="carouselItem">
         <!-- TODO: Hent rating fra backend -->
@@ -44,7 +48,7 @@
         <ListingView :ownerId="this.userId"/>
       </v-window-item>
       <v-window-item value="reviews">
-        <MyReviews/>
+        <MyReviews :user-id="this.userId"/>
       </v-window-item>
     </v-window>
   </v-card-text>
@@ -54,14 +58,18 @@
 import ListingView from "@/components/Listing/ListingView";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
+import { useRoute } from 'vue-router'
 //TODO: Lag en ny Review component?
 
 export default {
   name: 'lessor',
   components: {MyReviews, ListingView},
-
-  props: {
-    userId: Number,
+  setup() {
+    const route = useRoute();
+    const userId = route.params.userId;
+    return {
+      userId,
+    }
   },
 
   data() {
@@ -80,21 +88,35 @@ export default {
       background_img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd53l9d6fqlxs2.cloudfront.net%2Fphotos%2F75616-adobestock_63768956jpeg.jpeg&f=1&nofb=1',
     }
   },
+  methods: {
 
+    async getNumberOfReviews() {
+      this.reviewsCount = (await UserAccountService.getNumberOfReviews(this.userId)).data;
+    },
+    async getAverageScoreAsOwner() {
+      this.ratingSeller = (await UserAccountService.getAverageScoreAsOwner(this.userId)).data;
+    },
+    async getAverageScoreAsRenter() {
+      this.ratingRenter = (await UserAccountService.getAverageScoreAsRenter(this.userId)).data;
+    },
+  },
   //TODO: Hent en utleier fremfor innlogget bruker
   async beforeMount() {
-    let myUserId = this.$store.getters.myUserId;
-    const userInfo = await UserAccountService.getUser(myUserId)
+    const userInfo = await UserAccountService.getUser(this.userId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
 
-    console.log(this.userId)
-
     //check if user is verified
-    await UserAccountService.getVerifiedUser(myUserId)
+    await UserAccountService.getVerifiedUser(this.userId)
         .then(res => this.isVerified = res.data)
         .catch((err) => {
           console.log(err)
-        })
+        });
+
+    this.userDescription =  (await UserAccountService.getUserDescription(this.userId)).data
+
+    await this.getAverageScoreAsRenter();
+    await this.getAverageScoreAsOwner();
+    await this.getNumberOfReviews();
   }
 }
 </script>
