@@ -1,6 +1,6 @@
 <template>
   <v-card class="rounded-xl rentalCard">
-    <v-avatar x-large id="profilePicture"><v-img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg"></v-img></v-avatar>
+    <v-avatar x-large id="profilePicture"></v-avatar>
     <div id="rentalDetails">
       <p>{{ fname }} {{ lname }}</p>
       <p>{{ date }}</p>
@@ -13,6 +13,7 @@
 <script>
 import RentalService from "@/service/RentalService";
 import UserAccountService from "@/service/UserAccountService";
+import ImageService from "@/service/ImageService";
 
 export default {
   name: "RentalRequest",
@@ -25,6 +26,7 @@ export default {
     return {
       fname: '',
       lname: '',
+      imgSrc: '',
     }
   },
   methods: {
@@ -41,6 +43,7 @@ export default {
   },
   async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.renter)).data
+    const img = (await ImageService.getImagesByProductId(this.renter)).data
     this.fname = userInfo.fname;
     this.lname = userInfo.lname;
   }
@@ -56,16 +59,11 @@ export default {
   align-items: center;
 }
 
-#profilePicture {
-  flex-grow: 1;
-}
 
-#rentalDetails {
-  flex-grow: 1;
-}
 
 .rentalButton {
   margin: 5px;
+  width: 100px;
 }
 
 </style>

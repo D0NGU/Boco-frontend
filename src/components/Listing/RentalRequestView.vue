@@ -1,5 +1,5 @@
 <template>
-  <h1>Forespørsler om utleie</h1>
+  <h1>Forespørsler om utleie for <br>{{title}}</h1>
   <div v-for="(rental, i) in rentalList" :key="i">
     <RentalRequest
         :id="rental.rentalId"
@@ -21,7 +21,8 @@ export default {
   components: {RentalRequest},
   props: {
     productId: [Number, String],
-    rentalList: Array
+    rentalList: Array,
+    title: String,
   },
   methods: {
     sendEvent() {

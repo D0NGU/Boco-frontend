@@ -230,6 +230,7 @@
             v-if="this.render"
             :productId="this.itemId"
             :rental-list="this.rentalList"
+            :title="adName"
             @update="getRentals()"
         ></RentalRequestView>
       </v-window-item>
