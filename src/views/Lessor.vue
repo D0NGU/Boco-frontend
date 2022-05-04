@@ -1,3 +1,5 @@
+<!-- Side som viser en annen person sin profil -->
+
 <template>
   <div id="grid">
     <div id="topProfileContainer">
@@ -16,20 +18,23 @@
     <v-carousel id="carousel" height="300px" hide-delimiter-background="" :show-arrows="false">
       <v-carousel-item class="carouselItem">
         <v-avatar size="x-large">
-          <v-img src="../assets/images/missing_profile_img.png"></v-img>
+          <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
+          <v-img v-else src="../assets/images/missing_profile_img.png"></v-img>
         </v-avatar>
+
         <div>
           <p class="text-button">{{name}}
-            <v-icon v-if="isVerified">mdi-account-check-outline</v-icon>
+            <v-icon v-if="isVerified">mdi-shield-check</v-icon>
           </p>
         </div>
 
         <div>
-          <p id="userDescription" v-if="!edit" class="text-body-1">{{ userDescription }}</p>
+          <p id="userDescription" class="text-body-1">{{ userDescription }}</p>
         </div>
 
       </v-carousel-item>
       <v-carousel-item class="carouselItem">
+        <!-- TODO: Hent rating fra backend -->
         <p>Rangering som selger</p>
         <v-rating readonly="" v-model="ratingSeller"></v-rating>
         <p>Rangering som låner</p>
@@ -61,6 +66,7 @@ import { useRoute } from 'vue-router'
 export default {
   name: 'lessor',
   components: {MyReviews, ListingView},
+
   setup() {
     const route = useRoute();
     const userId = route.params.userId;
@@ -78,10 +84,10 @@ export default {
       tab: null,
       userInfo: '',
       userDescription: '',
-      edit: false,
       isVerified: false,
       rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
       background_img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd53l9d6fqlxs2.cloudfront.net%2Fphotos%2F75616-adobestock_63768956jpeg.jpeg&f=1&nofb=1',
+      profilePicSrc: ''
     }
   },
   methods: {
