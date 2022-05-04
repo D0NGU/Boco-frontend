@@ -52,7 +52,7 @@ export default {
 
     sendContactForm(name, email, comment){
         const contactForm = { name: name, email: email, comment: comment};
-        return getApiClient.post(UNKNOWN, {params: {contactForm}})
+        return getApiClient.post("contact", {params: {contactForm}})
     },
 
     getNumberOfReviews(userId) {
