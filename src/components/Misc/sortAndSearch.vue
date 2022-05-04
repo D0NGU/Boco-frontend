@@ -72,11 +72,39 @@
               </v-col>
             </v-row>
           </v-container>
-          <v-btn id="searchBtn" v-bind:style="{'background-color' : 'var(--bocoBlue)', 'color' : 'white'}" @click="handleSearchButton">Søk</v-btn>
+          <v-btn class="searchBtn" v-bind:style="{'background-color' : 'var(--bocoBlue)', 'color' : 'white'}" @click="handleSearchButton">Søk</v-btn>
         </v-card>
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>
+  <div id="wideScreen">
+    <v-text-field
+        v-model="searchBar"
+        id="searchBar"
+        density="comfortable"
+        color="var(--bocoBlue)"
+        label="Søk..."
+        variant="outlined"
+    ></v-text-field>
+
+    <div id="filteringButtons">
+      <v-select class="filterButton"
+                label="Filtrer"
+                variant="contained"
+                prepend-inner-icon="mdi-filter-outline"
+                :items="webCategories"
+                v-model="chosenCategory"
+      ></v-select>
+      <v-select class="filterButton"
+                label="Sorter"
+                variant="contained"
+                prepend-inner-icon="mdi-sort"
+                v-model="chosenSortBy"
+                :items="webSortBy"
+      ></v-select>
+    </div>
+    <v-btn class="searchBtn" v-bind:style="{'background-color' : 'var(--bocoBlue)', 'color' : 'white'}" @click="handleSearchButton">Søk</v-btn>
+  </div>
 </template>
 
 <script>
@@ -85,16 +113,18 @@ import ListingsService from "@/service/ListingsService";
 
 export default {
   name: "sortAndSearch",
+  emits: ["search"],
   data() {
     return {
       sortByDialog: false,
       filterDialog: false,
       searchBar: "",
       overlay: false,
-      // TODO: Legg til disse listene automatisk?
       sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}, {option: 'Lagt til nyeste', active: false}, {option: 'Lagt til eldste', active: false}, {option: 'Brukere', active: false}],
-      chosenSortBy: 'price',
-      ascending: false,
+      chosenSortBy: 'Mest relevant',
+      ascending: true,
+      webCategories: [],
+      webSortBy: ['Mest relevant', 'Pris lav-høy', 'Pris høy-lav'],
       categories: [],
       chosenCategory: [],
     };
@@ -102,10 +132,22 @@ export default {
   methods: {
     handleSearchButton(){
       let category = '';
-      if(this.chosenCategory.length > 0){
+      let sortBy = 'title';
+      if(this.chosenCategory.isArray && this.chosenCategory.length > 0){
         category = this.chosenCategory[0].category
+      } else if(this.chosenCategory.length > 0) {
+        category = this.chosenCategory
       }
-      this.$emit('search', this.searchBar, category, this.chosenSortBy, this.ascending)
+      if(this.chosenSortBy === "Mest relevant"){
+        sortBy = "title"
+      } else if(this.chosenSortBy === 'Pris lav-høy') {
+        sortBy = 'price'
+        this.ascending = true;
+      } else if (this.chosenSortBy === 'Pris høy-lav') {
+        sortBy = 'price'
+        this.ascending = false;
+      }
+      this.$emit('search', this.searchBar, category, sortBy, this.ascending)
     },
 
     selectSortByOption(selectedOption) {
@@ -126,7 +168,6 @@ export default {
         this.ascending = true;
       } else if (selectedOption === "Brukere"){
         this.chosenSortBy = "user_id"
-        this.ascending = true;
       }
       setTimeout(() => this.sortByDialog = false, 300);
     },
@@ -145,6 +186,7 @@ export default {
   async beforeMount() {
     const categories = (await ListingsService.getCategories()).data
     categories.forEach(cat => {
+      this.webCategories.push(cat.category)
       this.categories.push({category: cat.category, active: false})
     })
   }
@@ -152,6 +194,15 @@ export default {
 </script>
 
 <style scoped>
+#wideScreen {
+  background-color: white;
+  padding: 50px;
+  width: 80%;
+  margin: 20px auto;
+}
+#mobile {
+  display: none;
+}
 #sort-and-search-container {
   margin: auto;
   padding: 20px;
@@ -165,7 +216,7 @@ export default {
 }
 .filterButton {
   width: 200px;
-  margin: 10px;
+  margin: 20px;
 }
 .sortOption{
   padding: 15px;
@@ -176,10 +227,19 @@ export default {
   cursor: pointer;
   overflow-x: hidden;
 }
+>>> .v-input__details{
+  display: none;
+}
 @media only screen and (max-width: 600px) {
+  #wideScreen {
+    display: none;
+  }
+  #mobile {
+    display: block;
+  }
   .filterButton{
     width: 100px;
-    margin: 0 20px;
+    margin: 10px 20px;
   }
   #sort-and-search-container {
     margin: 10px;
