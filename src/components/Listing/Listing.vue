@@ -50,6 +50,7 @@
                     v-model="files"
                     label="Last opp bilder"
                     hide-details="auto"
+                    :rules="rulesImage"
                     accept="image/x-png, image/jpeg"
                     multiple
                     chips
@@ -292,7 +293,10 @@ export default {
       rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
-
+      ],
+      rulesImage: [
+        /* REGEL: Bilde kan ikke være større enn gitt størrelse */
+        files => !files || !files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
       ],
       rulesNumber: [
         value => !isNaN(value) || 'Må være tall.',
@@ -307,6 +311,7 @@ export default {
       render: true,
     }
   },
+
   watch: {
     files() {
       this.addFiles()
@@ -320,6 +325,7 @@ export default {
         this.render = true;
       });
     },
+
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
@@ -341,6 +347,7 @@ export default {
         }
       }
     },
+
     urlToFile(base64, data, filename){
       let url = data +","+base64;
       return (fetch(url)
@@ -348,12 +355,14 @@ export default {
           .then(function(buf){return new File([buf], filename,{type: "image/jpeg"});})
       );
     },
+
     async dataUrlToFile(base64, data, fileName) {
       const dataUrl = data +","+base64;
       const response = await fetch(dataUrl);
       const blob = await response.blob();
       return new File([blob], fileName, { type: 'image/png' });
     },
+
     async createAd() {
       console.log("Listing was created.")
       for (let file of this.files) {
@@ -362,9 +371,7 @@ export default {
 
       let tempStat = '';
       if(this.date !== undefined && this.date !== null) {
-        const dateFrom = new Date(this.date[0].getFullYear() + "/" + (this.date[0].getMonth() + 1) + "/" + this.date[0].getDate());
-        const dateTo = new Date(this.date[1].getFullYear() + "/" + (this.date[1].getMonth() + 1) + "/" + this.date[1].getDate());
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, dateFrom, dateTo, this.$store.state.myUserId, 'elektronikk', this.image).then(response => {
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.image).then(response => {
           tempStat = response.status;
         }).catch((error) => {
           if (error.response) {
@@ -381,8 +388,8 @@ export default {
         this.dialog = true;
         this.createdStatus = true;
         this.image = [];
-      for (let x = 0; x < this.files.length; x++) {
-        this.image.push( await this.getBase64(this.files[0]));
+      for (let file of this.files) {
+        this.image.push( await this.getBase64(file));
       }
       console.log("Listing was updated.")
         await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
@@ -398,10 +405,12 @@ export default {
     async addFiles() {
       this.images = []
       console.log(this.files)
-      for (let file of this.files){
+      for (let file of this.files) {
         this.images.push(await this.getBase64(file))
       }
     },
+
+
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -418,6 +427,7 @@ export default {
         reader.onerror = error => reject(error);
       });
     },
+
     async deleteAd(){
       await ListingsService.delete(this.$store.state.myUserId, this.itemId)
       this.deleteDialog = false;
@@ -439,6 +449,7 @@ export default {
     },
 
   },
+
    beforeMount(){
     this.getInfo();
     if(this.itemId > 0){

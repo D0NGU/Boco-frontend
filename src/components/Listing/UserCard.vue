@@ -1,9 +1,9 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
-  <v-card class="rounded-xl itemCard">
+  <v-card class="rounded-l itemCard">
     <div class="itemContainer">
-      <img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture" id="userImage"/>
+      <img src="../../assets/images/missing_profile_img.png" alt="profile picture" id="userImage"/>
 
       <v-divider vertical />
       <div class="itemDetail">
