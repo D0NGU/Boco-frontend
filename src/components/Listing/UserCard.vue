@@ -1,7 +1,7 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
-  <v-card class="rounded-xl itemCard">
+  <v-card class="rounded-l itemCard">
     <div class="itemContainer">
       <img src="../../assets/images/missing_profile_img.png" alt="profile picture" id="userImage"/>
 
