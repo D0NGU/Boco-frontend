@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 //import Landing from '../views/Landing.vue'
 import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
-import NotFound from '../views/notFound.vue'
+import NotFound from '../views/NotFoundPage.vue'
 import Login from '../views/Login'
 import RegisterForm from "@/components/RegisterForm";
 import DeleteUser from "@/components/UserProfile/DeleteUser";

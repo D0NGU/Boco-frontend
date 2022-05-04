@@ -1,6 +1,7 @@
 <template>
     <v-row id="footer" justify="center">
       <v-col cols="12">
+        <!-- BoCo Logo SVG at the top of the footer -->
         <svg id="logo" version="1.0" xmlns="http://www.w3.org/2000/svg" width="50.000000pt" height="50.000000pt" viewBox="0 0 500.000000 500.000000" preserveAspectRatio="xMidYMid meet" @click="scrollToTop">
           <g transform="translate(0.000000,500.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
             <path d="M2705 3697 c-115 -30 -189 -91 -237 -194 -77 -163 -54 -396 50 -514 89 -101 287 -137 452 -82 l55 18 3 88 c1 48 -1 87 -5 87 -4 0 -37 -9 -71 -20 -35 -11 -92 -20 -126 -20 -80 0 -121 25 -156 95 -21 42 -25 64 -25 141 0 77 4 98 26 140 48 93 132 118 256 74 32 -11 60 -20 64 -20 7 0 72 161 67 166 -2 1 -32 12 -67 24 -81 27 -216 35 -286 17z" fill="#004aab"/>
@@ -11,13 +12,12 @@
           </g>
         </svg>
         <v-divider/>
+        <!-- Kontaktinformasjon nederst på siden -->
         <div id="info">
-          <h4 onclick="location.href='/contact'">Kontakt oss</h4>
-          <h4 onclick="location.href='/home'">FAQ</h4>
-          <h4 onclick="location.href='/home'">
-            <v-icon>mdi-forum</v-icon> Chat
-          </h4>
-          <p id="copyrightMessage">&copy; 2022 BoCo</p>
+          <h4 onclick="location.href='/contact'"> Kontakt oss </h4>
+          <h4 onclick="location.href='/home'"> FAQ </h4>
+          <h4 onclick="location.href='/home'"><v-icon>mdi-forum</v-icon> Chat </h4>
+          <p id="copyrightMessage"> &copy; 2022 BoCo </p>
         </div>
       </v-col>
     </v-row>
@@ -28,10 +28,7 @@
 <script>
 export default {
   name: "Footer",
-  data () {
-    return {
-    }
-  },
+
   methods: {
     scrollToTop() {
       window.scroll({
@@ -52,7 +49,6 @@ export default {
   position: relative;
   margin: 30px 0 0 0;
   width: 100%;
-
 }
 .v-col {
   padding: 0;
