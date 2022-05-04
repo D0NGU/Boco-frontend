@@ -12,8 +12,8 @@ export default {
             }});
     },
 
-    handleClickSignUp(firstname, lastname, email, password) {
-        const registerNewUserRequest = {fname: firstname, lname: lastname, email: email, password: password};
+    handleClickSignUp(firstname, lastname, email, address, password) {
+        const registerNewUserRequest = {fname: firstname, lname: lastname, email: email, address: address, password: password};
         return axios.post(baseURL + `user/save`, registerNewUserRequest,
             { headers: {
                 'Content-Type': 'application/json',

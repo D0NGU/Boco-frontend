@@ -30,6 +30,18 @@
       </v-text-field>
 
       <v-text-field
+          id="address"
+          v-model="address"
+          hide-details
+          hide-selected
+          label="Adresse"
+      >
+          <!--<v-list-item-content>
+            <v-list-item-title v-text="item.name"></v-list-item-title>
+          </v-list-item-content>-->
+      </v-text-field>
+
+      <v-text-field
           id="password"
           :rules="rulesApplyToAll"
           v-model="password"
@@ -96,7 +108,9 @@ export default {
       firstname: '',
       lastname: '',
       email: '',
+      address: '',
       password: '',
+      //items: [],
       emailRules: [
         v => !!v || 'E-post er påkrevd',
         v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
@@ -108,8 +122,28 @@ export default {
       regisState: '',
       dialog: false,
       valid: true,
+      /**model: null,
+      search: null,
+      tab: null,*/
     }
   },
+  /**watch: {
+    model (val) {
+      if(val != null) this.tab = 0
+      else this.tab = null
+    },
+    search(val) {
+      if(this.items.length > 0) return
+
+      fetch('https://ws.geonorge.no/adresser/v1/')
+          .then(response => response.clone().json())
+          .then(response => {
+            this.items = response
+          }).catch(error => {
+            console.log(error)
+      })
+    }
+  },*/
 
   methods: {
     async submit() {
@@ -117,7 +151,7 @@ export default {
       this.dialog = true
       if (this.$refs.form.validate()) {
         console.log("Form is validated")
-        await LoginService.handleClickSignUp(this.firstname, this.lastname, this.email, this.password).then(response => {
+        await LoginService.handleClickSignUp(this.firstname, this.lastname, this.email, this.address, this.password).then(response => {
           tempStat = response.status;
         }).catch((error) => {
           if (error.response) {

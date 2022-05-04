@@ -16,6 +16,11 @@ export default {
         return getApiClient.post('user/edit', userDetails )
     },
 
+    updateUser (id, email, address, oldPassword) {
+        const userDetails = {id: id, email: email, address: address, oldPassword: oldPassword}
+        return getApiClient.post('user/update', userDetails )
+    },
+
     getUser(userId) {
         return getApiClient.get('user/get/', {params: {userId}})
     },

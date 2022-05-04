@@ -4,7 +4,8 @@
   <v-card id="container">
     <div id="textFieldWrapper">
       <v-text-field id="name" v-model="name" readonly label="Navn"></v-text-field>
-      <v-text-field id="email" v-model="email" readonly label="E-postadresse"></v-text-field>
+      <v-text-field id="email" v-model="email" label="E-postadresse"></v-text-field>
+      <v-text-field id="address" v-model="address" label="Adresse"></v-text-field>
       <v-file-input
           v-model="picture"
           label="Last opp bilde"
@@ -56,6 +57,12 @@
         v-model="confirmationSnackBar"
         top
     >Passordet har blitt endret! </v-snackbar>
+    <v-snackbar
+      color="success"
+      :timeout="3000"
+      v-model="updateConfSnackbar"
+      top
+    >Brukeren har blitt oppdatert!</v-snackbar>
   </v-card>
 
 </template>
@@ -71,11 +78,13 @@ export default {
     return {
       name: '',
       email: '',
+      address: '',
       oldPassword: "",
       newPassword: "",
       newPasswordRepeat: "",
       hideHistory: false,
       confirmationSnackBar: false,
+      updateConfSnackbar: false,
       dialog: false,
       picture: []
     }
@@ -91,6 +100,10 @@ export default {
         console.log(img);
         await ImageService.setProfilePic(img, this.$store.state.myUserId);
         this.confirmationSnackBar = true;
+      }
+      else {
+        await UserAccountService.updateUser(this.$store.getters.myUserId, this.email, this.address, this.oldPassword);
+        this.updateConfSnackbar = true;
       }
     },
     getBase64(file) {
@@ -110,7 +123,7 @@ export default {
       cookies.set('token', "", { path: '/' });
       cookies.set('userId', "", {path: '/'})
       cookies.set('email', "", {path: '/'})
-      setTimeout( () => this.$router.push({ path: '/login'}), 1500);
+      setTimeout( () => this.$router.push({ path: '/login'}), 200);
     },
   },
   async beforeMount() {
