@@ -1,7 +1,7 @@
 <template>
   <sort-and-search @search="updateList"/>
     <!--<h5><span v-text="visibleListings"></span> of <span>{{ activeProducts.length }}</span> listings shown</h5>-->
-      <div v-for="(product, index) in activeProducts" :key="index">
+      <div v-if="!reset" v-for="(product, index) in activeProducts" :key="index">
         <v-sheet min-height="115" class="fill-height" color="transparent">
           <v-lazy
               v-model="product.isActive" :options="{
@@ -12,7 +12,8 @@
                 :itemName="product.title"
                 :itemOwner="product.userId"
                 :itemPrice="product.price"
-                :itemId="product.productId"/>
+                :itemId="product.productId"
+            />
           </v-lazy>
         </v-sheet>
       </div>
@@ -46,7 +47,9 @@ export default {
   data () {
     return {
       pageNumber: 1,
-      activeProducts: []
+      activeProducts: [],
+      renderKey: 0,
+      reset: false
     }
   },
   /**computed: {
@@ -64,7 +67,10 @@ export default {
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
       console.log(searchBar, chosenCategories, chosenSortBy, ascending)
+      this.reset = true;
       this.activeProducts = (await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)).data
+      this.reset = false;
+      console.log(this.renderKey)
     }
   },
   created(){
