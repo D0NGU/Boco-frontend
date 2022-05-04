@@ -19,7 +19,8 @@
       <!-- Produktinfo -->
       <p class="text-h4">{{productInfo.title}}</p>
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
-      <p>{{ productInfo.description }}</p>
+      <br>
+      <p style="white-space: pre-wrap;">{{ productInfo.description }}</p>
       <br><br>
       <!-- Tags -->
       <v-chip color="indigo" style="  margin-left: 10px;"><p>{{ productInfo.category }}</p></v-chip>
