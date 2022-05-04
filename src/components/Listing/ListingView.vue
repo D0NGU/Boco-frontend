@@ -2,12 +2,11 @@
   <div v-if="isLoading">
     <div id="app">
       <div id="loadingPage">
-        <h1>Loading ...</h1>
         <img src="/img/loading_boxonly_final.gif" alt="Box swiping" id="loadingBar">
       </div>
     </div>
   </div>
-
+<div>
   <sort-and-search @search="updateList"/>
     <!--<h5><span v-text="visibleListings"></span> of <span>{{ activeProducts.length }}</span> listings shown</h5>-->
       <div v-if="!reset" v-for="(product, index) in activeProducts" :key="index" id="mobile">
@@ -46,6 +45,7 @@
       :itemId="product.productId"
     />
   </div>-->
+</div>
 </template>
 
 <script>

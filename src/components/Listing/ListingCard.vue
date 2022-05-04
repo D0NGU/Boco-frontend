@@ -223,6 +223,7 @@ export default {
 .itemImage {
   height: 250px;
   object-fit: cover;
+  margin: 10px;
 }
 @media only screen and (max-width: 600px) {
   #wideScreen {
@@ -239,9 +240,7 @@ export default {
   }
   .itemCard {
     max-width: 450px;
-    margin: auto;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin: 15px auto;
     background-color: white;
   }
   .itemContainer {

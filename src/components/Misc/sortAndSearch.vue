@@ -124,7 +124,7 @@ export default {
       chosenSortBy: 'Mest relevant',
       ascending: true,
       webCategories: [],
-      webSortBy: ['Mest relevant', 'Pris lav-høy', 'Pris høy-lav'],
+      webSortBy: ['Mest relevant', 'Pris lav-høy', 'Pris høy-lav', 'Lagt til nyeste', 'Lagt til eldste', 'Brukere'],
       categories: [],
       chosenCategory: [],
     };
