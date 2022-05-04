@@ -1,3 +1,5 @@
+<!-- Footer som alltid skal vises uavhengig av view -->
+
 <template>
     <v-row id="footer" justify="center">
       <v-col cols="12">

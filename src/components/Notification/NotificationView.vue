@@ -1,3 +1,5 @@
+<!-- Side for notifications -->
+
 <template>
   <h1 class="center">Varsler</h1>
   <div v-if="alerts.length < 1" class="center">
