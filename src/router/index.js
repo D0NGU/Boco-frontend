@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-//import Landing from '../views/Landing.vue'
 import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
 import NotFound from '../views/NotFoundPage.vue'
