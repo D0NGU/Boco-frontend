@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Carousel for å scrolle gjennom bilder -->
-    <v-carousel 
+    <v-carousel
       :continuous="true"
       :show-arrows="false"
       height="400px">
@@ -45,8 +45,7 @@
       <v-alert type="success" v-if="requestSent" id="requestSent">Forespørselen ble sendt!</v-alert>
       <!-- Legg til en leieforespørsel -->
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
-      <!-- Datepicker -->
-      <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :min-date="productInfo.availableFrom" :max-date="productInfo.availableTo" :start-date="startDate"></Datepicker>
+      <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :start-date="startDate" :allowedDates="availabilityWindow" ></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
       <!-- GMaps -->
       <v-btn id="mapBtn" @click="mapClick">Kart</v-btn>
@@ -93,7 +92,8 @@ export default {
       showMap: false,
       startDate: new Date(),
       priceRange: '',
-      images: []
+      images: [],
+      availabilityWindow: [],
     }
   },
 
@@ -104,23 +104,10 @@ export default {
       router.push({name: 'Lessor', params: { userId: this.userId }})
     },
 
-    async setPriceRange() {
-      const product = (await ListingsService.getListing(this.itemId)).data
-      this.productInfo = product.product;
-      if(this.productInfo.price >= 0 && this.productInfo.price < 200){
-        this.priceRange = '$'
-      } else if (this.productInfo.price >= 200 && this.productInfo.price < 500){
-        this.priceRange = '$$'
-      } else {
-        this.priceRange = '$$$'
-      }
-    },
-
     async getListingInfo(){
       const product = (await ListingsService.getListing(this.itemId)).data
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
-      console.log(product.owner.id);
       this.userId = product.owner.id;
       for (let image of product.images) {
         this.images.push(image.imgData + "," + image.img64);
@@ -128,8 +115,24 @@ export default {
       if(new Date(this.productInfo.availableFrom) > new Date()){
         this.startDate = this.productInfo.availableFrom
       }
+      for(let i = 0; i<product.availabilityWindows.length; i++){
+        const start = new Date(product.availabilityWindows[i].from);
+        const end = new Date(product.availabilityWindows[i].to);
+        let loop = new Date(start);
+        while (loop <= end) {
+          this.availabilityWindow.push(new Date(loop))
+          let newDate = loop.setDate(loop.getDate() + 1);
+          loop = new Date(newDate);
+        }
+      }
       this.ownerVerified = (await UserAccountService.getVerifiedUser(this.ownerInfo.id)).data
-
+      if(this.productInfo.price >= 0 && this.productInfo.price < 200){
+        this.priceRange = '$'
+      } else if (this.productInfo.price >= 200 && this.productInfo.price < 500){
+        this.priceRange = '$$'
+      } else {
+        this.priceRange = '$$$'
+      }
     },
 
     async sendRequest() {
@@ -150,7 +153,6 @@ export default {
 
   beforeMount() {
     this.getListingInfo()
-    this.setPriceRange()
   }
 }
 </script>
