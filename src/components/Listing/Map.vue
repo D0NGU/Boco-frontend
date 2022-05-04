@@ -1,3 +1,5 @@
+<!-- component som fremstiller kart funksjon -->
+
 <template>
   <div @click="closeMap()" class="backdrop" id="map">
     <iframe class="mapFrame"

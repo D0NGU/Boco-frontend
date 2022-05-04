@@ -1,3 +1,5 @@
+<!-- fremstiller en forespørsel om leie -->
+
 <template>
   <h1>Forespørsler om utleie</h1>
   <div v-for="(rental, i) in rentalList" :key="i">
