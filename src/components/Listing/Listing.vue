@@ -410,7 +410,6 @@ export default {
           imgData: reader.result.split(",")[0],
           productId: 0,
         },
-        console.log(reader.result),
       );
         reader.onerror = error => reject(error);
       });

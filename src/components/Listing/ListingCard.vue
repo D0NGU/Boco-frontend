@@ -45,7 +45,8 @@
         <div v-else>
         <p class="text-overline" id="itemOwner">
           <v-avatar size="x-small">
-            <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
+            <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
+            <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
           </v-avatar>
             {{itemOwnerName}}
           <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
@@ -82,6 +83,8 @@ export default {
       isOwner: false,
       thumbnail: '',
       ownerVerified: false,
+      profilePicSrc: ''
+
     }
   },
   methods: {
@@ -102,6 +105,9 @@ export default {
     this.itemOwnerName = userInfo.fname
     this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
     this.ownerVerified = (await UserAccountService.getVerifiedUser(this.itemOwner)).data
+    if (userInfo.profile64 !== "") {
+      this.profilePicSrc = "data:image/jpeg;base64," +userInfo.profile64;
+    }
   }
 }
 </script>
