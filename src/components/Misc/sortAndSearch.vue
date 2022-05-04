@@ -89,7 +89,7 @@ export default {
       searchBar: "",
       overlay: false,
       // TODO: Legg til disse listene automatisk?
-      sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
+      sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}, {option: 'Lagt til nyeste', active: false}, {option: 'Lagt til eldste', active: false}, {option: 'Brukere', active: false}],
       chosenSortBy: 'price',
       ascending: false,
       categories: [],
@@ -115,8 +115,14 @@ export default {
       } else if(selectedOption === "Pris høy-lav"){
         this.chosenSortBy = "price";
         this.ascending = false;
-      } else {
+      } else if (selectedOption === "Lagt til nyeste"){
         this.chosenSortBy = "product_id"
+        this.ascending = false;
+      } else if (selectedOption === "Lagt til eldste"){
+        this.chosenSortBy = "product_id"
+        this.ascending = true;
+      } else if (selectedOption === "Brukere"){
+        this.chosenSortBy = "user_id"
         this.ascending = true;
       }
       setTimeout(() => this.sortByDialog = false, 300);
