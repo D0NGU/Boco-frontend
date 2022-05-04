@@ -6,7 +6,7 @@
       :show-arrows="false"
       height="400px">
       <!-- Standardbilde hvis det ikke er lagt til noen bilder -->
-      <v-carousel-item v-if="images.length == 0" src="../../assets/images/missing_img.png"></v-carousel-item>
+      <v-carousel-item v-if="images.length == 0" src="../../assets/images/missing_img.png" cover=""></v-carousel-item>
       <!-- Legger til det første bildet - Nødvendig for å få frem bilde i starten -->
       <v-carousel-item
         v-if="images.length != 0"
@@ -19,27 +19,36 @@
         :src="images[i]"
       ></v-carousel-item>
     </v-carousel>
-      <div id="details">
+
+    <div id="details">
+      <!-- Produktinfo -->
       <p class="text-h4">{{productInfo.title}}</p>
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
       <p>{{ productInfo.description }}</p>
+      <br>
+      <!-- Tags -->
       <v-chip color="indigo"><p>{{ productInfo.category }}</p></v-chip>
       <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
+      <!-- Brukers -->
       <v-divider style="margin: 10px"/>
         <div>
           <p id="itemOwner" @click="redirect">
             <v-avatar>
-              <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
+              <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
             </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
         </div>
       <v-divider style="margin: 10px"/>
     </div>
+
     <div id="requestForm">
       <v-alert type="error" v-if="invalidDate" id="errorBox">Du må legge til en dato</v-alert>
       <v-alert type="success" v-if="requestSent" id="requestSent">Forespørselen ble sendt!</v-alert>
+      <!-- Legg til en leieforespørsel -->
       <p>Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
+      <!-- Datepicker -->
       <Datepicker range v-model="date" :enableTimePicker="false" showNowButton :min-date="productInfo.availableFrom" :max-date="productInfo.availableTo" :start-date="startDate"></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
+      <!-- GMaps -->
       <v-btn id="mapBtn" @click="mapClick">Kart</v-btn>
       <div v-if="this.showMap">
         <Map :address1="productInfo.address" @closeMap="mapClick" />

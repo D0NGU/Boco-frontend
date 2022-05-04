@@ -43,7 +43,7 @@
         <div v-else>
         <p class="text-overline" id="itemOwner">
           <v-avatar size="x-small">
-          <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
+          <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
         </v-avatar> {{itemOwnerName}}
           <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
         </div>
