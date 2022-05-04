@@ -9,7 +9,7 @@
       <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
         <template v-slot:placeholder>
           <v-row
-              class="fill-height ma-0"
+              class="fill-height ma-0 itemImage"
               align="center"
               justify="center"
           >
@@ -233,6 +233,7 @@ export default {
     height: 100px;
     object-fit: cover;
     max-height: 100px;
+    max-width: 100px;
     margin-right: 10px;
     border-radius: 5%;
     z-index: 1;
