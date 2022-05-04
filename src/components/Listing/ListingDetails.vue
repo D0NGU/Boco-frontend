@@ -29,7 +29,8 @@
         <div>
           <p id="itemOwner" @click="redirect">
             <v-avatar>
-              <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
+              <v-img v-if="profilePicSrc" :src="profilePicSrc" alt="profile picture"></v-img>
+              <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
             </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
         </div>
       <v-divider style="margin: 10px"/>
@@ -89,7 +90,8 @@ export default {
       priceRange: '',
       images: [],
       availabilityWindow: [],
-      defaultimage: require('@/assets/images/product.png')
+      defaultimage: require('@/assets/images/product.png'),
+      profilePicSrc: '',
     }
   },
 
@@ -105,6 +107,10 @@ export default {
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
       this.userId = product.owner.id;
+      if (this.ownerInfo.profile64 !== "" && this.ownerInfo.profile64 !== null) {
+        this.profilePicSrc = "data:image/jpeg;base64,"+this.ownerInfo.profile64;
+      }
+
       for (let image of product.images) {
         this.images.push(image.imgData + "," + image.img64);
       }
