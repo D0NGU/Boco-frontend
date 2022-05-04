@@ -6,7 +6,7 @@
       :show-arrows="false"
       height="400px">
       <!-- Standardbilde hvis det ikke er lagt til noen bilder -->
-      <v-carousel-item v-if="images.length == 0" src="../../assets/images/missing_img.png" cover=""></v-carousel-item>
+      <v-carousel-item v-if="images.length == 0" :src="defaultimage" cover=""></v-carousel-item>
       <!-- Legger til alle andre bilder i listen -->
       <v-carousel-item
          v-for="(item,i) in this.images"
@@ -30,7 +30,8 @@
         <div>
           <p id="itemOwner" @click="redirect">
             <v-avatar>
-              <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
+              <v-img v-if="profilePicSrc" :src="profilePicSrc" alt="profile picture"></v-img>
+              <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
             </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
         </div>
      <!--  <v-divider style="margin: 10px"/> -->
@@ -90,6 +91,8 @@ export default {
       priceRange: '',
       images: [],
       availabilityWindow: [],
+      defaultimage: require('@/assets/images/product.png'),
+      profilePicSrc: '',
     }
   },
 
@@ -105,6 +108,10 @@ export default {
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
       this.userId = product.owner.id;
+      if (this.ownerInfo.profile64 !== "" && this.ownerInfo.profile64 !== null) {
+        this.profilePicSrc = "data:image/jpeg;base64,"+this.ownerInfo.profile64;
+      }
+
       for (let image of product.images) {
         this.images.push(image.imgData + "," + image.img64);
       }
