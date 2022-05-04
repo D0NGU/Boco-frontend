@@ -74,7 +74,8 @@
 
 
       <div id="wideScreen">
-          <v-card class="mx-auto my-12 rounded-xl"
+        <!-- Annonser for ws -->
+          <v-card class="mx-auto my-12 rounded-l"
                   max-width="280"
                   @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
             <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
