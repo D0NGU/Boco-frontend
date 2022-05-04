@@ -363,7 +363,7 @@ export default {
 
       let tempStat = '';
       if(this.date !== undefined && this.date !== null) {
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory).then(response => {
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.image).then(response => {
           tempStat = response.status;
         }).catch((error) => {
           if (error.response) {
@@ -380,8 +380,8 @@ export default {
         this.dialog = true;
         this.createdStatus = true;
         this.image = [];
-      for (let x = 0; x < this.files.length; x++) {
-        this.image.push( await this.getBase64(this.files[0]));
+      for (let file of this.files) {
+        this.image.push( await this.getBase64(file));
       }
       console.log("Listing was updated.")
         await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
