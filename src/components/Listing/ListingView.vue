@@ -10,7 +10,7 @@
 
   <sort-and-search @search="updateList"/>
     <!--<h5><span v-text="visibleListings"></span> of <span>{{ activeProducts.length }}</span> listings shown</h5>-->
-      <div v-for="(product, index) in activeProducts" :key="index">
+      <div v-for="(product, index) in activeProducts" :key="index" id="mobile">
         <v-sheet min-height="150" class="fill-height" color="transparent">
           <v-lazy
               v-model="product.isActive" :options="{
@@ -25,6 +25,18 @@
           </v-lazy>
         </v-sheet>
       </div>
+
+  <v-container id="wideScreen">
+    <v-row>
+      <v-col v-for="(product, index) in activeProducts" :key="index">
+        <ListingCard
+            :itemName="product.title"
+            :itemOwner="product.userId"
+            :itemPrice="product.price"
+            :itemId="product.productId"/>
+      </v-col>
+    </v-row>
+  </v-container>
   <!--<div v-for="(product, index) in activeProducts" :key="index" class="item-list">
     <ListingCard
       :itemName="product.title"
@@ -34,8 +46,6 @@
     />
   </div>-->
 </template>
-
-
 
 <script>
 import ProductService from "@/service/ProductService";
@@ -86,3 +96,16 @@ export default {
   }*/
 }
 </script>
+<style scoped>
+#mobile {
+  display:none;
+}
+@media only screen and (max-width: 600px) {
+  #wideScreen {
+    display: none;
+  }
+  #mobile {
+    display: block;
+  }
+}
+</style>
