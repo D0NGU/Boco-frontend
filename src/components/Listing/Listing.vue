@@ -55,13 +55,19 @@
                     chips
                     prepend-icon="mdi-camera"
                 />
-                <div v-if="files" v-for="file in files">
-                  <ImageCards
-                      :file="file"
-                      :id="index"
-                      @deleteClick="this.deleteImage(file)"
-                  />
+
+                <div id="pictures">
+                <v-row no-gutters>
+                  <v-col v-if="files" v-for="file in files" cols="auto">
+                    <ImageCards
+                        :file="file"
+                        :id="index"
+                        @deleteClick="this.deleteImage(file)"
+                    />
+                  </v-col>
+                </v-row>
                 </div>
+
               </div>
               <v-select
                   v-model="adCategory"
@@ -480,5 +486,9 @@ button {
 
 .tabHeader {
   margin-top: 0;
+}
+
+#pictures {
+  padding-bottom: 10px;
 }
 </style>
