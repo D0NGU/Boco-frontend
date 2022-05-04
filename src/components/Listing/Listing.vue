@@ -48,9 +48,9 @@
               <div>
                 <v-file-input
                     v-model="files"
-                    label="Last opp bildene"
+                    label="Last opp bilder"
                     hide-details="auto"
-                    accept="image/*"
+                    accept="image/x-png, image/jpeg"
                     multiple
                     chips
                     prepend-icon="mdi-camera"

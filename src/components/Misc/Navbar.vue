@@ -1,5 +1,4 @@
-<!-- Navigasjonsbar som alltid skal vises uavhengig av current view -->
-
+<!-- Navigasjonsbar som alltid skal vises uavhengig av current view (ikke på 404 side) -->
 <template>
     <v-row id="navBar">
       <v-col class="navItem">
@@ -55,6 +54,7 @@
 <script>
 import NotificationView from "@/components/Notification/NotificationView";
 import {getApiClient} from "@/service/ApiService";
+
 export default {
   components: {NotificationView},
   data () {
@@ -66,29 +66,46 @@ export default {
       notification: false
     }
   },
+
   methods: {
+    // Sjekker om det er et tall (uavhengig av datatype)
+    isInt(value) {
+      if (isNaN(value)) {
+        return false;
+      }
+      var x = parseFloat(value);
+      return (x | 0) === x;
+    },
+
+    // Sjekker etter nye alerts
     async loadData() {
-      await getApiClient.get('alerts/user/' + this.$store.getters.myUserId + '/unseen').then(response => {
-        if (response.data !== "") {
-          console.log("New alert")
-          this.notification = true;
-        } else {
-          this.notification = false;
-        }
-      })
+      let userId = this.$store.getters.myUserId;
+      if (this.isInt(userId)) {
+        await getApiClient.get('alerts/user/' + userId + '/unseen').then(response => {
+          if (response.data !== "") {
+            console.info("New alert received")
+            this.notification = true;
+          } else {
+            this.notification = false;
+          }
+        })
+      } else {console.error("Could not check for new alerts because userid is '" + userId + "'");}
     },
   },
-  mounted(){
+
+  mounted() {
+    // Sørger for å sjekke polle etter alerts innimellom
     this.loadData();
-      setInterval(function () {
+    setInterval(function () {
       this.loadData();
-    }.bind(this), 15000);
+    }.bind(this), 30000); // loadData() every 30sec
   },
 }
 </script>
 
-<style>
 
+
+<style>
 * {
   --bocoBlue: #004aab;
   --backgroundBlue: #edf1f5
@@ -102,17 +119,14 @@ export default {
   z-index: 1000;
   width: 100%;
 }
-
 #navBar a {
   color: white;
   text-decoration: none;
 }
-
 #navBar a.router-link-active {
   color: orange;
 
 }
-
 .navItem {
   width: 30%;
   flex-grow: 1;
