@@ -227,7 +227,7 @@ export default {
   cursor: pointer;
   overflow-x: hidden;
 }
->>> .v-input__details{
+:deep().v-input__details{
   display: none;
 }
 @media only screen and (max-width: 600px) {
