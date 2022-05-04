@@ -1,6 +1,6 @@
 <template>
+  <h1 id="loginTitle">Logg inn</h1>
   <v-form ref="loginform" id="LoginForm" @submit.prevent="logInButton" v-model="valid" lazy-validation>
-    <h1 id="loginTitle">Logg inn</h1>
 
     <div id="inputWrapper">
       <div>
@@ -53,6 +53,10 @@
       </v-btn>
     </div>
   </v-form>
+
+  <p id="forgotPassword" @click="this.$router.push('/password/reset/request')">
+    Glemt passord &#10138;
+  </p>
 </template>
 
 
@@ -145,24 +149,26 @@ export default {
   display: grid;
   justify-content: center;
   padding: 20px;
-  margin-top: 30px;
   margin-bottom: 60px;
+  background-color: white;
 }
 
 #inputWrapper {
   width: 350px;
+
 }
 
 label {
   padding-top: 20px;
 }
 
-v-btn {
+.v-btn {
   padding: 10px;
 }
 
 h1 {
   margin-bottom: 30px;
+  margin-top: 30px;
 }
 
 #loginButton {
@@ -179,6 +185,12 @@ h1 {
   background-color: white !important;
   color: var(--bocoBlue) !important;
   font-weight: bold;
+  margin-bottom: 15px;
+}
+
+#forgotPassword {
+  color: var(--bocoBlue);
+  cursor: pointer;
 }
 
 </style>

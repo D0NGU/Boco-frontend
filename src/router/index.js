@@ -12,6 +12,8 @@ import {getApiClient} from "@/service/ApiService";
 import Landing from "@/views/Landing";
 import Lessor from "@/views/Lessor";
 import FAQ from "@/components/FAQ";
+import RequestPasswordReset from "@/components/RequestPasswordReset";
+import ResetPassword from "@/components/ResetPassword";
 
 const routes = [
   {
@@ -72,6 +74,16 @@ const routes = [
     path: "/faq",
     name: "FAQ",
     component: FAQ
+  },
+  {
+    path: "/password/reset/request",
+    name: "RequestPasswordReset",
+    component: RequestPasswordReset
+  },
+  {
+    path: "/password/reset",
+    name: "ResetPassword",
+    component: ResetPassword
   },
   // Redirect any none-existing path to 404 page
   {
