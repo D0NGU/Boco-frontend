@@ -131,6 +131,7 @@ export default {
 }
 #itemImage {
   width: 100px;
+  height: 100px;
   object-fit: cover;
   max-height: 100px;
   margin-right: 10px;
