@@ -13,6 +13,9 @@
               color="var(--bocoBlue)"
               label="Søk..."
               variant="outlined"
+              v-on:keyup.enter="handleSearchButton()"
+              clearable
+              :clear-icon-cb="clear='()'"
               ></v-text-field>
           <v-dialog v-model="filterDialog" id="filterDialog">
             <template v-slot:activator="{ props }">
@@ -169,6 +172,9 @@ export default {
   width: 150px;
   margin: 0;
   text-align: center;
+  user-select: none;
+  cursor: pointer;
+  overflow-x: hidden;
 }
 @media only screen and (max-width: 600px) {
   .filterButton{

@@ -155,7 +155,7 @@ export default {
   object-fit: cover;
   max-height: 100px;
   margin-right: 10px;
-  border-radius: 15%;
+  border-radius: 5%;
   z-index: 1;
 }
 .itemDetail {
