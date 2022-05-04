@@ -57,90 +57,88 @@
                     prepend-icon="mdi-camera"
                 />
 
-                <div id="pictures">
-                <v-row no-gutters>
-                  <v-col v-if="files" v-for="file in files" cols="auto">
-                    <ImageCards
-                        :file="file"
-                        :id="index"
-                        @deleteClick="this.deleteImage(file)"
-                    />
-                  </v-col>
-                </v-row>
+                <div id="pictures" v-if="files.length!==0">
+                  <v-badge content="x" color="error" v-for="(image, i) in images" @click="deleteImage(i)">
+                    <div id="space">
+                      <v-img outlined width="130" v-bind:src="image.img" class="grey lighten-2 image">
+                      </v-img>
+                    </div>
+                  </v-badge>
+                 </div>
+
                 </div>
 
-              </div>
-              <v-select
-                  v-model="adCategory"
-                  :items="categories"
-                  label="Kategori"
-                  outlined
-                  prepend-icon="mdi-widgets"
-              ></v-select>
-              <v-text-field
-                  v-model="adPrice"
-                  type="text"
-                  label="Pris"
-                  :rules="rulesNumber"
-                  hide-details="auto"
-              />
-              <v-radio-group
-                  v-model="pricePer"
-                  column
-              >
-                <v-radio
-                    label="Pris per dag"
-                    color="indigo"
-                    value="perDay"
-                ></v-radio>
-                <v-radio
-                    label="Fastpris"
-                    color="indigo"
-                    value="set"
-                ></v-radio>
-              </v-radio-group>
-              <!--
-                    <v-container class="grey lighten-5">
-                      <v-row no-gutters>
-                        <v-col order="1">
-                          <v-card
-                            class="pa-2"
-                            outlined
-                            tile
-                          >
-                            <div>
-                              <label>Fra dato:</label>
-                            </div>
-                            <div>
-                              <input
-                                  id="fromDate"
-                                  v-model="fromDate"
-                                  type="date"
-                              >
-                            </div>
-                          </v-card>
-                        </v-col>
-                        <v-col order="2">
-                          <v-card
-                            class="pa-2"
-                            outlined
-                            tile
-                          >
-                            <div>
-                              <label>Til dato:</label>
-                            </div>
-                            <div>
-                              <input
-                                  id="toDate"
-                                  v-model="toDate"
-                                  type="date"
-                              >
-                            </div>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-              -->
+               <v-select
+                   v-model="adCategory"
+                   :items="categories"
+                   label="Kategori"
+                   outlined
+                   prepend-icon="mdi-widgets"
+               ></v-select>
+               <v-text-field
+                   v-model="adPrice"
+                   type="text"
+                   label="Pris"
+                   :rules="rulesNumber"
+                   hide-details="auto"
+               />
+               <v-radio-group
+                   v-model="pricePer"
+                   column
+               >
+                 <v-radio
+                     label="Pris per dag"
+                     color="indigo"
+                     value="perDay"
+                 ></v-radio>
+                 <v-radio
+                     label="Fastpris"
+                     color="indigo"
+                     value="set"
+                 ></v-radio>
+               </v-radio-group>
+               <!--
+                     <v-container class="grey lighten-5">
+                       <v-row no-gutters>
+                         <v-col order="1">
+                           <v-card
+                             class="pa-2"
+                             outlined
+                             tile
+                           >
+                             <div>
+                               <label>Fra dato:</label>
+                             </div>
+                             <div>
+                               <input
+                                   id="fromDate"
+                                   v-model="fromDate"
+                                   type="date"
+                               >
+                             </div>
+                           </v-card>
+                         </v-col>
+                         <v-col order="2">
+                           <v-card
+                             class="pa-2"
+                             outlined
+                             tile
+                           >
+                             <div>
+                               <label>Til dato:</label>
+                             </div>
+                             <div>
+                               <input
+                                   id="toDate"
+                                   v-model="toDate"
+                                   type="date"
+                               >
+                             </div>
+                           </v-card>
+                         </v-col>
+                       </v-row>
+                     </v-container>
+               -->
               <Datepicker id="datepicker" :disabled="updating" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
 
               <v-text-field
@@ -249,6 +247,9 @@
       </v-window-item>
     </v-window>
   </v-card-text>
+
+
+
 </template>
 
 <script>
@@ -286,7 +287,7 @@ export default {
       categories: [],
       dialog: false,
       files: [],
-      image: [],
+      images: [],
       shownImages: [],
       statusMessage: '',
       rules: [
@@ -311,6 +312,11 @@ export default {
     }
   },
 
+  watch: {
+    files() {
+      this.addFiles()
+    }
+  },
   methods: {
     forceRerender() {
       this.render = false;
@@ -339,7 +345,6 @@ export default {
           this.files.push(await (this.urlToFile(x.img64, x.imgData, x.imgName)));
           this.shownImages.push(x.imgData + "," + x.img64);
         }
-        console.log(this.files);
       }
     },
 
@@ -360,12 +365,9 @@ export default {
 
     async createAd() {
       console.log("Listing was created.")
-      console.log(this.files)
       for (let file of this.files) {
-        console.log(file);
         this.image.push( await this.getBase64(file));
       }
-      console.log(this.image)
 
       let tempStat = '';
       if(this.date !== undefined && this.date !== null) {
@@ -400,12 +402,14 @@ export default {
         this.statusMessage = "Endringen var vellykket!";
         this.dialog = true;
     },
-
-    addFiles(files) {
-      for (let file of files){
-        this.files.push(file)
+    async addFiles() {
+      this.images = []
+      console.log(this.files)
+      for (let file of this.files) {
+        this.images.push(await this.getBase64(file))
       }
     },
+
 
     getBase64(file) {
       return new Promise((resolve, reject) => {
@@ -416,6 +420,7 @@ export default {
           imgName: file.name,
           img64: reader.result.split(",")[1],
           imgData: reader.result.split(",")[0],
+          img: reader.result,
           productId: 0,
         },
       );
@@ -434,16 +439,15 @@ export default {
       this.dialog = false;
       router.back();
     },
-
-    deleteImage(file) {
-      this.files = this.files.filter(function (ele){
-        return ele != file;
-      })
+    deleteImage(index) {
+      this.files.splice(index, 1)
+      this.addFiles()
     },
 
     async getRentals() {
       this.rentalList = (await RentalService.getRentals(this.itemId)).data
-    }
+    },
+
   },
 
    beforeMount(){
@@ -452,7 +456,7 @@ export default {
       this.updating = true;
       this.getRentals();
     }
-  }
+  },
 }
 </script>
 
@@ -498,5 +502,24 @@ button {
 
 #pictures {
   padding-bottom: 10px;
+  margin: auto;
+  place-content: center;
+}
+.image {
+  margin: 2px;
+}
+#space {
+  margin-left: 4px;
+}
+#pictures {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  margin-bottom: 3px;
+  overflow-y: scroll;
+  height: 200px;
+  border: solid grey 2px;
 }
 </style>
