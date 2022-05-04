@@ -42,11 +42,8 @@ import { ref } from 'vue';
 import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
 import Map from "@/components/Map";
-<<<<<<< HEAD
 import UserAccountService from "@/service/UserAccountService";
-=======
 import router from "@/router";
->>>>>>> 2a5145f166f0d31c415d230a1e065c07df0c0cbb
 
 export default {
   name: "ListingDetails",
