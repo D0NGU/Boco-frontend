@@ -2,18 +2,34 @@
 
 <template>
   <div id="mobile">
-  <v-card class="rounded-xl itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
+    <!-- Selve annonseboksen -->
+  <v-card class="rounded-l itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
     <div class="itemContainer">
-      <img v-if="thumbnail" v-bind:src="thumbnail" class="itemImage"/>
-      <img v-else src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" class="itemImage"/>
+      <!-- Annonse thumbnail -->
+      <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
+        <template v-slot:placeholder>
+          <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+          >
+            <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
+      <img v-else :src="defaultimage" class="itemImage">
+
       <v-divider vertical />
       <div class="itemDetail">
+        <!-- Produktnavn -->
         <p class="text-subtitle-1">{{ itemName }}</p>
         <v-dialog
             v-model="dialog"
             fullscreen=""
-            v-if="(ifRented && !ifReviewed) || ifEditing"
-        >
+            v-if="(ifRented && !ifReviewed) || ifEditing">
           <template v-slot:activator="{ props }">
             <v-btn icon="" class="writeReviewBtn" size="x-small" v-bind="props"><v-icon size="small">mdi-message-draw</v-icon></v-btn>
           </template>
@@ -31,8 +47,9 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
         <p class="text-caption" v-else>{{itemPrice}} kr/dag</p>
+
+        <!-- Eier-Detaljer -->
         <div v-if="isOwner">
           <p  class="editIcon">
             <v-avatar size="x-small">
@@ -44,8 +61,10 @@
         <div v-else>
         <p class="text-overline itemOwner">
           <v-avatar size="x-small">
-          <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-        </v-avatar> {{itemOwnerName}}
+            <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
+            <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
+          </v-avatar>
+            {{itemOwnerName}}
           <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
         </div>
       </div>
@@ -58,8 +77,21 @@
           <v-card class="mx-auto my-12 rounded-xl"
                   max-width="374"
                   @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
-            <img v-if="thumbnail" v-bind:src="thumbnail" class="itemImage" />
-            <img v-else src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" class="itemImage" />
+            <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
+              <template v-slot:placeholder>
+                <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                >
+                  <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+            <img v-else :src="defaultimage" class="itemImage">
         <v-divider />
             <v-card-header>
               <v-card-header-text>
@@ -67,8 +99,9 @@
                 <v-card-subtitle>
                   <p class="text-overline itemOwner" style="flex-grow: 1; text-align: left">
                     <v-avatar size="x-small">
-                      <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-                    </v-avatar> {{itemOwnerName}}
+                      <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
+                      <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
+                    </v-avatar>
                     <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
                   <p class= "d-flex justify-end">{{itemPrice}} kr/dag</p>
                 </v-card-subtitle>
@@ -141,6 +174,9 @@ export default {
       isOwner: false,
       thumbnail: '',
       ownerVerified: false,
+      profilePicSrc: '',
+      imgExist: true,
+      defaultimage: require('@/assets/images/product.png')
     }
   },
   methods: {
@@ -154,13 +190,22 @@ export default {
   },
   async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
+    this.itemOwnerName = userInfo.fname
+    this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
+    this.ownerVerified = (await UserAccountService.getVerifiedUser(this.itemOwner)).data
+    if (userInfo.profile64 !== "" && userInfo.profile64 !== null) {
+      this.profilePicSrc = "data:image/jpeg;base64," +userInfo.profile64;
+    }
+
+  },
+  async mounted() {
     const raw = (await ImageService.getImagesByProductId(this.itemId)).data[0]
     if (raw) {
       this.thumbnail = raw.imgData + "," + raw.img64;
     }
-    this.itemOwnerName = userInfo.fname + " " + userInfo.lname
-    this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
-    this.ownerVerified = (await UserAccountService.getVerifiedUser(this.itemOwner)).data
+    else {
+      this.imgExist = false
+    }
   }
 }
 </script>
@@ -184,17 +229,24 @@ export default {
     display: none;
   }
   .itemImage {
-    width: 40%;
-    object-fit: contain;
-    max-height: 100%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    max-height: 100px;
+    margin-right: 10px;
+    border-radius: 5%;
     z-index: 1;
   }
   .itemCard {
-    margin: 20px;
+    max-width: 450px;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
     background-color: white;
   }
   .itemContainer {
-    height: 120px;
+    align-content: center;
+    height: 115px;
     padding: 10px;
     display: flex;
     flex-direction: row;

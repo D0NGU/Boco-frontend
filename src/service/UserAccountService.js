@@ -49,7 +49,6 @@ export default {
         };
         return axios.post(url, description, config)
     },
-
     sendContactForm(id, fname, lname, email, comment, userId){
         const contactForm = { contactFormId: id, fname: fname, lname: lname, email: email, comment: comment, userId: userId};
         return getApiClient.post("contact", contactForm);

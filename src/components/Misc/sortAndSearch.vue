@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels id="mobile">
+  <v-expansion-panels>
     <v-expansion-panel>
       <v-expansion-panel-title>
         Filtrering
@@ -13,6 +13,9 @@
               color="var(--bocoBlue)"
               label="Søk..."
               variant="outlined"
+              v-on:keyup.enter="handleSearchButton()"
+              clearable
+              :clear-icon-cb="clear='()'"
               ></v-text-field>
           <v-dialog v-model="filterDialog" id="filterDialog">
             <template v-slot:activator="{ props }">
@@ -117,7 +120,7 @@ export default {
       filterDialog: false,
       searchBar: "",
       overlay: false,
-      sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}],
+      sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}, {option: 'Lagt til nyeste', active: false}, {option: 'Lagt til eldste', active: false}, {option: 'Brukere', active: false}],
       chosenSortBy: 'Mest relevant',
       ascending: true,
       webCategories: [],
@@ -157,9 +160,14 @@ export default {
       } else if(selectedOption === "Pris høy-lav"){
         this.chosenSortBy = "price";
         this.ascending = false;
-      } else {
+      } else if (selectedOption === "Lagt til nyeste"){
+        this.chosenSortBy = "product_id"
+        this.ascending = false;
+      } else if (selectedOption === "Lagt til eldste"){
         this.chosenSortBy = "product_id"
         this.ascending = true;
+      } else if (selectedOption === "Brukere"){
+        this.chosenSortBy = "user_id"
       }
       setTimeout(() => this.sortByDialog = false, 300);
     },
@@ -215,6 +223,9 @@ export default {
   width: 150px;
   margin: 0;
   text-align: center;
+  user-select: none;
+  cursor: pointer;
+  overflow-x: hidden;
 }
 >>> .v-input__details{
   display: none;

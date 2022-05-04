@@ -1,5 +1,5 @@
 <template>
-  <v-card class="rounded-xl rentalCard">
+  <v-card class="rounded-l rentalCard">
     <v-avatar x-large id="profilePicture"><v-img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg"></v-img></v-avatar>
     <div id="rentalDetails">
       <p>{{ fname }} {{ lname }}</p>

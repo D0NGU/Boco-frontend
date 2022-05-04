@@ -16,7 +16,7 @@
     <v-carousel id="carousel" height="300px" hide-delimiter-background="" :show-arrows="false">
       <v-carousel-item class="carouselItem">
         <v-avatar size="x-large">
-          <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"></v-img>
+          <v-img src="../assets/images/missing_profile_img.png"></v-img>
         </v-avatar>
         <div>
           <p class="text-button">{{name}}
