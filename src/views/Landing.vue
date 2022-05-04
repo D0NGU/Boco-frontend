@@ -1,3 +1,5 @@
+<!-- Hovedside uten å være logget inn -->
+
 <template v-cloak>
   <div id="cover">
     <div id="imageCover"></div>

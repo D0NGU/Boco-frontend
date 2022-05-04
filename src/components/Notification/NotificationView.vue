@@ -1,3 +1,5 @@
+<!-- Side for notifications -->
+
 <template>
   <div v-for="alert in alerts">
     <Notification
