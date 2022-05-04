@@ -21,8 +21,7 @@
         <v-carousel-item class="carouselItem">
           <div>
             <v-avatar size="x-large">
-              <v-img @click="setProfilePic" src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png">
-                <v-btn icon><v-icon>mdi-camera</v-icon></v-btn>
+              <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png">
               </v-img>
             </v-avatar>
 
