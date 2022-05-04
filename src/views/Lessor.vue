@@ -30,7 +30,6 @@
 
       </v-carousel-item>
       <v-carousel-item class="carouselItem">
-        <!-- TODO: Hent rating fra backend -->
         <p>Rangering som selger</p>
         <v-rating readonly="" v-model="ratingSeller"></v-rating>
         <p>Rangering som låner</p>
@@ -44,7 +43,6 @@
   <v-card-text>
     <v-window v-model="tab">
       <v-window-item value="items">
-        <!-- TODO: Hent utleier fra backend -->
         <ListingView :ownerId="this.userId"/>
       </v-window-item>
       <v-window-item value="reviews">
@@ -59,7 +57,6 @@ import ListingView from "@/components/Listing/ListingView";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
 import { useRoute } from 'vue-router'
-//TODO: Lag en ny Review component?
 
 export default {
   name: 'lessor',
@@ -74,7 +71,6 @@ export default {
 
   data() {
     return {
-      //TODO Hent rating fra backend
       name: 'Bruker',
       ratingSeller: 5,
       ratingRenter: 5,
@@ -100,7 +96,6 @@ export default {
       this.ratingRenter = (await UserAccountService.getAverageScoreAsRenter(this.userId)).data;
     },
   },
-  //TODO: Hent en utleier fremfor innlogget bruker
   async beforeMount() {
     const userInfo = await UserAccountService.getUser(this.userId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
@@ -125,9 +120,6 @@ export default {
 #grid {
   display: grid;
   height: 400px;
-}
-#components {
-  min-height: 30%;
 }
 #topProfileContainer {
   height: 400px;
@@ -169,9 +161,6 @@ export default {
   width: 100%;
   z-index: 10;
   display: flex;
-}
-.v-card-text {
-  padding: 0;
 }
 
 </style>
