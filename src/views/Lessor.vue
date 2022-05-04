@@ -7,7 +7,6 @@
       <v-tabs id="tabContainer"
               v-model="tab" grow="">
         <v-tab class="tabHeader" value="items"><v-icon>mdi-newspaper</v-icon></v-tab>
-        <v-tab class="tabHeader" value="history"><v-icon>mdi-history</v-icon></v-tab>
         <v-tab class="tabHeader" value="reviews"><v-icon>mdi-message-draw </v-icon></v-tab>
       </v-tabs>
     </div>
@@ -42,10 +41,7 @@
     <v-window v-model="tab">
       <v-window-item value="items">
         <!-- TODO: Hent utleier fra backend -->
-        <ListingView :ownerId="this.$store.state.myUserId"/>
-      </v-window-item>
-      <v-window-item value="history">
-        <HistoryComponent/>
+        <ListingView :ownerId="this.userId"/>
       </v-window-item>
       <v-window-item value="reviews">
         <MyReviews/>
@@ -56,14 +52,17 @@
 
 <script>
 import ListingView from "@/components/Listing/ListingView";
-import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
 //TODO: Lag en ny Review component?
 
 export default {
   name: 'lessor',
-  components: {MyReviews, ListingView, HistoryComponent},
+  components: {MyReviews, ListingView},
+
+  props: {
+    userId: Number,
+  },
 
   data() {
     return {
@@ -88,6 +87,7 @@ export default {
     const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
 
+    console.log(this.userId)
 
     //check if user is verified
     await UserAccountService.getVerifiedUser(myUserId)

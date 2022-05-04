@@ -9,14 +9,10 @@
       <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <v-divider style="margin: 10px"/>
         <div>
-         <router-link :to="{name: 'Lessor'}">
-           <div>
-             <p id="itemOwner">
-             <v-avatar>
-               <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-             </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
-           </div>
-         </router-link>
+          <p id="itemOwner" @click="redirect">
+            <v-avatar>
+              <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
+            </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
         </div>
       <v-divider style="margin: 10px"/>
     </div>
@@ -44,6 +40,7 @@ import { ref } from 'vue';
 import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
 import Map from "@/components/Map";
+import router from "@/router";
 
 export default {
   name: "ListingDetails",
@@ -71,6 +68,10 @@ export default {
   },
 
   methods: {
+
+    redirect() {
+      router.push({name: 'Lessor', params: { userId: this.userId }})
+    },
 
     async setPriceRange() {
       const product = (await ListingsService.getListing(this.itemId)).data

@@ -63,9 +63,10 @@ const routes = [
     component: Contact
   },
   {
-    path: "/lessor",
+    path: "/lessor/:userId",
     name: "Lessor",
-    component: Lessor
+    component: Lessor,
+    props: true,
   },
   // Redirect any none-existing path to 404 page
   {
