@@ -1,3 +1,5 @@
+<!-- side som fremstiller chat component -->
+
 <template>
   <Chat />
 </template>
