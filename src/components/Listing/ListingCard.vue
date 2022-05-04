@@ -96,7 +96,7 @@ export default {
       }
     }
   },
-  async beforeMount() {
+  async mounted() {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
     const raw = (await ImageService.getImagesByProductId(this.itemId)).data[0]
     if (raw) {
