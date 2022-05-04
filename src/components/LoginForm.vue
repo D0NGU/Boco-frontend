@@ -95,12 +95,17 @@ export default {
       // HttpStatus 403 (FORBIDDEN)
       else if (status === 403) {
         this.dialog = true;
-        this.loginStatus = "Feil passord";
+        this.loginStatus = "Feil email eller passord";
       }
       // HttpStatus 403 (NOT FOUND)
       else if (status === 404) {
         this.dialog = true;
         this.loginStatus = "Bruker eksisterer ikke!";
+      }
+      // HttpStatus 500 (INTERNAL SERVER ERROR)
+      else if (status === 500) {
+        this.dialog = true;
+        this.loginStatus = "En feil har oppstått. Prøv igjen";
       }
     },
 

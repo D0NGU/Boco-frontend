@@ -1,16 +1,17 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
-  <v-card class="rounded-xl itemCard" @click="redirect">
+  <v-card class="rounded-xl itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
     <div class="itemContainer">
-      <img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
+      <img v-if="thumbnail" v-bind:src="thumbnail" id="itemImage"/>
+      <img v-else src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg" id="itemImage"/>
       <v-divider vertical />
       <div class="itemDetail">
         <p class="text-subtitle-1">{{ itemName }}</p>
         <v-dialog
             v-model="dialog"
             fullscreen=""
-            v-if="ifRented && !ifReviewed"
+            v-if="(ifRented && !ifReviewed) || ifEditing"
         >
           <template v-slot:activator="{ props }">
             <v-btn icon="" id="writeReviewBtn" size="x-small" v-bind="props"><v-icon size="small">mdi-message-draw</v-icon></v-btn>
@@ -18,7 +19,7 @@
 
           <v-card>
             <v-card-text>
-              <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" />
+              <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" @close="dialog=false" />
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -31,14 +32,20 @@
         </v-dialog>
 
         <p class="text-caption" v-else>{{itemPrice}} kr/dag</p>
-        <div v-if="isOwner" id="editIcon">
-          <v-icon style="padding: 10px">mdi-pencil</v-icon> Rediger
+        <div v-if="isOwner">
+          <p  id="editIcon">
+            <v-avatar size="x-small">
+              <v-icon>mdi-pencil</v-icon>
+            </v-avatar>
+            Rediger
+          </p>
         </div>
         <div v-else>
         <p class="text-overline" id="itemOwner">
           <v-avatar size="x-small">
           <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-        </v-avatar> {{itemOwnerName}} </p>
+        </v-avatar> {{itemOwnerName}}
+          <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
         </div>
       </div>
     </div>
@@ -49,6 +56,7 @@
 import router from "@/router";
 import UserAccountService from "@/service/UserAccountService";
 import Review from "@/components/UserProfile/Review";
+import ImageService from "@/service/ImageService";
 
 export default {
   components: {Review},
@@ -62,19 +70,20 @@ export default {
     ifReviewed: Boolean,
     writeReviewToLoaner: Boolean,
     ifRented: Boolean,
+    ifEditing: Boolean,
   },
   data () {
     return {
       itemOwnerName: '',
       dialog: false,
       isOwner: false,
+      thumbnail: '',
+      ownerVerified: false,
     }
   },
   methods: {
     redirect() {
-      if (this.writeReviewToLoaner) {
-        // do nothing here
-      } else if(this.itemOwner !== parseInt(this.$store.state.myUserId)){
+      if(this.itemOwner !== parseInt(this.$store.state.myUserId)){
         router.push({name: 'ListingDetails', params: { itemId: this.itemId }})
       } else {
         router.push({name: 'Listing', params: { itemId: this.itemId }})
@@ -83,8 +92,13 @@ export default {
   },
   async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.itemOwner)).data
+    const raw = (await ImageService.getImagesByProductId(this.itemId)).data[0]
+    if (raw) {
+      this.thumbnail = raw.imgData + "," + raw.img64;
+    }
     this.itemOwnerName = userInfo.fname + " " + userInfo.lname
     this.isOwner = (this.itemOwner == this.$store.state.myUserId) //itemId is int and userId is String
+    this.ownerVerified = (await UserAccountService.getVerifiedUser(this.itemOwner)).data
   }
 }
 </script>
@@ -122,11 +136,6 @@ export default {
 }
 #editIcon {
   position: absolute;
-  border: solid 1px black;
-  border-radius: 20px;
-  display: inline-block;
-  padding: 6px;
-  bottom: 3px;
-  right: 3px;
+  bottom: 0;
 }
 </style>

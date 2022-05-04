@@ -12,7 +12,7 @@
     </v-overlay>
   </div>
   <router-view />
-  <Footer/>
+  <Footer v-if="!$route.name.match('NotFound')"/>
 </template>
 
 

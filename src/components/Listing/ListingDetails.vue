@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Hammer.jpg" id="itemImage"></v-img>
+    <!--Todo endre id itemImage-->
+    <v-img v-if="images" v-bind:src="images[0]" id="itemImage"></v-img>
+    <v-img v-else src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Hammer.jpg" id="itemImage"></v-img>
     <div id="details">
       <p class="text-h4">{{productInfo.title}}</p>
       <p class="text-h6">{{productInfo.price}} kr/dag</p>
@@ -8,10 +10,12 @@
       <v-chip color="indigo"><p>{{ productInfo.category }}</p></v-chip>
       <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <v-divider style="margin: 10px"/>
-      <p id="itemOwner">
-        <v-avatar>
-          <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
-        </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
+        <div>
+          <p id="itemOwner" @click="redirect">
+            <v-avatar>
+              <v-img src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png" alt="profile picture"></v-img>
+            </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
+        </div>
       <v-divider style="margin: 10px"/>
     </div>
     <div id="requestForm">
@@ -38,16 +42,18 @@ import { ref } from 'vue';
 import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
 import Map from "@/components/Map";
+import UserAccountService from "@/service/UserAccountService";
+import router from "@/router";
 
 export default {
   name: "ListingDetails",
   components: {
-    Map, 
+    Map,
     Datepicker
   },
 
   props: {
-    itemId: Number,
+    itemId: [Number, String],
     userId: Number,
   },
 
@@ -58,13 +64,19 @@ export default {
       requestSent: false,
       productInfo: '',
       ownerInfo: '',
+      ownerVerified: false,
       showMap: false,
       startDate: new Date(),
       priceRange: '',
+      images: []
     }
   },
 
   methods: {
+
+    redirect() {
+      router.push({name: 'Lessor', params: { userId: this.userId }})
+    },
 
     async setPriceRange() {
       const product = (await ListingsService.getListing(this.itemId)).data
@@ -82,9 +94,14 @@ export default {
       const product = (await ListingsService.getListing(this.itemId)).data
       this.productInfo = product.product;
       this.ownerInfo = product.owner;
+      for (let image of product.images) {
+        this.images.push(image.imgData + "," + image.img64);
+      }
       if(new Date(this.productInfo.availableFrom) > new Date()){
         this.startDate = this.productInfo.availableFrom
       }
+      this.ownerVerified = (await UserAccountService.getVerifiedUser(this.ownerInfo.id)).data
+
     },
 
     async sendRequest() {

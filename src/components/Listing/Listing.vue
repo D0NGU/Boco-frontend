@@ -37,23 +37,31 @@
                   :rules="rules"
                   hide-details="auto"
               ></v-text-field>
-              <v-text-field
+              <v-textarea
+                  rows="5"
+                  no-resize
                   v-model="adDescription"
                   label="Beskrivelse"
                   :rules="rules"
                   hide-details="auto"
-              ></v-text-field>
+              ></v-textarea>
               <div>
-                <!--        <v-file-input
-                            v-bind:value="adPicture"
-                            v-on:input="adPicture = $event.target.value"
-                            label="Last opp bildene"
-                            hide-details="auto"
-                            accept="image/*"
-                            multiple
-                            chips
-                            prepend-icon="mdi-camera"
-                        />-->
+                <v-file-input
+                    v-model="files"
+                    label="Last opp bilder"
+                    hide-details="auto"
+                    accept="image/x-png, image/jpeg"
+                    multiple
+                    chips
+                    prepend-icon="mdi-camera"
+                />
+                <div v-if="files" v-for="file in files">
+                  <ImageCards
+                      :file="file"
+                      :id="index"
+                      @deleteClick="this.deleteImage(file)"
+                  />
+                </div>
               </div>
               <v-select
                   v-model="adCategory"
@@ -84,7 +92,6 @@
                     value="set"
                 ></v-radio>
               </v-radio-group>
-
               <!--
                     <v-container class="grey lighten-5">
                       <v-row no-gutters>
@@ -242,19 +249,21 @@
 
 <script>
 import ListingsService from "@/service/ListingsService";
+import ImageService from "@/service/ImageService";
 import router from "@/router";
 import ProductService from "@/service/ProductService";
 import { ref } from 'vue';
 import Datepicker from "@vuepic/vue-datepicker";
+import ImageCards from "@/components/Listing/ImageCards";
 import ShowRentals from "@/components/UserProfile/ShowRentals";
 import RentalRequestView from "@/components/Listing/RentalRequestView";
 import RentalService from "@/service/RentalService";
 
 export default {
   name: "AdPage",
-  components: {Datepicker, RentalRequestView, ShowRentals},
+  components: {ImageCards, Datepicker, RentalRequestView, ShowRentals},
   props: {
-    itemId: String
+    itemId: [String, Number]
   },
   data() {
     return {
@@ -272,6 +281,9 @@ export default {
       unListed: false,
       categories: [],
       dialog: false,
+      files: [],
+      image: [],
+      shownImages: [],
       statusMessage: '',
       rules: [
         value => !!value || 'Påkrevd.',
@@ -312,18 +324,42 @@ export default {
         this.adAddress = productInfo.address;
         this.adCategory = productInfo.category
         this.unListed = productInfo.unlisted;
-        this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)]
-
+        this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)];
+        this.image = (await ImageService.getImagesByProductId(this.itemId)).data;
+        for (let x of this.image) {
+          this.files.push(await (this.urlToFile(x.img64, x.imgData, x.imgName)));
+          this.shownImages.push(x.imgData + "," + x.img64);
+        }
+        console.log(this.files);
       }
     },
-
+    urlToFile(base64, data, filename){
+      let url = data +","+base64;
+      return (fetch(url)
+          .then(function(res){return res.arrayBuffer();})
+          .then(function(buf){return new File([buf], filename,{type: "image/jpeg"});})
+      );
+    },
+    async dataUrlToFile(base64, data, fileName) {
+      const dataUrl = data +","+base64;
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      return new File([blob], fileName, { type: 'image/png' });
+    },
     async createAd() {
       console.log("Listing was created.")
+      console.log(this.files)
+      for (let file of this.files) {
+        console.log(file);
+        this.image.push( await this.getBase64(file));
+      }
+      console.log(this.image)
+
       let tempStat = '';
       if(this.date !== undefined && this.date !== null) {
         const dateFrom = new Date(this.date[0].getFullYear() + "/" + (this.date[0].getMonth() + 1) + "/" + this.date[0].getDate());
         const dateTo = new Date(this.date[1].getFullYear() + "/" + (this.date[1].getMonth() + 1) + "/" + this.date[1].getDate());
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, dateFrom, dateTo, this.$store.state.myUserId, 'elektronikk').then(response => {
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, dateFrom, dateTo, this.$store.state.myUserId, 'elektronikk', this.image).then(response => {
           tempStat = response.status;
         }).catch((error) => {
           if (error.response) {
@@ -335,23 +371,46 @@ export default {
         this.dialog = true;
       }
     },
-
     async updateAd(){
-      let tempStat;
-      this.dialog = true;
-      this.createdStatus = true;
+        let tempStat;
+        this.dialog = true;
+        this.createdStatus = true;
+        this.image = [];
+      for (let x = 0; x < this.files.length; x++) {
+        this.image.push( await this.getBase64(this.files[0]));
+      }
       console.log("Listing was updated.")
-      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory).then(response => {
-        tempStat = response.data
-      }).catch((error) => {
-        if (error.response) {
-          this.statusMessage = error.response.data;
-        }
-      })
-      this.statusMessage = "Endringen var vellykket!";
-      this.dialog = true;
+        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
+          tempStat = response.data
+        }).catch((error) => {
+          if (error.response) {
+            this.statusMessage = error.response.data;
+          }
+        })
+        this.statusMessage = "Endringen var vellykket!";
+        this.dialog = true;
     },
-
+    addFiles(files) {
+      for (let file of files){
+        this.files.push(file)
+      }
+    },
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        let blob;
+        reader.onload = () => resolve({
+          imgName: file.name,
+          img64: reader.result.split(",")[1],
+          imgData: reader.result.split(",")[0],
+          productId: 0,
+        },
+        console.log(reader.result),
+      );
+        reader.onerror = error => reject(error);
+      });
+    },
     async deleteAd(){
       await ListingsService.delete(this.$store.state.myUserId, this.itemId)
       this.deleteDialog = false;
@@ -363,20 +422,22 @@ export default {
       this.dialog = false;
       router.back();
     },
+    deleteImage(file) {
+      this.files = this.files.filter(function (ele){
+        return ele != file;
+      })
+    },
 
     async getRentals() {
       this.rentalList = (await RentalService.getRentals(this.itemId)).data
     }
   },
    beforeMount(){
-     if(this.itemId !== undefined){
-       this.updating = true;
-     }
-     this.getRentals();
     this.getInfo();
-    /*if(this.itemId > 0){
+    if(this.itemId > 0){
       this.updating = true;
-    }*/
+      this.getRentals();
+    }
   }
 }
 </script>
@@ -389,7 +450,7 @@ export default {
   padding: 1em;
 }
 
-.v-text-field, .v-file-input {
+.v-text-field, .v-file-input, .v-textarea, #datepicker {
   margin-bottom: 22px;
 }
 

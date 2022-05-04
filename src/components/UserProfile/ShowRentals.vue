@@ -3,11 +3,12 @@
     <h1>Utleie av {{ this.listingName }}</h1>
 
     <div v-if="!noRentals" v-for="rental in productRentals">
-      <ListingCard
-          :itemName=this.listingName
-          :itemOwner="rental.userId"
-          :itemId="rental.productId"
+      <UserCard
+          :item-loaner="rental.userId"
+          :date="rental.dateFrom + ' - ' + rental.dateTo"
           :write-review-to-loaner="true"
+          :item-name="this.listingName"
+          :item-owner="rental.userId"
       />
     </div>
 
@@ -21,19 +22,19 @@
 
 
 <script>
-import ListingCard from "@/components/Listing/ListingCard";
+import UserCard from "@/components/Listing/UserCard";
 import ProductService from "@/service/ProductService";
 
 export default {
   name: "ShowRentals",
 
   components: {
-    ListingCard
+    UserCard
   },
 
   props: {
     listingName: String,
-    productId: Number
+    productId: [Number, String]
   },
 
   data () {

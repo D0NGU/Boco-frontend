@@ -21,7 +21,7 @@ export default {
     },
 
     getUserId(email){
-        return getApiClient.get(`user/get/`+email)
+        return getApiClient.get('user/get/'+email)
     },
 
     getVerifiedUser(userId) {
@@ -50,9 +50,21 @@ export default {
         return axios.post(url, description, config)
     },
 
-    sendContactForm(name, email, comment){
-        const contactForm = { name: name, email: email, comment: comment};
-        return getApiClient.post(UNKNOWN, {params: {contactForm}})
+    sendContactForm(id, fname, lname, email, comment, userId){
+        const contactForm = { contactFormId: id, fname: fname, lname: lname, email: email, comment: comment, userId: userId};
+        return getApiClient.post("contact", contactForm);
+    },
+
+    getNumberOfReviews(userId) {
+        return getApiClient.get("review/user/" + userId + "/amount");
+    },
+
+    getAverageScoreAsOwner(userId) {
+        return getApiClient.get("review/user/" + userId + "/average/owner")
+    },
+
+    getAverageScoreAsRenter(userId) {
+        return getApiClient.get("review/user/" + userId + "/average/renter")
     },
 }
 

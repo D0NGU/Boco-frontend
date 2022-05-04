@@ -20,7 +20,7 @@ export default {
   name: "RentalRequestView",
   components: {RentalRequest},
   props: {
-    productId: Number,
+    productId: [Number, String],
     rentalList: Array
   },
   methods: {
