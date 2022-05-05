@@ -48,7 +48,7 @@
   <v-card-text>
     <v-window v-model="tab">
       <v-window-item value="items">
-        <ListingView :ownerId="this.userId"/>
+        <ListingView :ownerId="this.userId" :showSearch="false"/>
       </v-window-item>
       <v-window-item value="reviews">
         <MyReviews :user-id="this.userId"/>
