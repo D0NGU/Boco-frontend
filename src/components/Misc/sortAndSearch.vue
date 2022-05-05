@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels>
+  <v-expansion-panels id="mobile">
     <v-expansion-panel>
       <v-expansion-panel-title>
         Filtrering
@@ -77,6 +77,7 @@
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>
+
   <div id="wideScreen">
     <v-text-field
         v-model="searchBar"
@@ -85,6 +86,9 @@
         color="var(--bocoBlue)"
         label="Søk..."
         variant="outlined"
+        v-on:keyup.enter="handleSearchButton()"
+        clearable
+        :clear-icon-cb="clear='()'"
     ></v-text-field>
 
     <div id="filteringButtons">
@@ -227,7 +231,7 @@ export default {
   cursor: pointer;
   overflow-x: hidden;
 }
->>> .v-input__details{
+:deep().v-input__details{
   display: none;
 }
 @media only screen and (max-width: 600px) {

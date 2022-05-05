@@ -37,14 +37,6 @@
       </v-col>
     </v-row>
   </v-container>
-  <!--<div v-for="(product, index) in activeProducts" :key="index" class="item-list">
-    <ListingCard
-      :itemName="product.title"
-      :itemOwner="product.userId"
-      :itemPrice="product.price"
-      :itemId="product.productId"
-    />
-  </div>-->
 </div>
 </template>
 

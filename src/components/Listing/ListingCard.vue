@@ -71,9 +71,12 @@
     </div>
   </v-card>
   </div>
+
+
       <div id="wideScreen">
-          <v-card class="mx-auto my-12 rounded-xl"
-                  max-width="374"
+        <!-- Annonser for ws -->
+          <v-card class="mx-auto my-12 rounded-l"
+                  max-width="280"
                   @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
             <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
               <template v-slot:placeholder>
@@ -214,14 +217,15 @@ export default {
     display: none;
   }
   .itemCard {
-    width: 30%;
     margin: 20px;
   }
 }
 .itemImage {
   height: 250px;
+  width: 250px;
   object-fit: cover;
   margin: 10px;
+  border-radius: 5%;
 }
 @media only screen and (max-width: 600px) {
   #wideScreen {

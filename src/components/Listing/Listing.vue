@@ -387,9 +387,9 @@ export default {
         let tempStat;
         this.dialog = true;
         this.createdStatus = true;
-        this.images = [];
+        this.image = [];
       for (let file of this.files) {
-        this.images.push( await this.getBase64(file));
+        this.image.push( await this.getBase64(file));
       }
       console.log("Listing was updated.")
         await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
