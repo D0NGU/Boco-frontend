@@ -83,7 +83,7 @@ export default {
       if(this.newPassword === this.newPasswordRepeat){
         await UserAccountService.resetPassword(this.token, this.newPassword).then(response => {
           tempStat = response.status;
-          this.success = response.data.success
+          this.success = response.data;
           this.dialog = true;
         }).catch((error) => {
           if(error.response){
@@ -98,6 +98,9 @@ export default {
     },
     close() {
       this.dialog = false;
+      if(this.success) {
+        this.$router.push("/login");
+      }
     }
   },
 }

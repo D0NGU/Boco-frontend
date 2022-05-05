@@ -73,11 +73,13 @@ export default {
       let tempStat = '';
       await UserAccountService.requestPasswordReset(this.email).then(response => {
         tempStat = response.status;
-        this.success = response.data.success
+        this.success = response.data;
         this.dialog = true;
       }).catch((error) => {
         if(error.response){
           tempStat = error.response.status;
+          this.success = false;
+          this.dialog = true;
         }
       })
     },
