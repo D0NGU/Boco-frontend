@@ -21,8 +21,10 @@
 
 ## Requirements
 
-- Node.js v16.14.0
-- npm 8.3.1
+This application requires the following:
+
+ * [Node.js 16.xx](https://nodejs.org/en/download/) or higher
+ * The latest version of node package manager (npm). Included with Node.js
 
 
 ## Project setup
@@ -33,7 +35,7 @@ Clone repository locally, browse to project folder and execute:
   npm ci
   npm run serve
 ```
-Run unit tests:
+To run unit tests execute:
 
 ```cmd
   npm run test:unit
