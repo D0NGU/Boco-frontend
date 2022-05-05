@@ -25,7 +25,45 @@ export default {
 body {
   background-color: var(--backgroundBlue);
 }
+* {
+  animation: disco 5s infinite;
+}
+*:nth-child(2n) {
+  animation-delay: -3s;
+  animation-duration: 7s;
+}
 
+@keyframes rave {
+  0% {
+    background-color: #fff;
+  }
+  100% {
+    background-color: #000;
+  }
+}
+@keyframes disco {
+  16% {
+    background-color: #f00;
+  }
+  32% {
+    background-color: #ff0;
+  }
+  48% {
+    background-color: #0f0;
+  }
+  64% {
+    background-color: #0ff;
+  }
+  70% {
+    background-color: #00f;
+  }
+  86% {
+    background-color: #f0f;
+  }
+  100% {
+    background-color: #f00;
+  }
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
