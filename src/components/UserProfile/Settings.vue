@@ -4,7 +4,7 @@
   <v-card id="container">
     <div id="textFieldWrapper">
       <v-text-field id="name" v-model="name" readonly label="Navn"></v-text-field>
-      <v-text-field id="email" v-model="email" readonly label="E-postadresse"></v-text-field>
+      <v-text-field id="email" v-model="email" label="E-postadresse"></v-text-field>
       <v-file-input
           v-model="picture"
           label="Last opp bilde"
@@ -86,11 +86,14 @@ export default {
         await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword);
         this.confirmationSnackBar = true;
       }
-      if (this.picture) {
+      if (this.picture.isEmpty) {
         let img = await this.getBase64(this.picture[0]);
         console.log(img);
         await ImageService.setProfilePic(img, this.$store.getters.myUserId);
         this.confirmationSnackBar = true;
+      }
+      if(this.newPassword === ""){
+        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.oldPassword);
       }
     },
     getBase64(file) {
@@ -111,7 +114,7 @@ export default {
       cookies.set('userId', "", {path: '/'})
       cookies.set('email', "", {path: '/'})
       this.dialog = false;
-      setTimeout( () => this.$router.push({ path: '/login'}), 1500);
+      setTimeout( () => this.$router.push({ path: '/login'}), 300);
     },
   },
   async beforeMount() {
