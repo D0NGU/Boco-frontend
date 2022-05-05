@@ -232,6 +232,8 @@ export default {
 
 .my-12 {
    margin-top: 0 !important;
+   padding-top: 10px;
+   padding-left: 2px;
    margin-bottom: 0 !important;
  }
 @media only screen and (max-width: 600px) {
