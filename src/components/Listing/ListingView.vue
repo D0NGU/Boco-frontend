@@ -28,11 +28,17 @@
   <v-container id="wideScreen">
     <v-row>
       <v-col v-for="(product, index) in activeProducts" :key="index">
+        <v-lazy
+            v-model="product.isActive" :options="{
+              threshold: .5
+            }"
+            class="fill-height">
         <ListingCard
             :itemName="product.title"
             :itemOwner="product.userId"
             :itemPrice="product.price"
             :itemId="product.productId"/>
+        </v-lazy>
       </v-col>
     </v-row>
   </v-container>
