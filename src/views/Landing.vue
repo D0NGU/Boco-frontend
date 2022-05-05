@@ -64,7 +64,8 @@ export default {
 }
 
 #coverImage {
-  height: 100%;
+  max-height: 500px;
+  object-fit: cover;
   width: 100%;
   flex: 1;
 }
