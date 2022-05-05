@@ -19,7 +19,7 @@
       <v-carousel-item class="carouselItem">
         <v-avatar size="x-large">
           <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
-          <v-img v-else src="../assets/images/missing_profile_img.png"></v-img>
+          <v-img v-else src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"/>
         </v-avatar>
 
         <div>
@@ -105,6 +105,9 @@ export default {
   async beforeMount() {
     const userInfo = await UserAccountService.getUser(this.userId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
+    if (userInfo.data.profile64 !== "") {
+      this.profilePicSrc = "data:image/jpeg;base64," +userInfo.data.profile64;
+    }
 
     //check if user is verified
     await UserAccountService.getVerifiedUser(this.userId)
