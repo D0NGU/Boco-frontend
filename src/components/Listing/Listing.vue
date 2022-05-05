@@ -264,7 +264,7 @@ import { ref } from 'vue';
 import Datepicker from "@vuepic/vue-datepicker";
 import ImageCards from "@/components/Listing/ImageCards";
 import ShowRentals from "@/components/UserProfile/ShowRentals";
-import RentalRequestView from "@/components/Listing/RentalRequestView";
+import RentalRequestView from "@/components/Listing/Rental/RentalRequestView";
 import RentalService from "@/service/RentalService";
 
 export default {
@@ -462,7 +462,9 @@ export default {
   width: 350px;
   padding: 1em;
 }
-
+.v-tabs.v-slide-group--is-overflowing:not(.v-slide-group--has-affixes) .v-tab:first-child {
+  margin-left: 4px;
+}
 .v-text-field, .v-file-input, .v-textarea, #datepicker {
   margin-bottom: 22px;
 }
@@ -499,9 +501,6 @@ button {
   padding-bottom: 10px;
   margin: auto;
   place-content: center;
-}
-.image {
-  margin: 2px;
 }
 #space {
   margin-left: 4px;

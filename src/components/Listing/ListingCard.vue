@@ -103,6 +103,7 @@
                       <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
                       <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
                     </v-avatar>
+                    {{itemOwnerName}}
                     <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
                   <p class= "d-flex justify-end">{{itemPrice}} kr/dag</p>
                 </v-card-subtitle>
@@ -227,6 +228,10 @@ export default {
   margin: 10px;
   border-radius: 5%;
 }
+.my-12 {
+   margin-top: 0 !important;
+   margin-bottom: 0 !important;
+ }
 @media only screen and (max-width: 600px) {
   #wideScreen {
     display: none;
