@@ -55,7 +55,7 @@
         :timeout="3000"
         v-model="confirmationSnackBar"
         top
-    >Passordet har blitt endret! </v-snackbar>
+    >Endringene har blitt lagret! </v-snackbar>
   </v-card>
 
 </template>
@@ -147,6 +147,10 @@ h1 {
 
 button {
   margin: 0.4em 0.4em 0.8em 0.4em;
+}
+
+.v-file-input {
+  margin-bottom: 2.5em;
 }
 
 </style>
