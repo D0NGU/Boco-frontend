@@ -75,7 +75,7 @@ const routes = [
   },
   // Redirect any none-existing path to 404 page
   {
-    path: '/:catchAll(.*)',
+    path: '/:catchAll(.*)?',
     name: 'NotFound',
     component: NotFound
   }

@@ -333,6 +333,10 @@ export default {
       })
       if(this.updating) {
         const productInfo = (await ProductService.getProductById(this.itemId)).data
+        if(!(productInfo.userId == this.$store.state.myUserId)){
+          await this.$router.push({name: "NotFound"})
+        }
+
         this.adName = productInfo.title;
         this.adDescription = productInfo.description;
         this.adPrice = productInfo.price;
