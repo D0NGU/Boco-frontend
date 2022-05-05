@@ -64,6 +64,7 @@
 
 <script>
 import LoginService from '@/service/LoginService'
+import {baseURL} from "@/service/ApiService";
 import cookies from 'vue-cookie'
 import axios from "axios";
 
@@ -79,7 +80,7 @@ export default {
           console.log(response.data);
           token = response.data.access_token;
           await cookies.set('token', response.data.access_token);
-          await axios.get('http://localhost:8080/api/user/get/'+this.email, {
+          await axios.get(baseURL + 'user/get/' + this.email, {
           headers: {
             'Content-type': 'application/json',
                 Authorization: 'Bearer ' +  token,
