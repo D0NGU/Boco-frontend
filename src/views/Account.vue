@@ -22,7 +22,7 @@
           <div>
             <v-avatar size="x-large">
               <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
-              <v-img v-else src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"/>
+              <v-img v-else src="../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
             </v-avatar>
 
           </div>
