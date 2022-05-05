@@ -27,10 +27,12 @@
                   readonly
                   label="Navn på annonse"
                   hide-details="auto"
+                  data-test="adName"
               ></v-text-field>
               <v-text-field
                   v-else
                   data-testid="name-input"
+                  data-test="adName"
                   type="text"
                   v-model="adName"
                   label="Navn på annonse"

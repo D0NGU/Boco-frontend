@@ -1,6 +1,7 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
+  <div>
   <div id="mobile">
     <!-- Selve annonseboksen -->
   <v-card class="rounded-l itemCard" @click="redirect" :class="{verifiedOwner: ownerVerified}">
@@ -151,6 +152,7 @@
           </v-card>
 
       </div>
+  </div>
 </template>
 
 <script>
