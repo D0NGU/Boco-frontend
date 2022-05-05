@@ -65,7 +65,7 @@
 <script>
 import LoginService from '@/service/LoginService'
 import cookies from 'vue-cookie'
-import UserAccountService from "@/service/UserAccountService";
+import axios from "axios";
 
 export default {
   methods: {
@@ -79,9 +79,17 @@ export default {
           console.log(response.data);
           token = response.data.access_token;
           await cookies.set('token', response.data.access_token);
+          await axios.get('http://localhost:8080/api/user/get/'+this.email, {
+          headers: {
+            'Content-type': 'application/json',
+                Authorization: 'Bearer ' +  token,
+          }
+        }).then(response => {
+          cookies.set("userId", response.data.id);
+          this.$store.commit("SET_MYUSERID", cookies.get("userId"))
+        });
         }).catch((error) => {
           if (error.response) {
-            console.log("heriweowbg")
             status = error.response.status;
           }
         })
@@ -92,20 +100,7 @@ export default {
         this.loginStatus = "Påloggingen var vellykket";
         await cookies.set("email", this.email);
         await this.$store.dispatch("login", {token:cookies.get("token"), email:cookies.get("email")});
-        await UserAccountService.getUserId(this.email).then(async response => {
-          await cookies.set("userId", response.data.id);
-          await this.$store.commit("SET_MYUSERID", cookies.get("userId"))
-        }).catch((error) =>{
-          console.log("earnglrogækeonæigoægo")
-          status = error.response.status;
-        })
-
-        console.log(cookies.get("email"))
-        console.log(cookies.get("token"))
-        console.log(cookies.get("userId"))
-        console.log(this.$store.getters.myUserId)
-        console.log(this.$store.getters.token)
-        await this.$router.push('/home');
+        await window.location.replace('/home');
       }
       // HttpStatus 403 (FORBIDDEN)
       else if (status === 403) {
