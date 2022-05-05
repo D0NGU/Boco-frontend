@@ -20,8 +20,8 @@ export default {
         };
         return getApiClient.post(baseURL + 'products', createdProduct)
     },
-    editProduct(productId, description, address, price, unlisted, category, images) {
-        const product = { description: description, address: address, price: price, unlisted: unlisted, category: category, images: images };
+    editProduct(productId, description, address, price, available_from, available_to, unlisted, category, images) {
+        const product = { description: description, address: address, price: price, availableFrom: available_from, availableTo: available_to, unlisted: unlisted, category: category, images: images };
         console.log(product)
         return getApiClient.put('products/' + productId,  product)
     },
