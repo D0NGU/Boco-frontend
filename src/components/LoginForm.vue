@@ -13,7 +13,7 @@
       </div>
       <div>
         <v-text-field
-          :rules="rulesApplyToAll"
+          :rules="rulesPassword"
           id="password" v-model="password"
           v-on:keyup.enter="logInButton()"
           :type="show ?'text': 'password'"
@@ -131,12 +131,12 @@ export default {
       loginStatus: '',
       token1: '',
       error: '',
-      rulesApplyToAll: [
-        value => !!value || 'Required.',
+      rulesPassword: [
+        value => !!value || 'Påkrevd.',
       ],
       emailRules: [
-        v => !!v || 'Required',
-        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+        v => !!v || 'Påkrevd',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-post må være gyldig',
       ],
       show: false,
       dialog: false,

@@ -31,7 +31,7 @@
 
       <v-text-field
           id="password"
-          :rules="rulesApplyToAll"
+          :rules="rulesPassword"
           v-model="password"
           :type="show ?'text': 'password'"
           label="Passord"
@@ -99,10 +99,15 @@ export default {
       password: '',
       emailRules: [
         v => !!v || 'E-post er påkrevd',
-        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-post må være gyldig',
       ],
       rulesApplyToAll: [
         value => !!value || 'Påkrevd.',
+        value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
+      ],
+      rulesPassword: [
+        value => !!value || 'Påkrevd.',
+        value => (value && (value.length === 8)) || 'Lengden til passordet må være 8.',
       ],
       show: false,
       regisState: '',

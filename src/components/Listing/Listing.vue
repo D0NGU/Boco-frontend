@@ -61,8 +61,6 @@
                 <div id="pictures" v-if="files.length!==0">
                   <v-badge content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
                     <div id="space">
-                      <!--<v-img outlined width="130" v-bind:src="image" class="grey lighten-2 image">
-                      </v-img>-->
                       <!--Bruk image cards. Den inneholder metoden for å rendre ett bilde fra en fil-->
                       <ImageCards :file="file"></ImageCards>
                     </div>
@@ -167,6 +165,7 @@
             ></v-switch>
             <div v-if="updating">
               <v-btn
+                  :disabled="!valid"
                   class="createAdButton"
                   @click="updateAd()"
               >Oppdater annonse
@@ -191,13 +190,20 @@
             </v-btn>
             <v-dialog id="popOut" v-model="dialog">
               <v-card>
-                <v-card-title v-if="!isARequest && !isARental && !invalidDate" class="text-h5"> {{statusMessage}} </v-card-title>
-                <v-card-title v-if="invalidDate" class="text-h5"> Velg dato! </v-card-title>
+                <v-card-title v-if="!isARequest && !isARental && stayInUpdatePage" class="text-h5"> {{statusMessage}} </v-card-title>
+                <v-card-title v-if="!isARequest && !isARental && !stayInUpdatePage" class="text-h5"> {{statusMessage}} </v-card-title>
                 <v-card-title v-if="isARequest || isARental" class="text-h5"> Er du sikker? </v-card-title>
                 <v-card-text v-if="isARental"> Den produkt har blitt lånt utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, vennligst ta kontakt med personen som har lånt produktet for å avklare dato</v-card-text>
                 <v-card-text v-if="isARequest"> Den produkt har forespørsler utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, så avslår vi forespørslene til den produkt</v-card-text>
                 <v-card-actions>
-                  <v-btn v-if="!isARequest && !isARental && !invalidDate"
+                  <v-btn v-if="stayInUpdatePage"
+                         color="red"
+                         text
+                         @click="this.dialog = false"
+                  >
+                    Lukk
+                  </v-btn>
+                  <v-btn v-if="!isARequest && !isARental && !stayInUpdatePage"
                       color="red"
                       text
                       @click=close()
@@ -325,6 +331,7 @@ export default {
         value => !!value || 'Påkrevd.',
       ],
       rulesPhone: [
+        value => !!value || 'Påkrevd.',
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
@@ -334,7 +341,7 @@ export default {
       isARental: false,
       isARequest: false,
       conflictRequests: [],
-      invalidDate: false,
+      stayInUpdatePage: false,
     }
   },
 
@@ -388,21 +395,25 @@ export default {
     },
 
     async createAd() {
-      console.log("Listing was created.")
-      let tempStat = '';
       await this.addFiles();
-      if(this.date !== undefined && this.date !== null) {
+      if(this.date !== undefined && this.date !== null && this.date[0] !== undefined && this.date[1] !== undefined && this.date[0] !== null && this.date[1] !== null) {
         await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images).then(response => {
-          tempStat = response.status;
+          this.statusMessage = "Annonsen ble opprettet!";
+          this.stayInUpdatePage = false
         }).catch((error) => {
           if (error.response) {
-            tempStat = error.response.status;
-            this.statusMessage = error.response.data;
+            this.statusMessage = "Navnet til annonsen er tatt. Prøv med an annen navn";
+            this.stayInUpdatePage = true
           }
         })
-        this.statusMessage = "Annonsen ble opprettet!";
-        this.dialog = true;
+      } else if (this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null) {
+        this.statusMessage = "Velg dato (fra-til)"
+        this.stayInUpdatePage = true
+      } else {
+        this.statusMessage = "En feil har skjedd. Prøv igjen"
+        this.stayInUpdatePage = true
       }
+      this.dialog = true
     },
 
     async updateAd(){
@@ -414,29 +425,30 @@ export default {
         } else if (this.isARental || this.isARequest) {
           this.dialog = true
         }
+      } else if (this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null){
+        this.statusMessage = "Velg dato (fra-til)"
+        this.stayInUpdatePage = true
       } else {
-        this.dialog = true
-        this.invalidDate = true
+        this.statusMessage = "En feil har skjedd. Prøv igjen"
+        this.stayInUpdatePage = true
       }
+      this.dialog = true
     },
 
     //oppdatere annonsen
     async editAd() {
-      let tempStat;
       this.dialog = true;
       this.createdStatus = true;
       await this.addFiles();
 
-        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
-            .then(response => {
-              tempStat = response.data
-            }).catch((error) => {
-              if (error.response) {
-                this.statusMessage = error.response.data;
-              }
-            })
-
-      this.statusMessage = "Endringen var vellykket!";
+      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
+          .then(response => {
+            this.statusMessage = "Endringen var vellykket!";
+            this.stayInUpdatePage = false
+          }).catch((error) => {
+            this.statusMessage = "En feil har oppstått!";
+            this.stayInUpdatePage = true
+          })
       this.dialog = true;
     },
 
@@ -584,12 +596,6 @@ button {
 .tabHeader {
   margin-top: 0;
 }
-
-#pictures {
-  padding-bottom: 10px;
-  margin: auto;
-  place-content: center;
-}
 #space {
   margin-left: 4px;
 }
@@ -599,9 +605,9 @@ button {
   grid-template-rows: auto;
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-  margin-bottom: 3px;
   overflow-y: scroll;
+  overflow-x: scroll;
   height: 200px;
-  border: solid grey 2px;
+  place-content: center;
 }
 </style>
