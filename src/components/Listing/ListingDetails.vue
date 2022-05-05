@@ -6,13 +6,27 @@
       :show-arrows="false"
       height="400px">
       <!-- Standardbilde hvis det ikke er lagt til noen bilder -->
-      <v-carousel-item v-if="images.length == 0" :src="defaultimage" cover=""></v-carousel-item>
+      <v-carousel-item v-if="!imagesFound" :src="defaultimage" cover="">
+      </v-carousel-item>
       <!-- Legger til alle andre bilder i listen -->
       <v-carousel-item
          v-for="(item,i) in this.images"
         :key="i"
         :src="images[i]"
-      ></v-carousel-item>
+      >
+        <template v-slot:placeholder>
+        <v-row
+            class="fill-height ma-0"
+            align="center"
+            justify="center"
+        >
+          <v-progress-circular
+              indeterminate
+              color="grey lighten-5"
+          ></v-progress-circular>
+        </v-row>
+      </template>
+      </v-carousel-item>
     </v-carousel>
 
     <div id="details">
@@ -65,6 +79,8 @@ import RentalService from "@/service/RentalService";
 import Map from "@/components/Listing/Map";
 import UserAccountService from "@/service/UserAccountService";
 import router from "@/router";
+import ProductService from "@/service/ProductService";
+import ImageService from "@/service/ImageService";
 
 export default {
   name: "ListingDetails",
@@ -93,6 +109,8 @@ export default {
       availabilityWindow: [],
       defaultimage: require('@/assets/images/product.png'),
       profilePicSrc: '',
+      productImages: [],
+      imagesFound: false,
     }
   },
 
@@ -104,23 +122,21 @@ export default {
     },
 
     async getListingInfo(){
-      const product = (await ListingsService.getListing(this.itemId)).data
-      this.productInfo = product.product;
-      this.ownerInfo = product.owner;
-      this.userId = product.owner.id;
+      const product = (await ProductService.getProductById(this.itemId)).data
+      const owner = (await UserAccountService.getUser(product.userId)).data
+      const availabilityWindows = (await ProductService.getAvailabilityWindow(this.itemId)).data
+      this.productInfo = product;
+      this.ownerInfo = owner;
+      this.userId = owner.id;
       if (this.ownerInfo.profile64 !== "" && this.ownerInfo.profile64 !== null) {
         this.profilePicSrc = "data:image/jpeg;base64,"+this.ownerInfo.profile64;
-      }
-
-      for (let image of product.images) {
-        this.images.push(image.imgData + "," + image.img64);
       }
       if(new Date(this.productInfo.availableFrom) > new Date()){
         this.startDate = this.productInfo.availableFrom
       }
-      for(let i = 0; i<product.availabilityWindows.length; i++){
-        const start = new Date(product.availabilityWindows[i].from);
-        const end = new Date(product.availabilityWindows[i].to);
+      for(let i = 0; i<availabilityWindows.length; i++){
+        const start = new Date(availabilityWindows[i].from);
+        const end = new Date(availabilityWindows[i].to);
         let loop = new Date(start);
         while (loop <= end) {
           this.availabilityWindow.push(new Date(loop))
@@ -156,6 +172,15 @@ export default {
 
   beforeMount() {
     this.getListingInfo()
+  },
+  async mounted() {
+    this.productImages = (await ImageService.getImagesByProductId(this.itemId)).data
+    if (productImages !== []) {
+      this.imagesFound = true;
+      for (let image of this.productImages) {
+        this.images.push(image.imgData + "," + image.img64);
+      }
+    }
   }
 }
 </script>
