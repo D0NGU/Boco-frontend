@@ -227,6 +227,10 @@ export default {
   margin: 10px;
   border-radius: 5%;
 }
+.my-12 {
+   margin-top: 0 !important;
+   margin-bottom: 0 !important;
+ }
 @media only screen and (max-width: 600px) {
   #wideScreen {
     display: none;
