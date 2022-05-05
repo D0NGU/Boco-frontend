@@ -78,7 +78,6 @@ export default {
       }
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
-      console.log(searchBar, chosenCategories, chosenSortBy, ascending)
       this.reset = true;
       this.activeProducts = (await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)).data
       this.reset = false;
