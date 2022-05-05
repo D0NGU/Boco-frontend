@@ -6,7 +6,7 @@
   <v-card class="rounded-l itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
     <div class="itemContainer">
       <!-- Annonse thumbnail -->
-      <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
+      <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
         <template v-slot:placeholder>
           <v-row
               class="fill-height ma-0 itemImage"
@@ -78,10 +78,10 @@
           <v-card class="mx-auto my-12 rounded-l"
                   max-width="280"
                   @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
-            <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
+            <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
               <template v-slot:placeholder>
                 <v-row
-                    class="fill-height ma-0"
+                    class="fill-height ma-0 "
                     align="center"
                     justify="center"
                 >
@@ -97,12 +97,21 @@
             <v-card-header>
               <v-card-header-text>
                 <v-card-title> {{itemName}}</v-card-title>
-                <v-card-subtitle>
+                <v-card-subtitle v-if="isOwner">
+                  <p class="text-overline itemOwner" style="flex-grow: 1; text-align: left">
+                    <v-avatar size="x-small">
+                     <v-icon>mdi-pencil</v-icon>
+                    </v-avatar>
+                    Rediger</p>
+                  <p class= "d-flex justify-end">{{itemPrice}} kr/dag</p>
+                </v-card-subtitle>
+                <v-card-subtitle v-else>
                   <p class="text-overline itemOwner" style="flex-grow: 1; text-align: left">
                     <v-avatar size="x-small">
                       <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
                       <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
                     </v-avatar>
+                    {{itemOwnerName}}
                     <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
                   <p class= "d-flex justify-end">{{itemPrice}} kr/dag</p>
                 </v-card-subtitle>
@@ -111,14 +120,7 @@
             <v-card-text>
               <v-divider style="margin: 10px"/>
 
-              <div v-if="isOwner">
-                <p  class="text-subtitle-1">
-                  <v-avatar size="x-small">
-                    <v-icon>mdi-pencil</v-icon>
-                  </v-avatar>
-                  Rediger
-                </p>
-              </div>
+
 
             <v-dialog
                 v-model="dialog"

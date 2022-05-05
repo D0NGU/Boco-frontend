@@ -89,7 +89,7 @@ export default {
       if (this.picture) {
         let img = await this.getBase64(this.picture[0]);
         console.log(img);
-        await ImageService.setProfilePic(img, this.$store.state.myUserId);
+        await ImageService.setProfilePic(img, this.$store.getters.myUserId);
         this.confirmationSnackBar = true;
       }
     },
@@ -110,6 +110,7 @@ export default {
       cookies.set('token', "", { path: '/' });
       cookies.set('userId', "", {path: '/'})
       cookies.set('email', "", {path: '/'})
+      this.dialog = false;
       setTimeout( () => this.$router.push({ path: '/login'}), 1500);
     },
   },

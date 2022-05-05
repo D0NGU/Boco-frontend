@@ -19,13 +19,10 @@
     <div class="profileDetails">
       <v-carousel id="carousel" height="300px" hide-delimiter-background="" :show-arrows="false">
         <v-carousel-item class="carouselItem">
-          <div>
             <v-avatar size="x-large">
               <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
-              <v-img v-else src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"/>
+              <v-img v-else src="../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
             </v-avatar>
-
-          </div>
 
           <div>
             <p class="text-button">{{name}}
@@ -92,13 +89,13 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <ListingView :ownerId="this.$store.state.myUserId" :showSearch="false"/>
+          <ListingView :ownerId="this.$store.getters.myUserId" :showSearch="false"/>
         </v-window-item>
         <v-window-item value="history">
           <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
-          <MyReviews :user-id="this.$store.state.myUserId"/>
+          <MyReviews :user-id="this.$store.getters.myUserId"/>
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
@@ -180,7 +177,10 @@ export default {
       }
     },
 
-    setProfilePic() {
+    async setProfilePic() {
+      await UserAccountService.getUser(this.$store.getters.myUserId).then(response => {
+        this.profilePicSrc = "data:image/jpeg;base64," +response.data.profile64;
+      })
 
     }
   },
@@ -188,7 +188,7 @@ export default {
     let myUserId = this.$store.getters.myUserId;
     const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
-    if (userInfo.data.profile64 !== "") {
+    if (userInfo.data.profile64 !== "" && userInfo.data.profile64 !== null) {
       this.profilePicSrc = "data:image/jpeg;base64," +userInfo.data.profile64;
     }
 
