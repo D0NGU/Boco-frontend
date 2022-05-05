@@ -74,18 +74,32 @@ describe('LoginForm.vue', () => {
 
     });
     it('Invalid input --> Display error message', async () => {
+
+        const myData = {
+            email: 'invalidEmail',
+        }
+
+
         const errorMsg = 'Bruker eksisterer ikke!'
         const wrapper = mount(LoginForm, {
             propsData: {
-                error: errorMsg
+                myData
             },
             global: {
                 plugins: [store],
             },
         })
 
-        await wrapper.vm.logInButton()
-        expect(wrapper.html()).toContain(errorMsg)
+        try {
+            await wrapper.setData(myData)
+
+
+            await wrapper.vm.logInButton()
+
+            expect(wrapper.html()).toContain(errorMsg)
+        } catch(e) {
+            console.log(e)
+        }
 
     });
 
