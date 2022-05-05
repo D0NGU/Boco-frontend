@@ -70,13 +70,14 @@ export default {
       let token = '';
       // Check if login-info (email, password) is valid and not empty
       if (this.$refs.loginform.validate()) {
-        await LoginService.handleClickSignIn(this.email, this.password).then(response => {
+        await LoginService.handleClickSignIn(this.email, this.password).then(async response => {
           status = response.status;
           console.log(response.data);
           token = response.data.access_token;
-          cookies.set('token', response.data.access_token);
+          await cookies.set('token', response.data.access_token);
         }).catch((error) => {
           if (error.response) {
+            console.log("heriweowbg")
             status = error.response.status;
           }
         })
@@ -85,12 +86,22 @@ export default {
       // HttpStatus 200 (OK)
       if (status === 200) {
         this.loginStatus = "Påloggingen var vellykket";
-        cookies.set("email", this.email);
-        this.$store.dispatch("login", {token:cookies.get("token"), email:cookies.get("email")});
-        const userInfo = (await UserAccountService.getUserId(this.email)).data
-        cookies.set("userId", userInfo.id);
-        this.$store.commit("SET_MYUSERID", cookies.get("userId"))
-        await window.location.replace('/home');
+        await cookies.set("email", this.email);
+        await this.$store.dispatch("login", {token:cookies.get("token"), email:cookies.get("email")});
+        await UserAccountService.getUserId(this.email).then(async response => {
+          await cookies.set("userId", response.data.id);
+          await this.$store.commit("SET_MYUSERID", cookies.get("userId"))
+        }).catch((error) =>{
+          console.log("earnglrogækeonæigoægo")
+          status = error.response.status;
+        })
+
+        console.log(cookies.get("email"))
+        console.log(cookies.get("token"))
+        console.log(cookies.get("userId"))
+        console.log(this.$store.getters.myUserId)
+        console.log(this.$store.getters.token)
+        await this.$router.push('/home');
       }
       // HttpStatus 403 (FORBIDDEN)
       else if (status === 403) {
