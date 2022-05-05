@@ -25,7 +25,7 @@
       <v-divider vertical />
       <div class="itemDetail">
         <!-- Produktnavn -->
-        <p class="text-subtitle-1">{{ itemName }}</p>
+        <p class="text-subtitle-1 cardTitle">{{ itemName }}</p>
         <v-dialog
             v-model="dialog"
             fullscreen=""
@@ -96,7 +96,7 @@
         <v-divider />
             <v-card-header>
               <v-card-header-text>
-                <v-card-title> {{itemName}}</v-card-title>
+                <v-card-title class="cardTitle"> {{itemName}}</v-card-title>
                 <v-card-subtitle v-if="isOwner">
                   <p class="text-overline itemOwner" style="flex-grow: 1; text-align: left">
                     <v-avatar size="x-small">
@@ -229,6 +229,7 @@ export default {
   margin: 10px;
   border-radius: 5%;
 }
+
 .my-12 {
    margin-top: 0 !important;
    margin-bottom: 0 !important;
@@ -277,5 +278,13 @@ export default {
     position: absolute;
     bottom: 0;
   }
+}
+
+.cardTitle {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 230px;
 }
 </style>
