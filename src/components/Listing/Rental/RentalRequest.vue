@@ -2,30 +2,37 @@
 
 <template>
   <v-card class="rounded-l rentalCard">
-    <v-avatar x-large id="profilePicture"><v-img src="https://www.megaflis.no/globalassets/productimages/6952062643067_1.png?ref=1931F74161&w=1920&scale=both&mode=pad&h=1920&format=jpg"></v-img></v-avatar>
-    <div id="rentalDetails">
-      <p>{{ fname }} {{ lname }}</p>
-      <p>{{ date }}</p>
-      <v-btn color="success" class="rentalButton" @click="acceptRental">Godkjenn</v-btn>
-      <v-btn color="error" class="rentalButton" @click="denyRental">Avslå</v-btn>
+    <div class="itemContainer">
+      <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
+      <v-img v-else src="../../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
+
+      <v-divider vertical />
+      <div id="rentalDetails">
+        <p class="text-subtitle-1">{{ fname }} {{ lname }}</p>
+        <p>{{ date }}</p>
+        <v-btn color="success" class="acceptButton" @click="acceptRental">Godkjenn</v-btn>
+        <v-btn color="error" class="rentalButton" @click="denyRental">Avslå</v-btn>
+      </div>
+
+      <v-dialog v-model="dialog">
+        <v-card>
+          <v-card-title v-if="errorAccept" class="text-h5"> Kan ikke godkjennes </v-card-title>
+          <v-card-text v-if="errorAccept"> {{ errorAccept }} </v-card-text>
+          <v-card-actions>
+            <v-btn
+                color="red"
+                text
+                @click=close()
+            >
+              Lukk
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </v-card>
 
-  <v-dialog v-model="dialog">
-    <v-card>
-      <v-card-title v-if="errorAccept" class="text-h5"> Kan ikke godkjennes </v-card-title>
-      <v-card-text v-if="errorAccept"> {{ errorAccept }} </v-card-text>
-      <v-card-actions>
-        <v-btn
-            color="red"
-            text
-            @click=close()
-        >
-          Lukk
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+
 </template>
 
 <script>
@@ -46,6 +53,7 @@ export default {
       lname: '',
       errorAccept: '',
       dialog: false,
+      profilePicSrc: '',
     }
   },
   methods: {
@@ -71,29 +79,43 @@ export default {
     const userInfo = (await UserAccountService.getUser(this.renter)).data
     this.fname = userInfo.fname;
     this.lname = userInfo.lname;
+    if (userInfo.profile64 !== "" && userInfo.profile64 !== null) {
+      this.profilePicSrc = "data:image/jpeg;base64," +userInfo.profile64;
+    }
   }
 }
 </script>
 
 <style scoped>
 .rentalCard {
-  margin: 10px;
+  margin: 20px;
+  background-color: white;
+}
+.itemContainer {
+  height: 130px;
   padding: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
+  margin-right: -3em;
 }
-
-#profilePicture {
-  flex-grow: 1;
-}
-
 #rentalDetails {
+  height: 100%;
+  margin: 10px 0 10px 20px;
+  text-align: left;
+  position: relative;
+  z-index: 1;
   flex-grow: 1;
 }
-
 .rentalButton {
   margin: 5px;
+}
+.acceptButton {
+  margin: 5px 5px 5px 0;
+}
+.v-img {
+  margin: 0 1em 0 1em;
 }
 
 </style>
