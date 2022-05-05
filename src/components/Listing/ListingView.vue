@@ -57,7 +57,7 @@ export default {
   },
   data () {
     return {
-      pageNumber: 1,
+
       activeProducts: [],
       renderKey: 0,
       reset: false,
@@ -72,23 +72,30 @@ export default {
   methods: {
     async getProducts() {
       if(this.ownerId === 0){
-        const products = (await ProductService.getProducts('', '', this.pageNumber, "price", true)).data
+        const products = (await ProductService.getProducts('', '', "price", true)).data
         products.forEach(product => {
           if(new Date(product.availableTo) > new Date()){
             this.activeProducts.push(product)
           }
         })
       } else {
-        this.activeProducts = (await ProductService.getProductsByUserId(this.ownerId, this.pageNumber)).data.products
+        this.activeProducts = (await ProductService.getProductsByUserId(this.ownerId)).data.products
       }
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
       this.reset = true;
-      this.activeProducts = (await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)).data
+      this.activeProducts = []
+      setTimeout(async () => {
+        const products = (await ProductService.getProducts(searchBar, chosenCategories, chosenSortBy, ascending)).data
+        products.forEach(product => {
+          if (new Date(product.availableTo) > new Date()) {
+            this.activeProducts.push(product)
+          }
+        })
+      })
       this.reset = false;
       console.log(this.renderKey)
       this.isLoading = true;
-      setTimeout(async () => this.activeProducts = (await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)).data, 500);
       setTimeout(() => this.isLoading = false, 1500);
     }
   },
