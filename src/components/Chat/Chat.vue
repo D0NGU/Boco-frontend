@@ -1,3 +1,5 @@
+<!-- component for chat siden -->
+
 <template>
   <v-card class="chatCard">
     <v-row no-gutters=""
