@@ -174,7 +174,7 @@ export default {
   },
   async mounted() {
     this.productImages = (await ImageService.getImagesByProductId(this.itemId)).data
-    if (productImages !== []) {
+    if (this.productImages.length != 0) {
       this.imagesFound = true;
       for (let image of this.productImages) {
         this.images.push(image.imgData + "," + image.img64);

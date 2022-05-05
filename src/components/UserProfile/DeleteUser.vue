@@ -64,6 +64,11 @@ export default {
       this.$store.commit('SET_STATUS', false)
       setTimeout(() => this.$router.push({path: '/login'}), 1500);
     },
+  },
+  beforeMount() {
+    if(!(this.$store.state.loggedIn)){
+      this.$router.push({name: "NotFound"})
+    }
   }
 }
 </script>

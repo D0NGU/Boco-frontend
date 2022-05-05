@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import RentalRequest from "@/components/Listing/RentalRequest";
+import RentalRequest from "@/components/Listing/Rental/RentalRequest";
 import RentalService from "@/service/RentalService";
 import UserAccountService from "@/service/UserAccountService";
 

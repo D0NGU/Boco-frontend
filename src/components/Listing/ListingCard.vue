@@ -1,12 +1,13 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
+  <div>
   <div id="mobile">
     <!-- Selve annonseboksen -->
-  <v-card class="rounded-l itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
+  <v-card class="rounded-l itemCard" @click="redirect" :class="{verifiedOwner: ownerVerified}">
     <div class="itemContainer">
       <!-- Annonse thumbnail -->
-      <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
+      <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
         <template v-slot:placeholder>
           <v-row
               class="fill-height ma-0 itemImage"
@@ -25,18 +26,20 @@
       <v-divider vertical />
       <div class="itemDetail">
         <!-- Produktnavn -->
-        <p class="text-subtitle-1">{{ itemName }}</p>
+        <p class="text-subtitle-1 cardTitle">{{ itemName }}</p>
         <v-dialog
             v-model="dialog"
             fullscreen=""
-            v-if="(ifRented && !ifReviewed) || ifEditing">
+            v-if="ifRented || ifEditing"
+            :retain-focus="false"
+        >
           <template v-slot:activator="{ props }">
             <v-btn icon="" class="writeReviewBtn" size="x-small" v-bind="props"><v-icon size="small">mdi-message-draw</v-icon></v-btn>
           </template>
 
           <v-card>
             <v-card-text>
-              <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" @close="dialog=false" />
+              <Review :item-name="itemName" :owner-id="itemOwner" :owner="isOwner" @close="dialog=false" />
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -75,13 +78,14 @@
 
       <div id="wideScreen">
         <!-- Annonser for ws -->
-          <v-card class="mx-auto my-12 rounded-l"
+          <v-card class="mx-auto my-12 rounded-l itemCard"
                   max-width="280"
-                  @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
-            <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
+                  @click="redirect"
+                  :class="{verifiedOwner: ownerVerified}">
+            <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
               <template v-slot:placeholder>
                 <v-row
-                    class="fill-height ma-0"
+                    class="fill-height ma-0 "
                     align="center"
                     justify="center"
                 >
@@ -96,34 +100,36 @@
         <v-divider />
             <v-card-header>
               <v-card-header-text>
-                <v-card-title> {{itemName}}</v-card-title>
-                <v-card-subtitle>
+                <v-card-title> <p class="cardTitle">{{itemName}}</p></v-card-title>
+                <v-card-subtitle v-if="isOwner">
+                  <p class="text-overline itemOwner" style="flex-grow: 1; text-align: left">
+                    <v-avatar size="x-small">
+                     <v-icon>mdi-pencil</v-icon>
+                    </v-avatar>
+                    Rediger</p>
+                  <p class= "d-flex justify-end">{{itemPrice}} kr/dag</p>
+                </v-card-subtitle>
+                <v-card-subtitle v-else>
                   <p class="text-overline itemOwner" style="flex-grow: 1; text-align: left">
                     <v-avatar size="x-small">
                       <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
                       <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
                     </v-avatar>
+                    {{itemOwnerName}}
                     <v-icon v-if="ownerVerified">mdi-shield-check</v-icon></p>
                   <p class= "d-flex justify-end">{{itemPrice}} kr/dag</p>
                 </v-card-subtitle>
               </v-card-header-text>
             </v-card-header>
             <v-card-text>
-              <v-divider style="margin: 10px"/>
 
-              <div v-if="isOwner">
-                <p  class="text-subtitle-1">
-                  <v-avatar size="x-small">
-                    <v-icon>mdi-pencil</v-icon>
-                  </v-avatar>
-                  Rediger
-                </p>
-              </div>
+
 
             <v-dialog
                 v-model="dialog"
                 fullscreen=""
-                v-if="(ifRented && !ifReviewed) || ifEditing"
+                v-if="ifRented || ifEditing"
+                :retain-focus="false"
             >
               <template v-slot:activator="{ props }">
                 <v-btn append-icon="mdi-message-draw" class="writeReviewBtn" v-bind="props">Skriv en anmeldelse</v-btn>
@@ -131,7 +137,7 @@
 
               <v-card>
                 <v-card-text>
-                  <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" @close="dialog=false" />
+                  <Review :item-name="itemName" :owner-id="itemOwner" :owner="isOwner" @close="dialog=false" />
                 </v-card-text>
                 <v-card-actions>
                   <v-btn
@@ -146,6 +152,7 @@
           </v-card>
 
       </div>
+  </div>
 </template>
 
 <script>
@@ -163,8 +170,6 @@ export default {
     itemImage: Image,
     itemId: [Number, String],
     ifHistory: Boolean,
-    ifReviewed: Boolean,
-    writeReviewToLoaner: Boolean,
     ifRented: Boolean,
     ifEditing: Boolean,
   },
@@ -212,13 +217,8 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 600px) {
-  #mobile {
-    display: none;
-  }
-  .itemCard {
-    margin: 20px;
-  }
+.verifiedOwner {
+  animation: flashyBorder 7s infinite;
 }
 .itemImage {
   height: 250px;
@@ -226,6 +226,28 @@ export default {
   object-fit: cover;
   margin: 10px;
   border-radius: 5%;
+}
+
+.my-12 {
+   margin-top: 0 !important;
+   padding-top: 10px;
+   padding-left: 2px;
+   margin-bottom: 0 !important;
+ }
+.cardTitle {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 230px;
+}
+@media screen and (min-width: 600px) {
+  #mobile {
+    display: none;
+  }
+  .itemCard {
+    margin: 20px;
+  }
 }
 @media only screen and (max-width: 600px) {
   #wideScreen {
@@ -272,4 +294,15 @@ export default {
     bottom: 0;
   }
 }
+
+@keyframes flashyBorder {
+  0% {border: solid 2px red}
+  10% {border: solid 2px orange}
+  30% {border: solid 2px yellow}
+  50% {border: solid 2px green}
+  70% {border: solid 2px blue}
+  90%{border: solid 2px purple}
+  100%{border: solid 2px red}
+}
+
 </style>

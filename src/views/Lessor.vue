@@ -19,7 +19,7 @@
       <v-carousel-item class="carouselItem">
         <v-avatar size="x-large">
           <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
-          <v-img v-else src="../assets/images/missing_profile_img.png"></v-img>
+          <v-img v-else src="../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
         </v-avatar>
 
         <div>
@@ -87,7 +87,7 @@ export default {
       isVerified: false,
       rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
       background_img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd53l9d6fqlxs2.cloudfront.net%2Fphotos%2F75616-adobestock_63768956jpeg.jpeg&f=1&nofb=1',
-      profilePicSrc: ''
+      profilePicSrc: '',
     }
   },
   methods: {
@@ -105,6 +105,9 @@ export default {
   async beforeMount() {
     const userInfo = await UserAccountService.getUser(this.userId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
+    if (userInfo.data.profile64 !== "" && userInfo.data.profile64 !== null) {
+      this.profilePicSrc = "data:image/jpeg;base64," +userInfo.data.profile64;
+    }
 
     //check if user is verified
     await UserAccountService.getVerifiedUser(this.userId)

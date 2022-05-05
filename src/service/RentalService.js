@@ -14,5 +14,9 @@ export default {
 
     deny(id){
         return getApiClient.delete('rentals/'+id)
+    },
+
+    getAllRentals(id) {
+        return getApiClient.get('rentals/product/'+id)
     }
 }
