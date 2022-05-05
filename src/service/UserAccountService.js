@@ -65,6 +65,16 @@ export default {
     getAverageScoreAsRenter(userId) {
         return getApiClient.get("review/user/" + userId + "/average/renter")
     },
+
+    requestPasswordReset(email) {
+        return axios.post("http://localhost:8080/api/forgot_password?email=" + email)
+    },
+
+    resetPassword(token, password) {
+        return axios.put("http://localhost:8080/api/reset_password?token=" + token + "&password=" + password)
+    },
+
+
 }
 
 

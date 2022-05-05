@@ -3,7 +3,7 @@
     <Navbar id="navBar"/>
   </nav>
   <router-view />
-  <Footer v-if="!$route.name.match('NotFound')"/>
+  <Footer v-if="!($route.name === ('NotFound'))"/>
 </template>
 
 

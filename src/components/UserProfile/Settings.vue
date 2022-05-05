@@ -55,7 +55,7 @@
         :timeout="3000"
         v-model="confirmationSnackBar"
         top
-    >Passordet har blitt endret! </v-snackbar>
+    >Endringene har blitt lagret! </v-snackbar>
   </v-card>
 
 </template>
@@ -89,7 +89,7 @@ export default {
       if (this.picture) {
         let img = await this.getBase64(this.picture[0]);
         console.log(img);
-        await ImageService.setProfilePic(img, this.$store.state.myUserId);
+        await ImageService.setProfilePic(img, this.$store.getters.myUserId);
         this.confirmationSnackBar = true;
       }
     },
@@ -110,6 +110,7 @@ export default {
       cookies.set('token', "", { path: '/' });
       cookies.set('userId', "", {path: '/'})
       cookies.set('email', "", {path: '/'})
+      this.dialog = false;
       setTimeout( () => this.$router.push({ path: '/login'}), 1500);
     },
   },
@@ -147,6 +148,10 @@ h1 {
 
 button {
   margin: 0.4em 0.4em 0.8em 0.4em;
+}
+
+.v-file-input {
+  margin-bottom: 2.5em;
 }
 
 </style>

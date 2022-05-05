@@ -47,7 +47,8 @@
               ></v-textarea>
               <div>
                 <v-file-input
-                    v-model="files"
+                    v-model="newFiles"
+                    @change="fillFiles"
                     label="Last opp bilder"
                     hide-details="auto"
                     :rules="rulesImage"
@@ -58,10 +59,12 @@
                 />
 
                 <div id="pictures" v-if="files.length!==0">
-                  <v-badge content="x" color="error" v-for="(image, i) in images" @click="deleteImage(i)">
+                  <v-badge content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
                     <div id="space">
-                      <v-img outlined width="130" v-bind:src="image.img" class="grey lighten-2 image">
-                      </v-img>
+                      <!--<v-img outlined width="130" v-bind:src="image" class="grey lighten-2 image">
+                      </v-img>-->
+                      <!--Bruk image cards. Den inneholder metoden for å rendre ett bilde fra en fil-->
+                      <ImageCards :file="file"></ImageCards>
                     </div>
                   </v-badge>
                  </div>
@@ -265,6 +268,8 @@
     </v-window>
   </v-card-text>
 
+
+
 </template>
 
 <script>
@@ -276,7 +281,7 @@ import { ref } from 'vue';
 import Datepicker from "@vuepic/vue-datepicker";
 import ImageCards from "@/components/Listing/ImageCards";
 import ShowRentals from "@/components/UserProfile/ShowRentals";
-import RentalRequestView from "@/components/Listing/RentalRequestView";
+import RentalRequestView from "@/components/Listing/Rental/RentalRequestView";
 import RentalService from "@/service/RentalService";
 
 export default {
@@ -301,6 +306,7 @@ export default {
       unListed: false,
       categories: [],
       dialog: false,
+      newFiles: [],
       files: [],
       images: [],
       shownImages: [],
@@ -330,20 +336,14 @@ export default {
     }
   },
 
-  watch: {
-    files() {
-      this.addFiles()
-    }
-  },
   methods: {
-    forceRerender() {
-      this.render = false;
-
-      this.$nextTick(() => {
-        this.render = true;
-      });
+    fillFiles() {
+      for (let file of this.newFiles) {
+        console.log(file)
+        this.files.push(file);
+      }
+      this.newFiles = [];
     },
-
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
@@ -351,6 +351,10 @@ export default {
       })
       if(this.updating) {
         const productInfo = (await ProductService.getProductById(this.itemId)).data
+        if(!(productInfo.userId == this.$store.state.myUserId)){
+          await this.$router.push({name: "NotFound"})
+        }
+
         this.adName = productInfo.title;
         this.adDescription = productInfo.description;
         this.adPrice = productInfo.price;
@@ -382,11 +386,9 @@ export default {
     },
 
     async createAd() {
-      for (let file of this.files) {
-        this.images.push( await this.getBase64(file))
-      }
-
+      console.log("Listing was created.")
       let tempStat = '';
+      await this.addFiles();
       if(this.date !== undefined && this.date !== null) {
         await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images).then(response => {
           tempStat = response.status;
@@ -416,11 +418,7 @@ export default {
       let tempStat;
       this.dialog = true;
       this.createdStatus = true;
-      this.image = [];
-
-      for (let file of this.files) {
-        this.image.push( await this.getBase64(file));
-      }
+      await this.addFiles();
       await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
           .then(response => {
             tempStat = response.data
@@ -526,14 +524,13 @@ export default {
     },
 
   },
-
-   beforeMount(){
+  beforeMount(){
     this.getInfo();
     if(this.itemId > 0){
       this.updating = true;
       this.getRentals();
     }
-  },
+   },
 }
 </script>
 
@@ -544,7 +541,9 @@ export default {
   width: 350px;
   padding: 1em;
 }
-
+.v-tabs.v-slide-group--is-overflowing:not(.v-slide-group--has-affixes) .v-tab:first-child {
+  margin-left: 4px;
+}
 .v-text-field, .v-file-input, .v-textarea, #datepicker {
   margin-bottom: 22px;
 }
@@ -581,9 +580,6 @@ button {
   padding-bottom: 10px;
   margin: auto;
   place-content: center;
-}
-.image {
-  margin: 2px;
 }
 #space {
   margin-left: 4px;
