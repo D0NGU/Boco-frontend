@@ -340,8 +340,8 @@ export default {
         this.adCategory = productInfo.category
         this.unListed = productInfo.unlisted;
         this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)];
-        this.image = (await ImageService.getImagesByProductId(this.itemId)).data;
-        for (let x of this.image) {
+        this.images = (await ImageService.getImagesByProductId(this.itemId)).data;
+        for (let x of this.images) {
           this.files.push(await (this.urlToFile(x.img64, x.imgData, x.imgName)));
           this.shownImages.push(x.imgData + "," + x.img64);
         }
@@ -366,7 +366,7 @@ export default {
     async createAd() {
       console.log("Listing was created.")
       for (let file of this.files) {
-        this.image.push( await this.getBase64(file));
+        this.images.push( await this.getBase64(file));
       }
 
       let tempStat = '';
@@ -387,9 +387,9 @@ export default {
         let tempStat;
         this.dialog = true;
         this.createdStatus = true;
-        this.image = [];
+        this.images = [];
       for (let file of this.files) {
-        this.image.push( await this.getBase64(file));
+        this.images.push( await this.getBase64(file));
       }
       console.log("Listing was updated.")
         await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
