@@ -89,13 +89,13 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <ListingView :ownerId="this.$store.state.myUserId" :showSearch="false"/>
+          <ListingView :ownerId="this.$store.getters.myUserId" :showSearch="false"/>
         </v-window-item>
         <v-window-item value="history">
           <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
-          <MyReviews :user-id="this.$store.state.myUserId"/>
+          <MyReviews :user-id="this.$store.getters.myUserId"/>
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
@@ -177,7 +177,10 @@ export default {
       }
     },
 
-    setProfilePic() {
+    async setProfilePic() {
+      await UserAccountService.getUser(this.$store.getters.myUserId).then(response => {
+        this.profilePicSrc = "data:image/jpeg;base64," +response.data.profile64;
+      })
 
     }
   },

@@ -89,7 +89,7 @@ export default {
       if (this.picture) {
         let img = await this.getBase64(this.picture[0]);
         console.log(img);
-        await ImageService.setProfilePic(img, this.$store.state.myUserId);
+        await ImageService.setProfilePic(img, this.$store.getters.myUserId);
         this.confirmationSnackBar = true;
       }
     },
