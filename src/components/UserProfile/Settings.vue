@@ -110,6 +110,7 @@ export default {
       cookies.set('token', "", { path: '/' });
       cookies.set('userId', "", {path: '/'})
       cookies.set('email', "", {path: '/'})
+      this.dialog = false;
       setTimeout( () => this.$router.push({ path: '/login'}), 1500);
     },
   },
