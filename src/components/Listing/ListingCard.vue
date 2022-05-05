@@ -6,7 +6,7 @@
   <v-card class="rounded-l itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
     <div class="itemContainer">
       <!-- Annonse thumbnail -->
-      <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
+      <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
         <template v-slot:placeholder>
           <v-row
               class="fill-height ma-0 itemImage"
@@ -78,7 +78,7 @@
           <v-card class="mx-auto my-12 rounded-l"
                   max-width="280"
                   @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
-            <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage">
+            <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
               <template v-slot:placeholder>
                 <v-row
                     class="fill-height ma-0 "
