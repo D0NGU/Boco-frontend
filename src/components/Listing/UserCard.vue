@@ -82,12 +82,6 @@ export default {
   align-items: center;
   position: relative;
 }
-#userImage {
-  width: 30%;
-  object-fit: contain;
-  max-height: 100%;
-  z-index: 1;
-}
 .itemDetail {
   height: 100%;
   margin: 10px 0 10px 20px;
@@ -98,5 +92,8 @@ export default {
 }
 #writeReviewBtn {
   font-size: 11px;
+}
+.v-img {
+  margin: 0 1em 0 1em;
 }
 </style>
