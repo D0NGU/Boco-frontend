@@ -32,38 +32,66 @@ body {
   animation-delay: -3s;
   animation-duration: 7s;
 }
-
-@keyframes rave {
-  0% {
-    background-color: #fff;
-  }
-  100% {
-    background-color: #000;
-  }
+*:nth-child(7n) {
+  animation-duration: 0.2s;
+}
+.v-img {
+  animation: drop;
+  animation-duration: 10s;
 }
 @keyframes disco {
-  16% {
+  0% {
     background-color: #f00;
   }
-  32% {
+  16% {
     background-color: #ff0;
   }
-  48% {
+  32% {
     background-color: #0f0;
   }
+  48% {
+    background-color: #0ff;
+  }
   64% {
+    background-color: #00f;
+  }
+  80% {
+    background-color: #f0f;
+  }
+  96% {
+    background-color: #f00;
+  }
+}
+@keyframes drop {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #f00;
+  }
+  55% {
+    background-color: #ff0;
+  }
+  60% {
+    background-color: #0f0;
+  }
+  65% {
     background-color: #0ff;
   }
   70% {
     background-color: #00f;
   }
-  86% {
+  75% {
     background-color: #f0f;
   }
-  100% {
+  80% {
     background-color: #f00;
   }
+  81% {
+    background-color: transparent;
+  }
 }
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
