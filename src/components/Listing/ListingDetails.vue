@@ -48,7 +48,7 @@
               <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
             </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
         </div>
-     <!--  <v-divider style="margin: 10px"/> -->
+       <v-divider style="margin: 10px"/>
     </div>
 
     <div id="requestForm">
@@ -74,7 +74,6 @@
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
-import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
 import Map from "@/components/Listing/Map";
 import UserAccountService from "@/service/UserAccountService";

@@ -72,7 +72,12 @@ export default {
   methods: {
     async getProducts() {
       if(this.ownerId === 0){
-        this.activeProducts = (await ProductService.getProducts('', '', this.pageNumber, "price", true)).data
+        const products = (await ProductService.getProducts('', '', this.pageNumber, "price", true)).data
+        products.forEach(product => {
+          if(new Date(product.availableTo) > new Date()){
+            this.activeProducts.push(product)
+          }
+        })
       } else {
         this.activeProducts = (await ProductService.getProductsByUserId(this.ownerId, this.pageNumber)).data.products
       }

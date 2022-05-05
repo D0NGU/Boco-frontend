@@ -1,11 +1,11 @@
 <!-- registrerings komponent -->
 
 <template>
+  <h1 id="title">Opprett bruker</h1>
   <v-form ref="form" id="RegisterForm"
           @submit.prevent="submit"
           v-model="valid"
           lazy-validation>
-    <h1 id="title">Opprett bruker</h1>
 
     <div id="test">
       <v-text-field
@@ -155,14 +155,16 @@ export default {
 <style scoped>
 
 #RegisterForm {
-  display: grid;
+  display: inline-block;
   justify-content: center;
   padding: 20px;
-  margin-top: 30px;
+  background-color: white;
+  margin-bottom: 60px;
 }
 
 h1 {
   margin-bottom: 30px;
+  margin-top: 30px;
 }
 
 #test {
@@ -177,6 +179,7 @@ h1 {
   background-color: var(--bocoBlue) !important;
   color: white !important;
   font-weight: bold;
+  margin-top: 1em;
 }
 
 #backToLoginButton {

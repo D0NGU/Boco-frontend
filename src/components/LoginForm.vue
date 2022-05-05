@@ -1,6 +1,6 @@
 <template>
+  <h1 id="loginTitle">Logg inn</h1>
   <v-form ref="loginform" id="LoginForm" @submit.prevent="logInButton" v-model="valid" lazy-validation>
-    <h1 id="loginTitle">Logg inn</h1>
 
     <div id="inputWrapper">
       <div>
@@ -53,6 +53,10 @@
       </v-btn>
     </div>
   </v-form>
+
+  <p id="forgotPassword" @click="this.$router.push('/password/reset/request')">
+    Glemt passord &#10138;
+  </p>
 </template>
 
 
@@ -61,7 +65,7 @@
 <script>
 import LoginService from '@/service/LoginService'
 import cookies from 'vue-cookie'
-import UserAccountService from "@/service/UserAccountService";
+import axios from "axios";
 
 export default {
   methods: {
@@ -75,9 +79,17 @@ export default {
           console.log(response.data);
           token = response.data.access_token;
           await cookies.set('token', response.data.access_token);
+          await axios.get('http://localhost:8080/api/user/get/'+this.email, {
+          headers: {
+            'Content-type': 'application/json',
+                Authorization: 'Bearer ' +  token,
+          }
+        }).then(response => {
+          cookies.set("userId", response.data.id);
+          this.$store.commit("SET_MYUSERID", cookies.get("userId"))
+        });
         }).catch((error) => {
           if (error.response) {
-            console.log("heriweowbg")
             status = error.response.status;
           }
         })
@@ -88,20 +100,7 @@ export default {
         this.loginStatus = "Påloggingen var vellykket";
         await cookies.set("email", this.email);
         await this.$store.dispatch("login", {token:cookies.get("token"), email:cookies.get("email")});
-        await UserAccountService.getUserId(this.email).then(async response => {
-          await cookies.set("userId", response.data.id);
-          await this.$store.commit("SET_MYUSERID", cookies.get("userId"))
-        }).catch((error) =>{
-          console.log("earnglrogækeonæigoægo")
-          status = error.response.status;
-        })
-
-        console.log(cookies.get("email"))
-        console.log(cookies.get("token"))
-        console.log(cookies.get("userId"))
-        console.log(this.$store.getters.myUserId)
-        console.log(this.$store.getters.token)
-        await this.$router.push('/home');
+        await window.location.replace('/home');
       }
       // HttpStatus 403 (FORBIDDEN)
       else if (status === 403) {
@@ -156,24 +155,26 @@ export default {
   display: grid;
   justify-content: center;
   padding: 20px;
-  margin-top: 30px;
   margin-bottom: 60px;
+  background-color: white;
 }
 
 #inputWrapper {
   width: 350px;
+
 }
 
 label {
   padding-top: 20px;
 }
 
-v-btn {
+.v-btn {
   padding: 10px;
 }
 
 h1 {
   margin-bottom: 30px;
+  margin-top: 30px;
 }
 
 #loginButton {
@@ -190,6 +191,12 @@ h1 {
   background-color: white !important;
   color: var(--bocoBlue) !important;
   font-weight: bold;
+  margin-bottom: 15px;
+}
+
+#forgotPassword {
+  color: var(--bocoBlue);
+  cursor: pointer;
 }
 
 </style>
