@@ -1,3 +1,5 @@
+<!-- fremstiller en forespørsel om leie -->
+
 <template>
   <h1>Forespørsler om utleie</h1>
   <div v-for="(rental, i) in rentalList" :key="i">
@@ -6,6 +8,7 @@
         :renter="rental.userId"
         :date="rental.dateFrom + ' - ' + rental.dateTo"
         @update="sendEvent()"
+        :product-id="rental.productId"
     />
   </div>
   <p v-if="!rentalList">Du har ingen forespørsler om utleie.</p>

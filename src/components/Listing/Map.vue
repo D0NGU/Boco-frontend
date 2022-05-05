@@ -1,3 +1,5 @@
+<!-- component som fremstiller kart funksjon -->
+
 <template>
   <div @click="closeMap()" class="backdrop" id="map">
     <iframe class="mapFrame"
@@ -47,7 +49,7 @@ export default {
   padding: 20px;
   margin: 200px auto;
   background: white;
-  border-radius: 10px;
+  border-radius: 5%;
 }
 .backdrop {
   top: 0; right: 0; bottom: 0; left: 0;

@@ -21,9 +21,8 @@
         <v-carousel-item class="carouselItem">
           <div>
             <v-avatar size="x-large">
-              <v-img @click="setProfilePic" src="../assets/images/missing_profile_img.png">
-                <v-btn icon><v-icon>mdi-camera</v-icon></v-btn>
-              </v-img>
+              <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
+              <v-img v-else src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"/>
             </v-avatar>
 
           </div>
@@ -137,6 +136,7 @@ export default {
       statusForEditUserDescription: '',
       snackbar: false,
       timeout: 2000,
+      profilePicSrc: ''
     }
   },
 
@@ -190,6 +190,9 @@ export default {
     let myUserId = this.$store.getters.myUserId;
     const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
+    if (userInfo.data.profile64 !== "") {
+      this.profilePicSrc = "data:image/jpeg;base64," +userInfo.data.profile64;
+    }
 
     //check if user is verified
     this.isVerified = (await UserAccountService.getVerifiedUser(myUserId)).data

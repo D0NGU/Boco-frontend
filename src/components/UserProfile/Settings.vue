@@ -5,6 +5,13 @@
     <div id="textFieldWrapper">
       <v-text-field id="name" v-model="name" readonly label="Navn"></v-text-field>
       <v-text-field id="email" v-model="email" readonly label="E-postadresse"></v-text-field>
+      <v-file-input
+          v-model="picture"
+          label="Last opp bilde"
+          hide-details="auto"
+          accept="image/jpeg"
+          prepend-icon="mdi-camera"
+      />
       <v-text-field type="password" label="Gammelt passord" v-model="oldPassword"></v-text-field>
       <v-text-field type="password" label="Nytt passord" v-model="newPassword"></v-text-field>
       <v-text-field type="password" label="Gjenta passord" v-model="newPasswordRepeat"></v-text-field>
@@ -56,6 +63,7 @@
 <script>
 import UserAccountService from "@/service/UserAccountService";
 import cookies from 'vue-cookie';
+import ImageService from "@/service/ImageService";
 
 export default {
   name: "Settings",
@@ -69,14 +77,33 @@ export default {
       hideHistory: false,
       confirmationSnackBar: false,
       dialog: false,
+      picture: []
     }
   },
   methods: {
-    handleSaveClick(){
-      if(this.newPassword === this.newPasswordRepeat){
-        UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword);
+    async handleSaveClick(){
+      if(this.newPassword === this.newPasswordRepeat && this.newPassword !== ""){
+        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword);
         this.confirmationSnackBar = true;
       }
+      if (this.picture) {
+        let img = await this.getBase64(this.picture[0]);
+        console.log(img);
+        await ImageService.setProfilePic(img, this.$store.state.myUserId);
+        this.confirmationSnackBar = true;
+      }
+    },
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        let blob;
+        reader.onload = () => resolve({
+              img: reader.result.split(",")[1],
+            },
+        );
+        reader.onerror = error => reject(error);
+      });
     },
     logOut() {
       this.$store.commit('SET_STATUS', false);

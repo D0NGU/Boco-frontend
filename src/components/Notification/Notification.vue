@@ -1,3 +1,5 @@
+<!-- component for notification siden -->
+
 <template>
   <v-card class="notifCard">
     <v-row no-gutters=""

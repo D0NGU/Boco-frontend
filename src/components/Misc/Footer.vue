@@ -1,3 +1,5 @@
+<!-- Footer som alltid skal vises uavhengig av view -->
+
 <template>
     <v-row id="footer" justify="center">
       <v-col cols="12">
@@ -15,8 +17,7 @@
         <!-- Kontaktinformasjon nederst på siden -->
         <div id="info">
           <h4 onclick="location.href='/contact'"> Kontakt oss </h4>
-          <h4 onclick="location.href='/faq'"> FAQ </h4>
-          <h4 onclick="location.href='/home'"><v-icon>mdi-forum</v-icon> Chat </h4>
+          <h4 onclick="location.href='/faq'"><v-icon size="x-small">mdi-frequently-asked-questions</v-icon>FAQ </h4>
           <p id="copyrightMessage"> &copy; 2022 BoCo </p>
         </div>
       </v-col>
