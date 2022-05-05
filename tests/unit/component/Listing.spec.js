@@ -1,10 +1,23 @@
 import Listing from '@/components/Listing/Listing'
-import { mount } from '@vue/test-utils'
-
+import { mount, shallowMount } from '@vue/test-utils'
 describe('Testing Listing.vue', () => {
 
-    test('The title of a listing is required', () => {
-        const wrapper = mount(Listing)
-        expect(true).toBe(true)
-    })
-}) // TODO Skriv ferdig test her
+
+    test('The title of a listing is required and > 2 characters', () => {
+
+        let myData = {
+            adName: 'no'
+        }
+
+        const wrapper = shallowMount(Listing, {
+            propsData: {
+                myData
+            }
+        })
+
+        wrapper.setData(myData)
+        expect(wrapper.html()).toContain('Minimum 3 bokstaver.')
+    });
+
+
+})

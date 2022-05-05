@@ -6,6 +6,12 @@
            align="center"
            justify="center"
     >
+      <v-col
+          cols="2"
+          md="2">
+        <v-icon class="notifIcon">{{icon}}</v-icon>
+      </v-col>
+
       <v-col cols="8"
       sm="4"
       md="8"
@@ -40,6 +46,7 @@ export default {
   data () {
     return {
       dialog: false,
+      icon: '',
     }
   },
   methods: {
@@ -61,6 +68,17 @@ export default {
         this.$router.push('/account');
       }
     },
+  },
+  created() {
+    if (this.description === "Ny forespørsel om utleie.") {
+      this.icon = "mdi-newspaper-plus"
+    } else if (this.description === "Din forespørsel om utleie ble godtatt!") {
+      this.icon = "mdi-newspaper-plus"
+    } else if(this.description === "Din forespørsel om utleie ble avslått!") {
+      this.icon = "mdi-newspaper-minus"
+    } else{
+      this.icon = "mdi-message-draw"
+    }
   }
 }
 </script>
@@ -78,8 +96,10 @@ export default {
 .dateText {
   padding: 0 0 6px 0;
 }
-
 .v-icon {
   cursor: pointer;
+}
+.notifIcon {
+  margin: 10px;
 }
 </style>

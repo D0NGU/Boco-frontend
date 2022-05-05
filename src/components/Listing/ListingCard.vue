@@ -1,9 +1,10 @@
 <!-- En "listing" instans. (En annonseboks) -->
 
 <template>
+  <div>
   <div id="mobile">
     <!-- Selve annonseboksen -->
-  <v-card class="rounded-l itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
+  <v-card class="rounded-l itemCard" @click="redirect" :class="{verifiedOwner: ownerVerified}">
     <div class="itemContainer">
       <!-- Annonse thumbnail -->
       <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
@@ -77,9 +78,10 @@
 
       <div id="wideScreen">
         <!-- Annonser for ws -->
-          <v-card class="mx-auto my-12 rounded-l"
+          <v-card class="mx-auto my-12 rounded-l itemCard"
                   max-width="280"
-                  @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
+                  @click="redirect"
+                  :class="{verifiedOwner: ownerVerified}">
             <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
               <template v-slot:placeholder>
                 <v-row
@@ -94,11 +96,24 @@
                 </v-row>
               </template>
             </v-img>
-            <img v-else :src="defaultimage" class="itemImage">
+            <v-img v-else :src="defaultimage" class="itemImage" :cover="true">
+              <template v-slot:placeholder>
+                <v-row
+                    class="fill-height ma-0 "
+                    align="center"
+                    justify="center"
+                >
+                  <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
         <v-divider />
             <v-card-header>
               <v-card-header-text>
-                <v-card-title class="cardTitle"> {{itemName}}</v-card-title>
+                <v-card-title> <p class="cardTitle">{{itemName}}</p></v-card-title>
                 <v-card-subtitle v-if="isOwner">
                   <p class="text-overline itemOwner" style="flex-grow: 1; text-align: left">
                     <v-avatar size="x-small">
@@ -150,6 +165,7 @@
           </v-card>
 
       </div>
+  </div>
 </template>
 
 <script>
@@ -175,7 +191,7 @@ export default {
       itemOwnerName: '',
       dialog: false,
       isOwner: false,
-      thumbnail: '',
+      thumbnail: '@/assets/images/product.png',
       ownerVerified: false,
       profilePicSrc: '',
       imgExist: true,
@@ -214,13 +230,8 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 600px) {
-  #mobile {
-    display: none;
-  }
-  .itemCard {
-    margin: 20px;
-  }
+.verifiedOwner {
+  animation: flashyBorder 7s infinite;
 }
 .itemImage {
   height: 250px;
@@ -236,6 +247,24 @@ export default {
    padding-left: 2px;
    margin-bottom: 0 !important;
  }
+.cardTitle {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 230px;
+}
+.itemCard {
+  border: 1px solid white;
+}
+@media screen and (min-width: 600px) {
+  #mobile {
+    display: none;
+  }
+  .itemCard {
+    margin: 20px;
+  }
+}
 @media only screen and (max-width: 600px) {
   #wideScreen {
     display: none;
@@ -282,11 +311,14 @@ export default {
   }
 }
 
-.cardTitle {
-  display: inline-block;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 230px;
+@keyframes flashyBorder {
+  0% {border: solid 1px red}
+  10% {border: solid 1px orange}
+  30% {border: solid 1px yellow}
+  50% {border: solid 1px green}
+  70% {border: solid 1px blue}
+  90%{border: solid 1px purple}
+  100%{border: solid 1px red}
 }
+
 </style>
