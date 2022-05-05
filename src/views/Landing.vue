@@ -14,7 +14,7 @@
     <h1 id="title">Borrow <br> Community</h1>
     <h3>- for å skape et
       <br>bærekraftigere samfunn</h3>
-    <v-btn class="button" @click="$router.push({name: 'Login'})">Start nå</v-btn>
+    <v-btn class="button" @click="startButton">Start nå</v-btn>
     </div>
   </div>
   <div class="paragraph">
@@ -41,21 +41,33 @@ import ListingView from "@/components/Listing/ListingView";
 export default {
   name: "Landing",
   components: {ListingView},
+
   data () {
     return {
       isLoading: true,
       disabled: false,
     }
   },
+
   methods: {
     handleLoad () {
       setTimeout(() => this.isLoading = false, 1500);
     },
+    startButton() {
+      if (!this.$store.state.loggedIn) {
+        this.$router.push({name: 'Login'});
+      } else {
+        this.$router.push({name: 'Home'});
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
+h1, h3 {
+  cursor: default;
+}
 #cover {
   height: 100%;
   width: 100%;
@@ -64,7 +76,8 @@ export default {
 }
 
 #coverImage {
-  height: 100%;
+  max-height: 500px;
+  object-fit: cover;
   width: 100%;
   flex: 1;
 }

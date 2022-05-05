@@ -4,7 +4,7 @@
   <div>
   <div id="mobile">
     <!-- Selve annonseboksen -->
-  <v-card class="rounded-l itemCard" @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
+  <v-card class="rounded-l itemCard" @click="redirect" :class="{verifiedOwner: ownerVerified}">
     <div class="itemContainer">
       <!-- Annonse thumbnail -->
       <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
@@ -78,9 +78,10 @@
 
       <div id="wideScreen">
         <!-- Annonser for ws -->
-          <v-card class="mx-auto my-12 rounded-l"
+          <v-card class="mx-auto my-12 rounded-l itemCard"
                   max-width="280"
-                  @click="redirect" :color="ownerVerified ? '#8d9fe5' : '#FFFFFF'">
+                  @click="redirect"
+                  :class="{verifiedOwner: ownerVerified}">
             <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
               <template v-slot:placeholder>
                 <v-row
@@ -99,7 +100,7 @@
         <v-divider />
             <v-card-header>
               <v-card-header-text>
-                <v-card-title class="cardTitle"> {{itemName}}</v-card-title>
+                <v-card-title> <p class="cardTitle">{{itemName}}</p></v-card-title>
                 <v-card-subtitle v-if="isOwner">
                   <p class="text-overline itemOwner" style="flex-grow: 1; text-align: left">
                     <v-avatar size="x-small">
@@ -216,13 +217,8 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 600px) {
-  #mobile {
-    display: none;
-  }
-  .itemCard {
-    margin: 20px;
-  }
+.verifiedOwner {
+  animation: flashyBorder 7s infinite;
 }
 .itemImage {
   height: 250px;
@@ -238,6 +234,21 @@ export default {
    padding-left: 2px;
    margin-bottom: 0 !important;
  }
+.cardTitle {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 230px;
+}
+@media screen and (min-width: 600px) {
+  #mobile {
+    display: none;
+  }
+  .itemCard {
+    margin: 20px;
+  }
+}
 @media only screen and (max-width: 600px) {
   #wideScreen {
     display: none;
@@ -284,11 +295,14 @@ export default {
   }
 }
 
-.cardTitle {
-  display: inline-block;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 230px;
+@keyframes flashyBorder {
+  0% {border: solid 2px red}
+  10% {border: solid 2px orange}
+  30% {border: solid 2px yellow}
+  50% {border: solid 2px green}
+  70% {border: solid 2px blue}
+  90%{border: solid 2px purple}
+  100%{border: solid 2px red}
 }
+
 </style>
