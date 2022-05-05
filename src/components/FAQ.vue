@@ -19,6 +19,13 @@
         <v-expansion-panel-text>Ved å få mange gode anmeldelser vil du bli en verifisert bruker som gjør at annonsene dine blir fremhevet.</v-expansion-panel-text>
         <v-expansion-panel-text>Når du legger til kategori, en god tittel og en fin beskrivelse, øker du også sjansene for at den ønskede kunden finner annonsen din.</v-expansion-panel-text>
       </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-title>Hvordan blir du en verifisert bruker?</v-expansion-panel-title>
+        <v-expansion-panel-text style="font-weight: bold">For å bli en verifisert bruker hos BoCo, er det tre ting som gjelder:</v-expansion-panel-text>
+        <v-expansion-panel-text>1) Du må ha vært medlem av BoCo i minst en måned.</v-expansion-panel-text>
+        <v-expansion-panel-text>2) Du må ha fått minimum 10 anmeldelser av andre.</v-expansion-panel-text>
+        <v-expansion-panel-text>3) Du må ha fått ett snitt på 4 stjerner eller høyere fra anmelderene dine. Det betyr at du må fortsette med å være en god utleier/leietaker for å beholde fordelene med å være verifisert.</v-expansion-panel-text>
+      </v-expansion-panel>
     </v-expansion-panels>
   </div>
 

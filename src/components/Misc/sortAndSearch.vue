@@ -127,7 +127,7 @@ export default {
       sortByOptions: [{option: 'Mest relevant', active: true}, {option: 'Pris lav-høy', active: false}, {option: 'Pris høy-lav', active: false}, {option: 'Lagt til nyeste', active: false}, {option: 'Lagt til eldste', active: false}, {option: 'Brukere', active: false}],
       chosenSortBy: 'Mest relevant',
       ascending: true,
-      webCategories: [],
+      webCategories: ["Ingen",],
       webSortBy: ['Mest relevant', 'Pris lav-høy', 'Pris høy-lav', 'Lagt til nyeste', 'Lagt til eldste', 'Brukere'],
       categories: [],
       chosenCategory: [],
@@ -137,6 +137,9 @@ export default {
     handleSearchButton(){
       let category = '';
       let sortBy = 'title';
+      if(this.chosenCategory === "Ingen") {
+        this.chosenCategory = "";
+      }
       if(this.chosenCategory.isArray && this.chosenCategory.length > 0){
         category = this.chosenCategory[0].category
       } else if(this.chosenCategory.length > 0) {

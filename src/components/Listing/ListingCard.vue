@@ -30,14 +30,16 @@
         <v-dialog
             v-model="dialog"
             fullscreen=""
-            v-if="(ifRented && !ifReviewed) || ifEditing">
+            v-if="ifRented || ifEditing"
+            :retain-focus="false"
+        >
           <template v-slot:activator="{ props }">
             <v-btn icon="" class="writeReviewBtn" size="x-small" v-bind="props"><v-icon size="small">mdi-message-draw</v-icon></v-btn>
           </template>
 
           <v-card>
             <v-card-text>
-              <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" @close="dialog=false" />
+              <Review :item-name="itemName" :owner-id="itemOwner" :owner="isOwner" @close="dialog=false" />
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -119,14 +121,14 @@
               </v-card-header-text>
             </v-card-header>
             <v-card-text>
-              <v-divider style="margin: 10px"/>
 
 
 
             <v-dialog
                 v-model="dialog"
                 fullscreen=""
-                v-if="(ifRented && !ifReviewed) || ifEditing"
+                v-if="ifRented || ifEditing"
+                :retain-focus="false"
             >
               <template v-slot:activator="{ props }">
                 <v-btn append-icon="mdi-message-draw" class="writeReviewBtn" v-bind="props">Skriv en anmeldelse</v-btn>
@@ -134,7 +136,7 @@
 
               <v-card>
                 <v-card-text>
-                  <Review :item-name="itemName" :owner-id="itemOwner" :owner="writeReviewToLoaner" @close="dialog=false" />
+                  <Review :item-name="itemName" :owner-id="itemOwner" :owner="isOwner" @close="dialog=false" />
                 </v-card-text>
                 <v-card-actions>
                   <v-btn
@@ -167,8 +169,6 @@ export default {
     itemImage: Image,
     itemId: [Number, String],
     ifHistory: Boolean,
-    ifReviewed: Boolean,
-    writeReviewToLoaner: Boolean,
     ifRented: Boolean,
     ifEditing: Boolean,
   },
