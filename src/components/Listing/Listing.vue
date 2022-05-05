@@ -191,12 +191,13 @@
             </v-btn>
             <v-dialog id="popOut" v-model="dialog">
               <v-card>
-                <v-card-title v-if="!isARequest && !isARental" class="text-h5"> {{statusMessage}} </v-card-title>
+                <v-card-title v-if="!isARequest && !isARental && !invalidDate" class="text-h5"> {{statusMessage}} </v-card-title>
+                <v-card-title v-if="invalidDate" class="text-h5"> Velg dato! </v-card-title>
                 <v-card-title v-if="isARequest || isARental" class="text-h5"> Er du sikker? </v-card-title>
                 <v-card-text v-if="isARental"> Den produkt har blitt lånt utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, vennligst ta kontakt med personen som har lånt produktet for å avklare dato</v-card-text>
                 <v-card-text v-if="isARequest"> Den produkt har forespørsler utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, så avslår vi forespørslene til den produkt</v-card-text>
                 <v-card-actions>
-                  <v-btn v-if="!isARequest && !isARental"
+                  <v-btn v-if="!isARequest && !isARental && !invalidDate"
                       color="red"
                       text
                       @click=close()
@@ -333,6 +334,7 @@ export default {
       isARental: false,
       isARequest: false,
       conflictRequests: [],
+      invalidDate: false,
     }
   },
 
@@ -405,11 +407,16 @@ export default {
 
     async updateAd(){
       //sjekke for dato konflikter
-      await this.checkDateConflict()
-      if (!this.isARental && !this.isARequest){
-        await this.editAd()
-      } else if (this.isARental || this.isARequest) {
+      if(this.date !== undefined && this.date !== null && this.date[0] !== undefined && this.date[1] !== undefined && this.date[0] !== null && this.date[1] !== null) {
+        await this.checkDateConflict()
+        if (!this.isARental && !this.isARequest){
+          await this.editAd()
+        } else if (this.isARental || this.isARequest) {
+          this.dialog = true
+        }
+      } else {
         this.dialog = true
+        this.invalidDate = true
       }
     },
 
@@ -419,14 +426,16 @@ export default {
       this.dialog = true;
       this.createdStatus = true;
       await this.addFiles();
-      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
-          .then(response => {
-            tempStat = response.data
-          }).catch((error) => {
-            if (error.response) {
-              this.statusMessage = error.response.data;
-            }
-          })
+
+        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
+            .then(response => {
+              tempStat = response.data
+            }).catch((error) => {
+              if (error.response) {
+                this.statusMessage = error.response.data;
+              }
+            })
+
       this.statusMessage = "Endringen var vellykket!";
       this.dialog = true;
     },
