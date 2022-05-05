@@ -47,7 +47,8 @@
               ></v-textarea>
               <div>
                 <v-file-input
-                    v-model="files"
+                    v-model="newFiles"
+                    @change="fillFiles"
                     label="Last opp bilder"
                     hide-details="auto"
                     :rules="rulesImage"
@@ -58,10 +59,12 @@
                 />
 
                 <div id="pictures" v-if="files.length!==0">
-                  <v-badge content="x" color="error" v-for="(image, i) in images" @click="deleteImage(i)">
+                  <v-badge content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
                     <div id="space">
-                      <v-img outlined width="130" v-bind:src="image.img" class="grey lighten-2 image">
-                      </v-img>
+                      <!--<v-img outlined width="130" v-bind:src="image" class="grey lighten-2 image">
+                      </v-img>-->
+                      <!--Bruk image cards. Den inneholder metoden for å rendre ett bilde fra en fil-->
+                      <ImageCards :file="file"></ImageCards>
                     </div>
                   </v-badge>
                  </div>
@@ -286,6 +289,7 @@ export default {
       unListed: false,
       categories: [],
       dialog: false,
+      newFiles: [],
       files: [],
       images: [],
       shownImages: [],
@@ -312,20 +316,14 @@ export default {
     }
   },
 
-  watch: {
-    files() {
-      this.addFiles()
-    }
-  },
   methods: {
-    forceRerender() {
-      this.render = false;
-
-      this.$nextTick(() => {
-        this.render = true;
-      });
+    fillFiles() {
+      for (let file of this.newFiles) {
+        console.log(file)
+        this.files.push(file);
+      }
+      this.newFiles = [];
     },
-
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
@@ -365,11 +363,8 @@ export default {
 
     async createAd() {
       console.log("Listing was created.")
-      for (let file of this.files) {
-        this.images.push( await this.getBase64(file))
-      }
-
       let tempStat = '';
+      await this.addFiles();
       if(this.date !== undefined && this.date !== null) {
         await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images).then(response => {
           tempStat = response.status;
@@ -387,12 +382,9 @@ export default {
         let tempStat;
         this.dialog = true;
         this.createdStatus = true;
-        this.image = [];
-      for (let file of this.files) {
-        this.image.push( await this.getBase64(file));
-      }
+        await this.addFiles();
       console.log("Listing was updated.")
-        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
+        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.images).then(response => {
           tempStat = response.data
         }).catch((error) => {
           if (error.response) {
@@ -449,14 +441,13 @@ export default {
     },
 
   },
-
-   beforeMount(){
+  beforeMount(){
     this.getInfo();
     if(this.itemId > 0){
       this.updating = true;
       this.getRentals();
     }
-  },
+   },
 }
 </script>
 
