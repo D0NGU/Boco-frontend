@@ -120,7 +120,6 @@
               </v-card-header-text>
             </v-card-header>
             <v-card-text>
-              <v-divider style="margin: 10px"/>
 
 
 
