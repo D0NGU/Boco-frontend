@@ -188,14 +188,31 @@
             </v-btn>
             <v-dialog id="popOut" v-model="dialog">
               <v-card>
-                <v-card-title class="text-h5"> {{statusMessage}} </v-card-title>
+                <v-card-title v-if="!isARequest && !isARental" class="text-h5"> {{statusMessage}} </v-card-title>
+                <v-card-title v-if="isARequest || isARental" class="text-h5"> Er du sikker? </v-card-title>
+                <v-card-text v-if="isARental"> Den produkt har blitt lånt utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, vennligst ta kontakt med personen som har lånt produktet for å avklare dato</v-card-text>
+                <v-card-text v-if="isARequest"> Den produkt har forespørsler utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, så avslår vi forespørslene til den produkt</v-card-text>
                 <v-card-actions>
-                  <v-btn
+                  <v-btn v-if="!isARequest && !isARental"
                       color="red"
                       text
                       @click=close()
                   >
                     Lukk
+                  </v-btn>
+                  <v-btn v-if="isARequest || isARental"
+                      color="green"
+                      text
+                      @click="acceptChangeDate"
+                  >
+                    JA
+                  </v-btn>
+                  <v-btn v-if="isARequest || isARental"
+                      color="red"
+                      text
+                      @click="declineChangeDate"
+                  >
+                    NEI
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -247,8 +264,6 @@
       </v-window-item>
     </v-window>
   </v-card-text>
-
-
 
 </template>
 
@@ -309,6 +324,9 @@ export default {
       deleteDialog: false,
       tab: null,
       render: true,
+      isARental: false,
+      isARequest: false,
+      conflictRequests: [],
     }
   },
 
@@ -382,32 +400,45 @@ export default {
         this.dialog = true;
       }
     },
+
     async updateAd(){
-        let tempStat;
-        this.dialog = true;
-        this.createdStatus = true;
-        this.image = [];
+      //sjekke for dato konflikter
+      await this.checkDateConflict()
+      if (!this.isARental && !this.isARequest){
+        await this.editAd()
+      } else if (this.isARental || this.isARequest) {
+        this.dialog = true
+      }
+    },
+
+    //oppdatere annonsen
+    async editAd() {
+      let tempStat;
+      this.dialog = true;
+      this.createdStatus = true;
+      this.image = [];
+
       for (let file of this.files) {
         this.image.push( await this.getBase64(file));
       }
-        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
-            .then(response => {
-              tempStat = response.data
-            }).catch((error) => {
-              if (error.response) {
-                this.statusMessage = error.response.data;
-              }
-            })
-        this.statusMessage = "Endringen var vellykket!";
-        this.dialog = true;
+      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
+          .then(response => {
+            tempStat = response.data
+          }).catch((error) => {
+            if (error.response) {
+              this.statusMessage = error.response.data;
+            }
+          })
+      this.statusMessage = "Endringen var vellykket!";
+      this.dialog = true;
     },
+
     async addFiles() {
       this.images = []
       for (let file of this.files) {
         this.images.push(await this.getBase64(file))
       }
     },
-
 
     getBase64(file) {
       return new Promise((resolve, reject) => {
@@ -437,6 +468,54 @@ export default {
       this.dialog = false;
       router.back();
     },
+
+    acceptChangeDate() {
+      this.dialog = false
+      if (this.isARequest) {
+        this.isARequest = false
+        if (this.conflictRequests.length) {
+          //avslå forespørsler hvis dato endringen utenfor datoene på forespørsler er godtatt
+          this.conflictRequests.forEach((rental) => {
+            console.log(rental.rentalId)
+            this.denyRentals(rental.rentalId)
+          })
+        }
+      } else if (this.isARental) {
+        this.isARental = false
+      }
+      this.editAd()
+    },
+
+    async denyRentals(id) {
+      await RentalService.deny(id)
+      this.$emit("update");
+    },
+
+    declineChangeDate() {
+      this.dialog = false
+    },
+
+    //sjekker om det skjer en dato konflikt med forespørsler og godtatt forespørsler ved endringen av dato i annonsen
+    async checkDateConflict() {
+      let allRentals = (await RentalService.getAllRentals(this.itemId)).data
+      if (!allRentals.length) {
+        return;
+      }
+      let requestRentals = []
+      allRentals.forEach((rental) => {
+        if (new Date(rental.dateFrom) < this.date[0] || new Date(rental.dateTo) > this.date[1]){
+          if (rental.accepted === true){
+            this.isARental = true
+
+          } else if(rental.accepted === false) {
+            requestRentals.push(rental)
+            this.isARequest = true
+          }
+        }
+      })
+      this.conflictRequests = requestRentals
+    },
+
     deleteImage(index) {
       this.files.splice(index, 1)
       this.addFiles()
