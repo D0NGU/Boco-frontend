@@ -365,12 +365,12 @@ export default {
 
     async createAd() {
       for (let file of this.files) {
-        this.images.push( await this.getBase64(file));
+        this.images.push( await this.getBase64(file))
       }
 
       let tempStat = '';
       if(this.date !== undefined && this.date !== null) {
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.image).then(response => {
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images).then(response => {
           tempStat = response.status;
         }).catch((error) => {
           if (error.response) {

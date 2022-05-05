@@ -18,4 +18,7 @@ export default {
     getOwnerProductAcceptedRentals(productId) {
         return getApiClient.get("rentals/product/"+ productId + "/true")
     },
+    getAvailabilityWindow(productId) {
+        return getApiClient.get("products/"+productId+"/availability")
+    }
 }

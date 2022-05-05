@@ -61,13 +61,13 @@
 
           <v-container>
             <v-row>
-              <v-col v-for="(category, i) in chosenCategory"
+              <v-col v-for="(category) in chosenCategory"
               :key="category.category">
               <v-chip
                 closable=""
-                @click:close="chosenCategory.splice(i, 1)">
+                @click:close="emptyChosenCat">
 
-                {{ category.category }}
+                {{ category }}
               </v-chip>
               </v-col>
             </v-row>
@@ -142,14 +142,20 @@ export default {
       } else if(this.chosenCategory.length > 0) {
         category = this.chosenCategory
       }
-      if(this.chosenSortBy === "Mest relevant"){
-        sortBy = "title"
-      } else if(this.chosenSortBy === 'Pris lav-høy') {
-        sortBy = 'price'
+      if(this.chosenSortBy === "Pris lav-høy") {
+        sortBy = "price";
         this.ascending = true;
-      } else if (this.chosenSortBy === 'Pris høy-lav') {
-        sortBy = 'price'
+      } else if(this.chosenSortBy  === "Pris høy-lav"){
+        sortBy = "price";
         this.ascending = false;
+      } else if (this.chosenSortBy  === "Lagt til nyeste"){
+        sortBy = "product_id"
+        this.ascending = false;
+      } else if (this.chosenSortBy  === "Lagt til eldste"){
+        sortBy = "product_id"
+        this.ascending = true;
+      } else if (this.chosenSortBy  === "Brukere"){
+        sortBy = "user_id"
       }
       this.$emit('search', this.searchBar, category, sortBy, this.ascending)
     },
@@ -158,21 +164,7 @@ export default {
       this.sortByOptions.forEach((option) => {
         option.active = option.option === selectedOption;
       })
-      if(selectedOption === "Pris lav-høy") {
-        this.chosenSortBy = "price";
-        this.ascending = true;
-      } else if(selectedOption === "Pris høy-lav"){
-        this.chosenSortBy = "price";
-        this.ascending = false;
-      } else if (selectedOption === "Lagt til nyeste"){
-        this.chosenSortBy = "product_id"
-        this.ascending = false;
-      } else if (selectedOption === "Lagt til eldste"){
-        this.chosenSortBy = "product_id"
-        this.ascending = true;
-      } else if (selectedOption === "Brukere"){
-        this.chosenSortBy = "user_id"
-      }
+      this.chosenSortBy = selectedOption
       setTimeout(() => this.sortByDialog = false, 300);
     },
 
@@ -183,8 +175,15 @@ export default {
       if(this.chosenCategory.length > 0){
         this.chosenCategory = [];
       }
-      this.chosenCategory.push(selectedCategory);
+      this.chosenCategory.push(selectedCategory.category);
       setTimeout(() => this.filterDialog = false, 300);
+    },
+
+    emptyChosenCat(){
+      this.chosenCategory.splice(0, 1)
+      this.categories.forEach((category) => {
+        category.active = false;
+      })
     }
   },
   async beforeMount() {

@@ -79,7 +79,6 @@
 
         </v-carousel-item>
         <v-carousel-item class="carouselItem">
-          <!-- TODO: Hent rating fra backend -->
           <p>Rangering som selger</p>
           <v-rating readonly="" v-model="ratingSeller"></v-rating>
           <p>Rangering som låner</p>
@@ -93,7 +92,7 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <ListingView :ownerId="this.$store.state.myUserId"/>
+          <ListingView :ownerId="this.$store.state.myUserId" :showSearch="false"/>
         </v-window-item>
         <v-window-item value="history">
           <HistoryComponent/>
@@ -122,7 +121,6 @@ export default {
 
   data() {
     return {
-      //TODO Hent rating fra backend
       name: 'Bruker',
       ratingSeller: '',
       ratingRenter: '',
