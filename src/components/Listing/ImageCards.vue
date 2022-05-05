@@ -10,13 +10,10 @@
     </v-img>
   </div>-->
 
-  <!--<div @click="this.$emit('deleteClick')" >
-    <v-img :src="image.img" aspect-ratio="1" class="grey lighten-2"></v-img>
-  </div>-->
+    <img :src="image.img" outlined width="130" class="grey lighten-2"/>
 
-  <!--<v-btn @click="check"> check </v-btn>-->
-  <v-img :src="image.img" aspect-ratio="1" class="grey lighten-2" @click="this.$emit('deleteClick')">
-  </v-img>
+  <!--<v-img :src="image.img" aspect-ratio="1" class="grey lighten-2" @click="this.$emit('deleteClick')">
+  </v-img>-->
 
 
 
@@ -69,6 +66,7 @@ export default {
   },
   methods: {
     getBase64(file) {
+      console.log(file)
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -84,11 +82,12 @@ export default {
     },
 
     check() {
-      console.log(this.image)
+      console.log(this.file)
     }
   },
   async beforeMount() {
     this.image = await this.getBase64(this.file);
+    console.log(this.image)
   }
 }
 </script>
