@@ -1,7 +1,7 @@
 <!-- Hovedside med annonser -->
 
 <template>
-  <ListingView />
+  <ListingView :showSearch="true"/>
 </template>
 
 <script>

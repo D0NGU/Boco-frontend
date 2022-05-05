@@ -7,8 +7,7 @@
     </div>
   </div>
 <div>
-  <sort-and-search @search="updateList"/>
-    <!--<h5><span v-text="visibleListings"></span> of <span>{{ activeProducts.length }}</span> listings shown</h5>-->
+  <sort-and-search @search="updateList" v-if="showSearch"/>
       <div v-if="!reset" v-for="(product, index) in activeProducts" :key="index" id="mobile">
         <v-sheet min-height="115" class="fill-height" color="transparent">
           <v-lazy
@@ -50,6 +49,7 @@ export default {
   name: "ListingView",
   components: {SortAndSearch, ListingCard},
   props: {
+    showSearch: Boolean,
     ownerId: {
       default: 0,
       type: [Number, String],
@@ -78,7 +78,6 @@ export default {
       }
     },
     async updateList(searchBar, chosenCategories, chosenSortBy, ascending){
-      console.log(searchBar, chosenCategories, chosenSortBy, ascending)
       this.reset = true;
       this.activeProducts = (await ProductService.getProducts(searchBar, chosenCategories, this.pageNumber, chosenSortBy, ascending)).data
       this.reset = false;
