@@ -33,7 +33,6 @@
 
 <script>
 import UserAccountService from "@/service/UserAccountService";
-import router from "@/router";
 
 export default {
   name: "Contact",
