@@ -81,9 +81,6 @@ export default {
     }
   },
   computed: {
-    /*visibleListings () {
-      return this.activeProducts.filter(p=>p.isActive).length
-    }*/
     mobileView() {
       return screen.width <= 600;
     }

@@ -118,7 +118,6 @@ export default {
   methods: {
 
     redirect() {
-      console.log(this.userId)
       router.push({name: 'Lessor', params: { userId: this.userId }})
     },
 
