@@ -29,11 +29,20 @@
       </v-card-actions>
 
       <v-alert
-          id="deletedAlert"
+          class="deletedAlert"
+          dismissible
+          type="error"
+          max-width="300px"
+          v-if="error"
+      > {{errorMsg}}
+      </v-alert>
+
+      <v-alert
+          class="deletedAlert"
           dismissible
           type="success"
           max-width="300px"
-          v-if="clicked ? 'true':''"
+          v-if="deleted"
       >Brukeren ble slettet!
       </v-alert>
     </v-card>
@@ -48,21 +57,28 @@ export default {
   name: "DeleteUser",
   data(){
     return{
-      clicked: false,
+      deleted: false,
       password: '',
       userInfo: '',
+      errorMsg: '',
+      error: false,
     }
   },
   methods: {
     async deleteUser(){
-      this.clicked = true;
       await UserAccountService.delete(this.$store.getters.myUserId, this.password).then(response => {
-        console.warn(response)
+        this.deleted = true;
+        this.$store.commit('SET_STATUS', false)
+        setTimeout(() => this.$router.push({path: '/login'}), 1500);
       }).catch((error) => {
-        console.warn(error.response);
+        if(error.response.status === 401){
+          this.errorMsg = "Feil passord. Prøv igjen."
+          this.error = true;
+        } else {
+          this.errorMsg = "Noe gikk galt. Prøv igjen eller ta kontakt med kundestøtte."
+          this.error = true;
+        }
       })
-      this.$store.commit('SET_STATUS', false)
-      setTimeout(() => this.$router.push({path: '/login'}), 1500);
     },
   },
   beforeMount() {
@@ -74,11 +90,14 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  padding: 1em;
+}
 
   #header{
     margin: 1em;
   }
-  #deletedAlert{
+  .deletedAlert{
     margin: 1.5em;
   }
 

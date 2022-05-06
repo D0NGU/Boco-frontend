@@ -89,6 +89,7 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
+          <h1>Mine annonser</h1>
           <ListingView :ownerId="this.$store.getters.myUserId" :showSearch="false"/>
         </v-window-item>
         <v-window-item value="history">
@@ -240,6 +241,10 @@ export default {
 #userDescription {
   width: 350px;
   margin: 0 auto;
+}
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 </style>

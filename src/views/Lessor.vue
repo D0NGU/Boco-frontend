@@ -47,6 +47,7 @@
   <v-card-text>
     <v-window v-model="tab">
       <v-window-item value="items">
+        <h1>Mine annonser</h1>
         <ListingView :ownerId="this.userId" :showSearch="false"/>
       </v-window-item>
       <v-window-item value="reviews">
@@ -170,6 +171,10 @@ export default {
   width: 100%;
   z-index: 10;
   display: flex;
+}
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 </style>
