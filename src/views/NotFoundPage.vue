@@ -21,9 +21,10 @@
         type="warning">
         <h1>Oops! Siden du leter etter finnes ikke</h1>
       </v-alert>
-      <!-- <h1>Oops! Siden du leter etter finnes ikke.</h1> -->
       <br><br>
-      <h3 onclick="location.href='/home'"> Tilbake til hjemskjermen </h3>
+      <router-link to="Home">
+        <h3> Tilbake til hjemskjermen </h3>
+      </router-link>
     </div>
   </v-row>
 </template>

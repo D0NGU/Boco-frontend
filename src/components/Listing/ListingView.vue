@@ -49,7 +49,6 @@
 import ProductService from "@/service/ProductService";
 import ListingCard from "@/components/Listing/ListingCard";
 import SortAndSearch from "@/components/Misc/sortAndSearch";
-import axios from "axios";
 
 export default {
   name: "ListingView",

@@ -1,4 +1,4 @@
-import RegisterForm from "@/components/RegisterForm";
+import RegisterForm from "@/components/LogIn/RegisterForm";
 import App from "@/App";
 import { createStore } from 'vuex'
 import { mount, flushPromises } from "@vue/test-utils";

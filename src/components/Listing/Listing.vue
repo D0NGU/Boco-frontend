@@ -63,7 +63,6 @@
                 <div id="pictures" v-if="files.length!==0">
                   <v-badge content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
                     <div id="space">
-                      <!--Bruk image cards. Den inneholder metoden for å rendre ett bilde fra en fil-->
                       <ImageCards :file="file"></ImageCards>
                     </div>
                   </v-badge>
@@ -100,48 +99,6 @@
                      value="set"
                  ></v-radio>
                </v-radio-group>
-               <!--
-                     <v-container class="grey lighten-5">
-                       <v-row no-gutters>
-                         <v-col order="1">
-                           <v-card
-                             class="pa-2"
-                             outlined
-                             tile
-                           >
-                             <div>
-                               <label>Fra dato:</label>
-                             </div>
-                             <div>
-                               <input
-                                   id="fromDate"
-                                   v-model="fromDate"
-                                   type="date"
-                               >
-                             </div>
-                           </v-card>
-                         </v-col>
-                         <v-col order="2">
-                           <v-card
-                             class="pa-2"
-                             outlined
-                             tile
-                           >
-                             <div>
-                               <label>Til dato:</label>
-                             </div>
-                             <div>
-                               <input
-                                   id="toDate"
-                                   v-model="toDate"
-                                   type="date"
-                               >
-                             </div>
-                           </v-card>
-                         </v-col>
-                       </v-row>
-                     </v-container>
-               -->
               <Datepicker id="datepicker" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
 
               <v-text-field
@@ -190,7 +147,7 @@
                 @click="$router.back()"
             >Avbryt
             </v-btn>
-            <v-dialog id="popOut" v-model="dialog">
+            <v-dialog id="popOut" v-model="dialog" persistent>
               <v-card>
                 <v-card-title v-if="!isARequest && !isARental && stayInUpdatePage" class="text-h5"> {{statusMessage}} </v-card-title>
                 <v-card-title v-if="!isARequest && !isARental && !stayInUpdatePage" class="text-h5"> {{statusMessage}} </v-card-title>

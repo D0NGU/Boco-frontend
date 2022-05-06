@@ -1,4 +1,4 @@
-import LoginForm from "@/components/LoginForm";
+import LoginForm from "@/components/LogIn/LoginForm";
 import App from "@/App";
 import { createStore } from 'vuex'
 import { mount, shallowMount, flushPromises } from "@vue/test-utils";

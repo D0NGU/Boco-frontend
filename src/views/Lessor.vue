@@ -34,7 +34,6 @@
 
       </v-carousel-item>
       <v-carousel-item class="carouselItem">
-        <!-- TODO: Hent rating fra backend -->
         <p>Rangering som selger</p>
         <v-rating readonly="" v-model="ratingSeller"></v-rating>
         <p>Rangering som låner</p>
@@ -64,7 +63,7 @@ import MyReviews from "@/components/UserProfile/MyReviews";
 import { useRoute } from 'vue-router'
 
 export default {
-  name: 'lessor',
+  name: 'Lessor',
   components: {MyReviews, ListingView},
 
   setup() {
@@ -78,8 +77,8 @@ export default {
   data() {
     return {
       name: 'Bruker',
-      ratingSeller: 5,
-      ratingRenter: 5,
+      ratingSeller: '',
+      ratingRenter: '',
       reviewsCount: '',
       tab: null,
       userInfo: '',
@@ -103,13 +102,14 @@ export default {
     },
   },
   async beforeMount() {
+    // Get user information
     const userInfo = await UserAccountService.getUser(this.userId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
     if (userInfo.data.profile64 !== "" && userInfo.data.profile64 !== null) {
       this.profilePicSrc = "data:image/jpeg;base64," +userInfo.data.profile64;
     }
 
-    //check if user is verified
+    // check if user is verified
     await UserAccountService.getVerifiedUser(this.userId)
         .then(res => this.isVerified = res.data)
         .catch((err) => {

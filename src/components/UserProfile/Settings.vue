@@ -86,7 +86,7 @@ export default {
         await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword);
         this.confirmationSnackBar = true;
       }
-      if (this.picture.isEmpty) {
+      if (this.picture) {
         let img = await this.getBase64(this.picture[0]);
         console.log(img);
         await ImageService.setProfilePic(img, this.$store.getters.myUserId);
@@ -151,10 +151,6 @@ h1 {
 
 button {
   margin: 0.4em 0.4em 0.8em 0.4em;
-}
-
-.v-file-input {
-  margin-bottom: 2.5em;
 }
 
 </style>

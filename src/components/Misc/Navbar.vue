@@ -135,9 +135,7 @@ export default {
 #notificationDialog {
   background-color: #edf1f5;
 }
-#chatDialog {
-  background-color: #edf1f5;
-}
+
 #closeButton {
   color: var(--bocoBlue);
   font-weight: bold;
