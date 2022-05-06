@@ -329,6 +329,7 @@ export default {
         this.adAddress = productInfo.address;
         this.adCategory = productInfo.category
         this.unListed = productInfo.unlisted;
+        this.adPhone = productInfo.tlf;
         this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)];
         this.image = (await ImageService.getImagesByProductId(this.itemId)).data;
         for (let x of this.image) {
@@ -356,7 +357,7 @@ export default {
     async createAd() {
       await this.addFiles();
       if(this.date !== undefined && this.date !== null && this.date[0] !== undefined && this.date[1] !== undefined && this.date[0] !== null && this.date[1] !== null) {
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images).then(response => {
+        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images, this.adPhone).then(response => {
           this.statusMessage = "Annonsen ble opprettet!";
           this.stayInUpdatePage = false
         }).catch((error) => {
@@ -400,7 +401,7 @@ export default {
       this.createdStatus = true;
       await this.addFiles();
 
-      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
+      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image, this.adPhone)
           .then(response => {
             this.statusMessage = "Endringen var vellykket!";
             this.stayInUpdatePage = false
