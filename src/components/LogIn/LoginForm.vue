@@ -169,10 +169,6 @@ label {
   padding-top: 20px;
 }
 
-.v-btn {
-  padding: 10px;
-}
-
 h1 {
   margin-bottom: 30px;
   margin-top: 30px;
