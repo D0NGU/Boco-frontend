@@ -121,23 +121,9 @@ export default {
       this.getProducts()
     }
   },
-  /**beforeMount() {
-    this.getProducts()
-  }*/
-
 }
 </script>
 <style scoped>
-#mobile {
-  display:none;
-}
-@media only screen and (max-width: 600px) {
-  #wideScreen {
-    display: none;
-  }
-  #mobile {
-    display: block;
-  }
-}
+
 </style>
 

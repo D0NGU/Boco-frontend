@@ -1,4 +1,4 @@
-<!-- component for forespørsel siden -->
+<!-- Komponent for forespørsel siden -->
 
 <template>
   <v-card class="rounded-l rentalCard">
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     async acceptRental(){
-      await RentalService.accept(this.id).then().catch((err) => this.errorAccept = "Den produkt er allerede lånt av en annen på gitt dato: " + this.date);
+      await RentalService.accept(this.id).then().catch((err) => this.errorAccept = "Dette produktet er allerede lånt av en annen på gitt dato: " + this.date);
       if (this.errorAccept !== ''){
         this.dialog = true
       }
