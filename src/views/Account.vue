@@ -89,7 +89,7 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <h1>Mine produkter</h1>
+          <h1>Mine annonser</h1>
           <ListingView :ownerId="this.$store.getters.myUserId" :showSearch="false"/>
         </v-window-item>
         <v-window-item value="history">
