@@ -58,7 +58,7 @@
                 />
 
                 <div id="pictures" v-if="files.length!==0">
-                  <v-badge content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
+                  <v-badge v-if="!reset" content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
                     <div id="space">
                       <ImageCards :file="file"></ImageCards>
                     </div>
@@ -270,9 +270,22 @@ export default {
       categories: [],
       dialog: false,
       imgDialog: false,
+      reset: false,
+      /**
+       * New files from the file input
+       */
       newFiles: [],
+      /**
+       * List of all the image files
+       */
       files: [],
+      /**
+       * List of objects conating, image name, image data, image meta data and image url
+       */
       images: [],
+      /**
+       * List of image objects found then editing a product
+       */
       shownImages: [],
       confirmationMsg: '',
       statusMessage: '',
@@ -323,6 +336,7 @@ export default {
         }
         this.newFiles = [];
       }
+      console.log(this.files)
     },
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
@@ -350,7 +364,13 @@ export default {
         }
       }
     },
-
+    /**
+     * Method for creating a file from a base 64 encypted url
+     * @param base64 the encyprted file
+     * @param data meta data
+     * @param filename name of the file
+     * @returns {Promise<File>}
+     */
     urlToFile(base64, data, filename){
       let url = data +","+base64;
       return (fetch(url)
@@ -408,7 +428,7 @@ export default {
     //oppdatere annonsen
     async editAd() {
       await this.addFiles();
-      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image, this.adPhone)
+      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.images, this.adPhone)
           .then(response => {
             this.confirmationMsg = "Endringen var vellykket!";
           }).catch((error) => {
@@ -423,7 +443,11 @@ export default {
         this.images.push(await this.getBase64(file))
       }
     },
-
+    /**
+     * Create a base64 representation of a file
+     * @param file image file to encrypt
+     * @returns {Promise<unknown>} Object containing data, metadata, name, and url to display the image
+     */
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -499,9 +523,11 @@ export default {
       this.conflictRequests = requestRentals
     },
 
-    deleteImage(index) {
+    async deleteImage(index) {
+      this.reset = true;
       this.files.splice(index, 1)
-      this.addFiles()
+      await this.addFiles()
+      this.reset = false;
     },
 
     async getRentals() {

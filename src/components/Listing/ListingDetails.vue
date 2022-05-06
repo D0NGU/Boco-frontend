@@ -156,6 +156,7 @@ export default {
     async sendRequest() {
       if(!(this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null)){
         await RentalService.newRental(this.date[0],this.date[1], this.itemId, this.$store.state.myUserId)
+        this.invalidDate = false;
         this.requestSent = true;
       } else {
         this.invalidDate = true;
