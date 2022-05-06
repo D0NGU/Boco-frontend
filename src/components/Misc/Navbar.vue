@@ -27,9 +27,11 @@
             v-model="dialog"
             fullscreen=""
         >
-          <template  v-slot:activator="{ props }">
-              <v-icon v-show="!notification" color="white" v-bind="props"> mdi-bell </v-icon>
+          <template v-slot:activator="{ props }">
+            <div id="=notifIcon" v-bind="props">
+              <v-icon v-show="!notification" color="white"> mdi-bell </v-icon>
               <v-icon v-show="notification"  color="white" v-bind="props"> mdi-bell-alert </v-icon>
+            </div>
           </template>
 
           <v-card id="notificationDialog">
@@ -136,6 +138,9 @@ export default {
   background-color: #edf1f5;
 }
 
+#notifIcon {
+  width: 100%;
+}
 #closeButton {
   color: var(--bocoBlue);
   font-weight: bold;

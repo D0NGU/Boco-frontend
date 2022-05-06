@@ -135,7 +135,7 @@ export default {
         this.regisState = "Brukeren ble opprettet!";
       } else if (tempStat === 409) {
         this.regisState = "E-posten er allerede i bruk.";
-      } else if (tempStat === 500) {
+      } else {
         this.regisState = "Det oppsto en feil ved registrering. Prøv igjen";
       }
     },
