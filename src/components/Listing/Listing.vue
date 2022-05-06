@@ -598,6 +598,6 @@ button {
   overflow-y: scroll;
   overflow-x: scroll;
   height: 200px;
-  place-content: center;
+  padding: 10px;
 }
 </style>
