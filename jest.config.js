@@ -9,6 +9,7 @@ module.exports = {
     "http-common.js",
     "registerServiceWorker.js",
     "main.js",
+    "plugins/*",
   ],
 
   /* Test and coverage */
