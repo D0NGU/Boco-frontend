@@ -63,12 +63,10 @@ export default {
         this.dialog = true
       }
       this.$emit("update");
-      // location.reload();
     },
     async denyRental(){
       await RentalService.deny(this.id)
       this.$emit("update");
-      // location.reload();
     },
     close() {
       this.dialog = false;

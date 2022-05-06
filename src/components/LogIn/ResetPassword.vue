@@ -57,9 +57,7 @@ export default {
   name: "ResetPassword",
   setup() {
     const route = useRoute();
-    console.log(route.query.token)
     const token = route.query.token;
-    console.log(token)
     return {
       token,
     }
