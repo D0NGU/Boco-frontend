@@ -8,10 +8,7 @@
       <v-divider vertical="" />
       <div class="itemDetail">
         <p class="text-subtitle-1">{{ comment }} </p>
-        <!--<p class="text-caption" >{{itemPrice}} kr/dag</p>-->
 
-
-        <!-- TODO HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
         <p class="text-overline" id="itemOwner">
           <v-avatar size="x-small">
             <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>

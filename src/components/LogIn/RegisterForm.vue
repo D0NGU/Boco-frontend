@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import LoginService from '../service/LoginService'
+import LoginService from '../../service/LoginService'
 export default {
   data() {
     return {
