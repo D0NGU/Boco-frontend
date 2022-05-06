@@ -35,7 +35,7 @@ body {
 *:nth-child(7n) {
   animation-duration: 0.2s;
 }
-.v-img {
+v-progress-circular {
   animation: drop;
   animation-duration: 10s;
 }
