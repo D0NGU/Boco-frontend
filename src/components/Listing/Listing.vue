@@ -398,7 +398,6 @@ export default {
     //oppdatere annonsen
     async editAd() {
       this.dialog = true;
-      this.createdStatus = true;
       await this.addFiles();
 
       await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image, this.adPhone)
