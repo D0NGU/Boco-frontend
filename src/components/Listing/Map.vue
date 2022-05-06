@@ -1,4 +1,4 @@
-<!-- component som fremstiller kart funksjon -->
+<!-- Komponent som fremstiller kart funksjon -->
 
 <template>
   <div @click="closeMap()" class="backdrop" id="map">

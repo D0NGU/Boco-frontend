@@ -80,7 +80,6 @@ import UserAccountService from "@/service/UserAccountService";
 import router from "@/router";
 import ProductService from "@/service/ProductService";
 import ImageService from "@/service/ImageService";
-import {useRoute} from "vue-router";
 
 export default {
   name: "ListingDetails",
