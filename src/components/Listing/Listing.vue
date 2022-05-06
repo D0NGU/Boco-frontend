@@ -142,7 +142,7 @@
                        </v-row>
                      </v-container>
                -->
-              <Datepicker id="datepicker" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
+              <Datepicker id="datepicker" range v-model="date" :enableTimePicker="false" showNowButton :monthChangeOnScroll="false"></Datepicker>
 
               <v-text-field
                   v-model="adAddress"
