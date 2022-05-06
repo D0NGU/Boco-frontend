@@ -43,9 +43,17 @@ body {
 *:nth-child(11n) {
   animation-duration: 15s;
 }
-.v-card__overlay {
+.v-img__img {
   animation: drop infinite;
-  animation-duration: 10s;
+  animation-duration: 3s;
+}
+.v-responsive__sizer {
+  animation: drop infinite;
+  animation-duration: 3s;
+}
+.v-img {
+  animation: drop infinite;
+  animation-duration: 3s;
 }
 @keyframes disco {
   0% {
@@ -72,6 +80,9 @@ body {
 }
 @keyframes drop {
   0% {
+    background-color: transparent;
+  }
+  49% {
     background-color: transparent;
   }
   50% {
