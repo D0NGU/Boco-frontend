@@ -4,21 +4,21 @@
       <v-col class="navItem">
       <router-link :to="{name: 'Home'}">
         <div class="navLink">
-          <v-icon>mdi-home</v-icon>
+          <v-icon size="x-large">mdi-home</v-icon>
         </div>
       </router-link>
       </v-col>
       <v-col class="navItem">
       <router-link :to="{name: 'Account'}">
         <div>
-          <v-icon> mdi-account</v-icon>
+          <v-icon size="x-large"> mdi-account</v-icon>
         </div>
       </router-link>
       </v-col>
       <v-col class="navItem">
         <router-link :to="{name: 'Listing'}">
           <div>
-            <v-icon> mdi-plus-circle</v-icon>
+            <v-icon size="x-large"> mdi-plus-circle</v-icon>
           </div>
         </router-link>
       </v-col>
@@ -29,8 +29,8 @@
         >
           <template v-slot:activator="{ props }">
             <div id="=notifIcon" v-bind="props">
-              <v-icon v-show="!notification" color="white"> mdi-bell </v-icon>
-              <v-icon v-show="notification"  color="white" v-bind="props"> mdi-bell-alert </v-icon>
+              <v-icon v-show="!notification" color="white" size="x-large"> mdi-bell </v-icon>
+              <v-icon v-show="notification"  color="white" size="x-large"> mdi-bell-alert </v-icon>
             </div>
           </template>
 
@@ -126,7 +126,7 @@ export default {
   text-decoration: none;
 }
 #navBar a.router-link-active {
-  color: orange;
+  color: #FFB429;
 
 }
 .navItem {
