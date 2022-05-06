@@ -137,7 +137,6 @@
             <v-card-text>
 
 
-
             <v-dialog
                 v-model="dialog"
                 fullscreen=""

@@ -110,7 +110,6 @@ import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
-import {getApiClient} from "@/service/ApiService";
 
 export default {
     name: 'account',

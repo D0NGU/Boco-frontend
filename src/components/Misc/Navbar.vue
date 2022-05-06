@@ -22,7 +22,7 @@
           </div>
         </router-link>
       </v-col>
-      <v-col class="navItem">
+      <v-col class="navItem" id="notificationButton">
         <v-dialog
             v-model="dialog"
             fullscreen=""
@@ -134,12 +134,10 @@ export default {
   flex-grow: 1;
   padding: 12px;
 }
-.navItem:hover {
-  cursor: pointer;
-}
 #notificationDialog {
   background-color: #edf1f5;
 }
+
 #notifIcon {
   width: 100%;
 }
@@ -147,4 +145,9 @@ export default {
   color: var(--bocoBlue);
   font-weight: bold;
 }
+
+#notificationButton {
+  cursor: pointer;
+}
+
 </style>

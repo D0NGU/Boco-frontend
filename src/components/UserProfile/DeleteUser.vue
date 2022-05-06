@@ -93,22 +93,20 @@ export default {
 .container {
   padding: 1em;
 }
+
   #header{
     margin: 1em;
   }
   .deletedAlert{
     margin: 1.5em;
   }
-  .v-text-field {
-    margin: 10px;
+
+  #container {
+    padding: 1em;
   }
 
   #deleteUserScreen {
     box-shadow: none;
-  }
-
-  .v-btn {
-    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 0.2), 0px 2px 2px 0px rgb(0 0 0 / 0.14), 0px 1px 5px 0px rgb(0 0 0 / 0.12)
   }
 
   h1 {
@@ -119,4 +117,14 @@ export default {
 button {
   margin: 0.4em 0.4em 0.8em 0.4em;
 }
+
+  .v-btn {
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 0.2), 0px 2px 2px 0px rgb(0 0 0 / 0.14), 0px 1px 5px 0px rgb(0 0 0 / 0.12)
+  }
+
+  .v-text-field {
+    margin: 10px;
+  }
+
+
 </style>

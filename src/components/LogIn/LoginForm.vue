@@ -169,10 +169,6 @@ label {
   padding-top: 20px;
 }
 
-.v-btn {
-  padding: 10px;
-}
-
 h1 {
   margin-bottom: 30px;
   margin-top: 30px;
@@ -193,6 +189,10 @@ h1 {
   color: var(--bocoBlue) !important;
   font-weight: bold;
   margin-bottom: 15px;
+}
+
+.v-btn {
+  padding: 10px;
 }
 
 #forgotPassword {
