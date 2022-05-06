@@ -4,7 +4,7 @@
   <div>
   <div id="mobile">
     <!-- Selve annonseboksen -->
-  <v-card class="rounded-l itemCard" @click="redirect" :class="{verifiedOwner: ownerVerified}">
+  <v-card class="rounded-l itemCard" @click="redirect" v-bind:style="ownerVerified ? {border: 'solid 1px var(--bocoBlue)'} : {border: 'solid 1px white'}">
     <div class="itemContainer">
       <!-- Annonse thumbnail -->
       <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
@@ -81,7 +81,7 @@
           <v-card class="mx-auto my-12 rounded-l itemCard"
                   max-width="280"
                   @click="redirect"
-                  :class="{verifiedOwner: ownerVerified}">
+                  v-bind:style="ownerVerified ? {border: 'solid 1px var(--bocoBlue)'} : {border: 'solid 1px white'}">
             <v-img v-if="imgExist" v-bind:src="thumbnail" class="itemImage" :cover="true">
               <template v-slot:placeholder>
                 <v-row
@@ -229,9 +229,6 @@ export default {
 </script>
 
 <style scoped>
-.verifiedOwner {
-  animation: flashyBorder 7s infinite;
-}
 .itemImage {
   height: 250px;
   width: 250px;
@@ -252,9 +249,6 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   width: 230px;
-}
-.itemCard {
-  border: 1px solid white;
 }
 @media screen and (min-width: 600px) {
   #mobile {
@@ -308,16 +302,6 @@ export default {
     position: absolute;
     bottom: 0;
   }
-}
-
-@keyframes flashyBorder {
-  0% {border: solid 1px red}
-  10% {border: solid 1px orange}
-  30% {border: solid 1px yellow}
-  50% {border: solid 1px green}
-  70% {border: solid 1px blue}
-  90%{border: solid 1px purple}
-  100%{border: solid 1px red}
 }
 
 </style>
