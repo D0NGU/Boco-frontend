@@ -48,14 +48,13 @@
               <div>
                 <v-file-input
                     v-model="newFiles"
-                    @change="fillFiles"
                     label="Last opp bilder"
                     hide-details="auto"
-                    :rules="rulesImage"
                     accept="image/x-png, image/jpeg"
                     multiple
                     chips
                     prepend-icon="mdi-camera"
+                    @change="fillFiles"
                 />
 
                 <div id="pictures" v-if="files.length!==0">
@@ -172,6 +171,21 @@
               </v-card>
             </v-dialog>
 
+            <v-dialog v-model="imgDialog" persistent>
+              <v-card>
+                <v-card-title> {{confirmationMsg}}</v-card-title>
+                <v-spacer />
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red"
+                         text
+                         @click=imgClose()>
+                    Lukk
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
             <v-spacer />
             <v-dialog v-model="deleteDialog">
               <v-card>
@@ -255,6 +269,7 @@ export default {
       unListed: false,
       categories: [],
       dialog: false,
+      imgDialog: false,
       newFiles: [],
       files: [],
       images: [],
@@ -268,6 +283,7 @@ export default {
       rulesImage: [
         /* REGEL: Bilde kan ikke være større enn gitt størrelse */
         files => !files || !files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
+        files => !files || this.files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
       ],
       rulesNumber: [
         value => !isNaN(value) || 'Må være tall.',
@@ -289,11 +305,24 @@ export default {
 
   methods: {
     fillFiles() {
-      for (let file of this.newFiles) {
-        console.log(file)
-        this.files.push(file);
+      if (this.rulesImage) {
+        for (let file of this.newFiles) {
+          if (file.size > 1024*1024*2) {
+            this.confirmationMsg = "Files over 2 MB not supported"
+            this.imgDialog=true;
+            break;
+          }
+          if (file.size + this.files.size > 1024*1024*10) {
+            this.confirmationMsg = "Total file size must be less than 10 MB \n" +
+                "Remove som files to make more space"
+                this.imgDialog=true;
+                break;
+          }
+          console.log(file)
+          this.files.push(file);
+        }
+        this.newFiles = [];
       }
-      this.newFiles = [];
     },
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
@@ -422,6 +451,11 @@ export default {
     close(){
       this.dialog = false;
       router.back();
+    },
+
+    imgClose(){
+      this.newFiles = [];
+      this.imgDialog = false;
     },
 
     acceptChangeDate() {
