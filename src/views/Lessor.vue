@@ -39,7 +39,7 @@
         <p>Rangering som låner</p>
         <v-rating readonly="" v-model="ratingRenter"></v-rating>
         <br>
-        <v-icon> mdi-message-draw </v-icon> {{reviewsCount}}
+        <v-icon id="reviewCounter" @click="this.tab = 'reviews'"> mdi-message-draw </v-icon> {{reviewsCount}}
       </v-carousel-item>
     </v-carousel>
   </div>
@@ -175,6 +175,9 @@ export default {
 h1 {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+#reviewCounter {
+  cursor: pointer;
 }
 
 </style>

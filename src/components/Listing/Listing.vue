@@ -48,14 +48,13 @@
               <div>
                 <v-file-input
                     v-model="newFiles"
-                    @change="fillFiles"
                     label="Last opp bilder"
                     hide-details="auto"
-                    :rules="rulesImage"
                     accept="image/x-png, image/jpeg"
                     multiple
                     chips
                     prepend-icon="mdi-camera"
+                    @change="fillFiles"
                 />
 
                 <div id="pictures" v-if="files.length!==0">
@@ -66,7 +65,7 @@
                   </v-badge>
                  </div>
 
-                </div>
+              </div>
 
                <v-select
                    v-model="adCategory"
@@ -172,6 +171,21 @@
               </v-card>
             </v-dialog>
 
+            <v-dialog v-model="imgDialog" persistent>
+              <v-card>
+                <v-card-title> {{confirmationMsg}}</v-card-title>
+                <v-spacer />
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red"
+                         text
+                         @click=imgClose()>
+                    Lukk
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
             <v-spacer />
             <v-dialog v-model="deleteDialog">
               <v-card>
@@ -255,9 +269,22 @@ export default {
       unListed: false,
       categories: [],
       dialog: false,
+      imgDialog: false,
+      /**
+       * New files from the file input
+       */
       newFiles: [],
+      /**
+       * List of all the image files
+       */
       files: [],
+      /**
+       * List of objects conating, image name, image data, image meta data and image url
+       */
       images: [],
+      /**
+       * List of image objects found then editing a product
+       */
       shownImages: [],
       confirmationMsg: '',
       statusMessage: '',
@@ -268,6 +295,7 @@ export default {
       rulesImage: [
         /* REGEL: Bilde kan ikke være større enn gitt størrelse */
         files => !files || !files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
+        files => !files || this.files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
       ],
       rulesNumber: [
         value => !isNaN(value) || 'Må være tall.',
@@ -289,11 +317,25 @@ export default {
 
   methods: {
     fillFiles() {
-      for (let file of this.newFiles) {
-        console.log(file)
-        this.files.push(file);
+      if (this.rulesImage) {
+        for (let file of this.newFiles) {
+          if (file.size > 1024*1024*2) {
+            this.confirmationMsg = "Files over 2 MB not supported"
+            this.imgDialog=true;
+            break;
+          }
+          if (file.size + this.files.size > 1024*1024*10) {
+            this.confirmationMsg = "Total file size must be less than 10 MB \n" +
+                "Remove som files to make more space"
+                this.imgDialog=true;
+                break;
+          }
+          console.log(file)
+          this.files.push(file);
+        }
+        this.newFiles = [];
       }
-      this.newFiles = [];
+      console.log(this.files)
     },
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
@@ -321,7 +363,13 @@ export default {
         }
       }
     },
-
+    /**
+     * Method for creating a file from a base 64 encypted url
+     * @param base64 the encyprted file
+     * @param data meta data
+     * @param filename name of the file
+     * @returns {Promise<File>}
+     */
     urlToFile(base64, data, filename){
       let url = data +","+base64;
       return (fetch(url)
@@ -379,7 +427,7 @@ export default {
     //oppdatere annonsen
     async editAd() {
       await this.addFiles();
-      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image, this.adPhone)
+      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.images, this.adPhone)
           .then(response => {
             this.confirmationMsg = "Endringen var vellykket!";
           }).catch((error) => {
@@ -394,7 +442,11 @@ export default {
         this.images.push(await this.getBase64(file))
       }
     },
-
+    /**
+     * Create a base64 representation of a file
+     * @param file image file to encrypt
+     * @returns {Promise<unknown>} Object containing data, metadata, name, and url to display the image
+     */
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -422,6 +474,11 @@ export default {
     close(){
       this.dialog = false;
       router.back();
+    },
+
+    imgClose(){
+      this.newFiles = [];
+      this.imgDialog = false;
     },
 
     acceptChangeDate() {
@@ -466,9 +523,9 @@ export default {
       this.conflictRequests = requestRentals
     },
 
-    deleteImage(index) {
+    async deleteImage(index) {
       this.files.splice(index, 1)
-      this.addFiles()
+      await this.addFiles()
     },
 
     async getRentals() {
@@ -532,6 +589,7 @@ button {
 }
 #pictures {
   display: grid;
+  padding: 10px;
   grid-template-columns: auto auto;
   grid-template-rows: auto;
   grid-column-gap: 20px;
@@ -539,6 +597,5 @@ button {
   overflow-y: scroll;
   overflow-x: scroll;
   height: 200px;
-  place-content: center;
 }
 </style>

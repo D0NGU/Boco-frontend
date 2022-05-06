@@ -5,7 +5,7 @@ beforeEach(() =>
     jest.spyOn(getApiClient, 'post'), 
     jest.spyOn(getApiClient, 'get')
 );
-afterEach(() => jest.clearAllMocks())
+afterEach(() => jest.clearAllMocks());
 
 describe('Testing ReviewService.js', () => {
 

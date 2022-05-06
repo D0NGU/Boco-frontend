@@ -13,7 +13,7 @@ export default {
 
     editPassword (id, email, oldPassword, newPassword) {
         const userDetails = {id: id, email: email, oldPassword: oldPassword, newPassword: newPassword}
-        return getApiClient.post('user/edit', userDetails )
+        return getApiClient.post('user/edit', userDetails ); // TODO Burde være PUT (standard)
     },
 
     getUser(userId) {
