@@ -1,6 +1,6 @@
 <template>
+  <h1 id="loginTitle">Logg inn</h1>
   <v-form ref="loginform" id="LoginForm" @submit.prevent="logInButton" v-model="valid" lazy-validation>
-    <h1 id="loginTitle">Logg inn</h1>
 
     <div id="inputWrapper">
       <div>
@@ -13,7 +13,7 @@
       </div>
       <div>
         <v-text-field
-          :rules="rulesApplyToAll"
+          :rules="rulesPassword"
           id="password" v-model="password"
           v-on:keyup.enter="logInButton()"
           :type="show ?'text': 'password'"
@@ -53,6 +53,10 @@
       </v-btn>
     </div>
   </v-form>
+
+  <p id="forgotPassword" @click="this.$router.push('/password/reset/request')">
+    Glemt passord &#10138;
+  </p>
 </template>
 
 
@@ -60,8 +64,9 @@
 
 <script>
 import LoginService from '@/service/LoginService'
+import {baseURL} from "@/service/ApiService";
 import cookies from 'vue-cookie'
-import UserAccountService from "@/service/UserAccountService";
+import axios from "axios";
 
 export default {
   methods: {
@@ -70,11 +75,19 @@ export default {
       let token = '';
       // Check if login-info (email, password) is valid and not empty
       if (this.$refs.loginform.validate()) {
-        await LoginService.handleClickSignIn(this.email, this.password).then(response => {
+        await LoginService.handleClickSignIn(this.email, this.password).then(async response => {
           status = response.status;
-          console.log(response.data);
           token = response.data.access_token;
-          cookies.set('token', response.data.access_token);
+          await cookies.set('token', response.data.access_token);
+          await axios.get(baseURL + 'user/get/' + this.email, {
+          headers: {
+            'Content-type': 'application/json',
+                Authorization: 'Bearer ' +  token,
+          }
+        }).then(response => {
+          cookies.set("userId", response.data.id);
+          this.$store.commit("SET_MYUSERID", cookies.get("userId"))
+        });
         }).catch((error) => {
           if (error.response) {
             status = error.response.status;
@@ -85,11 +98,8 @@ export default {
       // HttpStatus 200 (OK)
       if (status === 200) {
         this.loginStatus = "Påloggingen var vellykket";
-        cookies.set("email", this.email);
-        this.$store.dispatch("login", {token:cookies.get("token"), email:cookies.get("email")});
-        const userInfo = (await UserAccountService.getUserId(this.email)).data
-        cookies.set("userId", userInfo.id);
-        this.$store.commit("SET_MYUSERID", cookies.get("userId"))
+        await cookies.set("email", this.email);
+        await this.$store.dispatch("login", {token:cookies.get("token"), email:cookies.get("email")});
         await window.location.replace('/home');
       }
       // HttpStatus 403 (FORBIDDEN)
@@ -121,12 +131,12 @@ export default {
       loginStatus: '',
       token1: '',
       error: '',
-      rulesApplyToAll: [
-        value => !!value || 'Required.',
+      rulesPassword: [
+        value => !!value || 'Påkrevd.',
       ],
       emailRules: [
-        v => !!v || 'Required',
-        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+        v => !!v || 'Påkrevd',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-post må være gyldig',
       ],
       show: false,
       dialog: false,
@@ -145,24 +155,22 @@ export default {
   display: grid;
   justify-content: center;
   padding: 20px;
-  margin-top: 30px;
   margin-bottom: 60px;
+  background-color: white;
 }
 
 #inputWrapper {
   width: 350px;
+
 }
 
 label {
   padding-top: 20px;
 }
 
-v-btn {
-  padding: 10px;
-}
-
 h1 {
   margin-bottom: 30px;
+  margin-top: 30px;
 }
 
 #loginButton {
@@ -179,6 +187,16 @@ h1 {
   background-color: white !important;
   color: var(--bocoBlue) !important;
   font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.v-btn {
+  padding: 10px;
+}
+
+#forgotPassword {
+  color: var(--bocoBlue);
+  cursor: pointer;
 }
 
 </style>

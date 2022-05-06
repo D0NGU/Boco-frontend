@@ -6,13 +6,27 @@
       :show-arrows="false"
       height="400px">
       <!-- Standardbilde hvis det ikke er lagt til noen bilder -->
-      <v-carousel-item v-if="images.length == 0" :src="defaultimage" cover=""></v-carousel-item>
+      <v-carousel-item v-if="!imagesFound" :src="defaultimage" cover="">
+      </v-carousel-item>
       <!-- Legger til alle andre bilder i listen -->
       <v-carousel-item
          v-for="(item,i) in this.images"
         :key="i"
         :src="images[i]"
-      ></v-carousel-item>
+      >
+        <template v-slot:placeholder>
+        <v-row
+            class="fill-height ma-0"
+            align="center"
+            justify="center"
+        >
+          <v-progress-circular
+              indeterminate
+              color="grey lighten-5"
+          ></v-progress-circular>
+        </v-row>
+      </template>
+      </v-carousel-item>
     </v-carousel>
 
     <div id="details">
@@ -23,7 +37,7 @@
       <p style="white-space: pre-wrap;">{{ productInfo.description }}</p>
       <br><br>
       <!-- Tags -->
-      <v-chip color="indigo" style="  margin-left: 10px;"><p>{{ productInfo.category }}</p></v-chip>
+      <v-chip color="indigo" style="  margin-left: 10px; cursor:pointer; " @click="searchForCategory()"><p>{{ productInfo.category }}</p></v-chip>
       <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <!-- Brukers -->
       <v-divider style="margin: 10px;"/>
@@ -34,7 +48,7 @@
               <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
             </v-avatar> {{ownerInfo.fname}} {{ownerInfo.lname}}</p>
         </div>
-     <!--  <v-divider style="margin: 10px"/> -->
+       <v-divider style="margin: 10px"/>
     </div>
 
     <div id="requestForm">
@@ -42,7 +56,7 @@
       <v-alert type="success" v-if="requestSent" id="requestSent">Forespørselen ble sendt!</v-alert>
       <!-- Legg til en leieforespørsel -->
       <p style="margin-left: 10px;margin-right: 10px; color:grey;">Interessert i å leie gjenstanden? Legg til ønsket dato og send en forespørsel!</p>
-      <Datepicker id="datePicker" range v-model="date" :enableTimePicker="false" showNowButton :start-date="startDate" :allowedDates="availabilityWindow" ></Datepicker>
+      <Datepicker id="datePicker" range v-model="date" :enableTimePicker="false" showNowButton :start-date="startDate" :allowedDates="availabilityWindow" :monthChangeOnScroll="false" ></Datepicker>
       <v-btn id="requestBtn" @click="sendRequest"> Send Forespørsel </v-btn>
       <!-- GMaps -->
       <v-btn id="mapBtn" @click="mapClick">Kart</v-btn>
@@ -60,11 +74,13 @@
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import { ref } from 'vue';
-import ListingsService from "@/service/ListingsService";
 import RentalService from "@/service/RentalService";
 import Map from "@/components/Listing/Map";
 import UserAccountService from "@/service/UserAccountService";
 import router from "@/router";
+import ProductService from "@/service/ProductService";
+import ImageService from "@/service/ImageService";
+import {useRoute} from "vue-router";
 
 export default {
   name: "ListingDetails",
@@ -93,34 +109,39 @@ export default {
       availabilityWindow: [],
       defaultimage: require('@/assets/images/product.png'),
       profilePicSrc: '',
+      productImages: [],
+      imagesFound: false,
+      category: ''
     }
   },
 
   methods: {
 
     redirect() {
-      console.log(this.userId)
       router.push({name: 'Lessor', params: { userId: this.userId }})
     },
 
+    searchForCategory() {
+      this.$router.push({name: 'Home', params: { category: this.category }})
+    },
+
     async getListingInfo(){
-      const product = (await ListingsService.getListing(this.itemId)).data
-      this.productInfo = product.product;
-      this.ownerInfo = product.owner;
-      this.userId = product.owner.id;
+      const product = (await ProductService.getProductById(this.itemId)).data
+      const owner = (await UserAccountService.getUser(product.userId)).data
+      const availabilityWindows = (await ProductService.getAvailabilityWindow(this.itemId)).data
+      this.productInfo = product;
+      this.ownerInfo = owner;
+      this.userId = owner.id;
+      this.category = product.category;
       if (this.ownerInfo.profile64 !== "" && this.ownerInfo.profile64 !== null) {
         this.profilePicSrc = "data:image/jpeg;base64,"+this.ownerInfo.profile64;
-      }
-
-      for (let image of product.images) {
-        this.images.push(image.imgData + "," + image.img64);
       }
       if(new Date(this.productInfo.availableFrom) > new Date()){
         this.startDate = this.productInfo.availableFrom
       }
-      for(let i = 0; i<product.availabilityWindows.length; i++){
-        const start = new Date(product.availabilityWindows[i].from);
-        const end = new Date(product.availabilityWindows[i].to);
+      for(let i = 0; i<availabilityWindows.length; i++){
+        const start = new Date(availabilityWindows[i].from);
+        const end = new Date(availabilityWindows[i].to);
         let loop = new Date(start);
         while (loop <= end) {
           this.availabilityWindow.push(new Date(loop))
@@ -139,8 +160,9 @@ export default {
     },
 
     async sendRequest() {
-      if(this.date !== undefined && this.date !== null){
+      if(!(this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null)){
         await RentalService.newRental(this.date[0],this.date[1], this.itemId, this.$store.state.myUserId)
+        this.invalidDate = false;
         this.requestSent = true;
       } else {
         this.invalidDate = true;
@@ -156,6 +178,15 @@ export default {
 
   beforeMount() {
     this.getListingInfo()
+  },
+  async mounted() {
+    this.productImages = (await ImageService.getImagesByProductId(this.itemId)).data
+    if (this.productImages.length != 0) {
+      this.imagesFound = true;
+      for (let image of this.productImages) {
+        this.images.push(image.imgData + "," + image.img64);
+      }
+    }
   }
 }
 </script>

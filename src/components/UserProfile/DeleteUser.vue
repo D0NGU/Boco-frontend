@@ -29,11 +29,20 @@
       </v-card-actions>
 
       <v-alert
-          id="deletedAlert"
+          class="deletedAlert"
+          dismissible
+          type="error"
+          max-width="300px"
+          v-if="error"
+      > {{errorMsg}}
+      </v-alert>
+
+      <v-alert
+          class="deletedAlert"
           dismissible
           type="success"
           max-width="300px"
-          v-if="clicked ? 'true':''"
+          v-if="deleted"
       >Brukeren ble slettet!
       </v-alert>
     </v-card>
@@ -48,46 +57,56 @@ export default {
   name: "DeleteUser",
   data(){
     return{
-      clicked: false,
+      deleted: false,
       password: '',
       userInfo: '',
+      errorMsg: '',
+      error: false,
     }
   },
   methods: {
     async deleteUser(){
-      this.clicked = true;
       await UserAccountService.delete(this.$store.getters.myUserId, this.password).then(response => {
-        console.warn(response)
+        this.deleted = true;
+        this.$store.commit('SET_STATUS', false)
+        setTimeout(() => this.$router.push({path: '/login'}), 1500);
       }).catch((error) => {
-        console.warn(error.response);
+        if(error.response.status === 401){
+          this.errorMsg = "Feil passord. Prøv igjen."
+          this.error = true;
+        } else {
+          this.errorMsg = "Noe gikk galt. Prøv igjen eller ta kontakt med kundestøtte."
+          this.error = true;
+        }
       })
-      this.$store.commit('SET_STATUS', false)
-      setTimeout(() => this.$router.push({path: '/login'}), 1500);
     },
+  },
+  beforeMount() {
+    if(!(this.$store.state.loggedIn)){
+      this.$router.push({name: "NotFound"})
+    }
   }
 }
 </script>
 
 <style scoped>
-#container {
+.container {
   padding: 1em;
 }
+
   #header{
     margin: 1em;
   }
-  #deletedAlert{
+  .deletedAlert{
     margin: 1.5em;
   }
-  .v-text-field {
-    margin: 10px;
+
+  #container {
+    padding: 1em;
   }
 
   #deleteUserScreen {
     box-shadow: none;
-  }
-
-  .v-btn {
-    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 0.2), 0px 2px 2px 0px rgb(0 0 0 / 0.14), 0px 1px 5px 0px rgb(0 0 0 / 0.12)
   }
 
   h1 {
@@ -98,4 +117,14 @@ export default {
 button {
   margin: 0.4em 0.4em 0.8em 0.4em;
 }
+
+  .v-btn {
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 0.2), 0px 2px 2px 0px rgb(0 0 0 / 0.14), 0px 1px 5px 0px rgb(0 0 0 / 0.12)
+  }
+
+  .v-text-field {
+    margin: 10px;
+  }
+
+
 </style>

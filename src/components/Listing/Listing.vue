@@ -14,6 +14,7 @@
         <h1 v-else >Opprett en ny annonse</h1>
         <div class="flex-column mb-6">
           <v-card class="container">
+            <v-alert type="error" closable="" v-model="error" style="font-size: 16px; font-weight: bold"> {{statusMessage}}  </v-alert>
             <v-form
                 v-model="valid"
                 lazy-validation
@@ -27,141 +28,79 @@
                   readonly
                   label="Navn på annonse"
                   hide-details="auto"
-              ></v-text-field>
+                  data-test="adName"/>
               <v-text-field
                   v-else
                   data-testid="name-input"
+                  data-test="adName"
                   type="text"
                   v-model="adName"
                   label="Navn på annonse"
                   :rules="rules"
-                  hide-details="auto"
-              ></v-text-field>
+                  hide-details="auto"/>
               <v-textarea
                   rows="5"
                   no-resize
                   v-model="adDescription"
                   label="Beskrivelse"
                   :rules="rules"
-                  hide-details="auto"
-              ></v-textarea>
+                  hide-details="auto"/>
               <div>
                 <v-file-input
-                    v-model="files"
+                    v-model="newFiles"
                     label="Last opp bilder"
                     hide-details="auto"
-                    :rules="rulesImage"
                     accept="image/x-png, image/jpeg"
                     multiple
                     chips
                     prepend-icon="mdi-camera"
+                    @change="fillFiles"
+                    :key="componentKey"
                 />
 
                 <div id="pictures" v-if="files.length!==0">
-                  <v-badge content="x" color="error" v-for="(image, i) in images" @click="deleteImage(i)">
+                  <v-badge v-if="!reset" content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
                     <div id="space">
-                      <v-img outlined width="130" v-bind:src="image.img" class="grey lighten-2 image">
-                      </v-img>
+                      <ImageCards :file="file"></ImageCards>
                     </div>
                   </v-badge>
                  </div>
 
-                </div>
+              </div>
 
                <v-select
                    v-model="adCategory"
                    :items="categories"
                    label="Kategori"
+                   :rules="rules"
                    outlined
-                   prepend-icon="mdi-widgets"
-               ></v-select>
+                   prepend-icon="mdi-widgets" />
                <v-text-field
                    v-model="adPrice"
                    type="text"
                    label="Pris"
                    :rules="rulesNumber"
-                   hide-details="auto"
-               />
-               <v-radio-group
-                   v-model="pricePer"
-                   column
-               >
-                 <v-radio
-                     label="Pris per dag"
-                     color="indigo"
-                     value="perDay"
-                 ></v-radio>
-                 <v-radio
-                     label="Fastpris"
-                     color="indigo"
-                     value="set"
-                 ></v-radio>
-               </v-radio-group>
-               <!--
-                     <v-container class="grey lighten-5">
-                       <v-row no-gutters>
-                         <v-col order="1">
-                           <v-card
-                             class="pa-2"
-                             outlined
-                             tile
-                           >
-                             <div>
-                               <label>Fra dato:</label>
-                             </div>
-                             <div>
-                               <input
-                                   id="fromDate"
-                                   v-model="fromDate"
-                                   type="date"
-                               >
-                             </div>
-                           </v-card>
-                         </v-col>
-                         <v-col order="2">
-                           <v-card
-                             class="pa-2"
-                             outlined
-                             tile
-                           >
-                             <div>
-                               <label>Til dato:</label>
-                             </div>
-                             <div>
-                               <input
-                                   id="toDate"
-                                   v-model="toDate"
-                                   type="date"
-                               >
-                             </div>
-                           </v-card>
-                         </v-col>
-                       </v-row>
-                     </v-container>
-               -->
-              <Datepicker id="datepicker" :disabled="updating" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
+                   hide-details="auto"/>
+              <Datepicker id="datepicker" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
 
               <v-text-field
                   v-model="adAddress"
                   type="text"
                   label="Adresse"
                   :rules="rules"
-                  hide-details="auto"
-              />
+                  hide-details="auto"/>
               <v-text-field
                   v-model="adPhone"
                   type="text"
                   label="Telefon"
                   :rules="rulesPhone"
-                  hide-details="auto"
-              />
+                  hide-details="auto"/>
             </v-form>
             <v-switch
                 v-model="unListed"
                 inset=""
                 color="indigo"
-                :label="`Skjul annonse`"
-            ></v-switch>
+                :label="`Skjul annonse`" />
             <div v-if="updating">
               <v-btn
                   class="createAdButton"
@@ -175,31 +114,67 @@
               </v-btn>
             </div>
             <v-btn
-                :disabled="!valid"
                 class="createAdButton"
                 @click="createAd()"
-                v-else
-            >Opprett annonse
+                v-else>
+              Opprett annonse
             </v-btn>
             <v-btn
                 id="cancelButton"
-                @click="$router.back()"
-            >Avbryt
+                @click="$router.back()">
+              Avbryt
             </v-btn>
-            <v-dialog id="popOut" v-model="dialog">
+
+            <v-dialog v-model="warning" persistent>
               <v-card>
-                <v-card-title class="text-h5"> {{statusMessage}} </v-card-title>
+                <v-card-title class="text-h5"> Er du sikker? </v-card-title>
+                <v-card-text>Dette produktet har allerede en planlagt utleie eller har forespørsler for utleie utenfor valgte dato. Dersom du fortsetter med endringen vil alle forespørsler utenfor datoendringen
+                bli avslått. Vi anbefaler at du tar kontakt med personen med planlagt utleie for å avklare dato</v-card-text>
                 <v-card-actions>
-                  <v-btn
-                      color="red"
-                      text
-                      @click=close()
-                  >
+                  <v-btn color="green"
+                         text
+                         @click="acceptChangeDate">
+                    Endre
+                  </v-btn>
+                  <v-btn color="red"
+                         text
+                         @click="this.warning = false">
+                    Avbryt
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialog" persistent>
+              <v-card>
+                <v-card-title> {{confirmationMsg}}</v-card-title>
+                <v-spacer />
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red"
+                         text
+                         @click=close()>
                     Lukk
                   </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
+
+            <v-dialog v-model="imgDialog" persistent>
+              <v-card>
+                <v-card-title> {{confirmationMsg}}</v-card-title>
+                <v-spacer />
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red"
+                         text
+                         @click=imgClose()>
+                    Lukk
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
             <v-spacer />
             <v-dialog v-model="deleteDialog">
               <v-card>
@@ -209,15 +184,13 @@
                   <v-btn
                       color="red"
                       text
-                      @click="deleteDialog=false"
-                  >
+                      @click="deleteDialog=false">
                     Avbryt
                   </v-btn>
                   <v-btn
                       color="red"
                       text
-                      @click=deleteAd
-                  >
+                      @click=deleteAd>
                     Slett
                   </v-btn>
                 </v-card-actions>
@@ -225,9 +198,6 @@
             </v-dialog>
           </v-card>
         </div>
-
-
-
       </v-window-item>
 
       <v-window-item value="rentalRequests">
@@ -261,7 +231,7 @@ import { ref } from 'vue';
 import Datepicker from "@vuepic/vue-datepicker";
 import ImageCards from "@/components/Listing/ImageCards";
 import ShowRentals from "@/components/UserProfile/ShowRentals";
-import RentalRequestView from "@/components/Listing/RentalRequestView";
+import RentalRequestView from "@/components/Listing/Rental/RentalRequestView";
 import RentalService from "@/service/RentalService";
 
 export default {
@@ -273,59 +243,84 @@ export default {
   data() {
     return {
       rentalList: [],
-      valid: false,
+      valid: true,
+      error: false,
+      warning: false,
       updating: false,
       adName: '',
       adDescription: '',
       adCategory: '',
       adPrice: '',
-      pricePer: '',
       date: ref(),
       adAddress: '',
       adPhone: '',
       unListed: false,
       categories: [],
       dialog: false,
+      imgDialog: false,
+      reset: false,
+      componentKey: 0,
+      /**
+       * New files from the file input
+       */
+      newFiles: [],
+      /**
+       * List of all the image files
+       */
       files: [],
+      /**
+       * List of objects conating, image name, image data, image meta data and image url
+       */
       images: [],
+      /**
+       * List of image objects found then editing a product
+       */
       shownImages: [],
+      confirmationMsg: '',
       statusMessage: '',
       rules: [
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
-      ],
-      rulesImage: [
-        /* REGEL: Bilde kan ikke være større enn gitt størrelse */
-        files => !files || !files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
       ],
       rulesNumber: [
         value => !isNaN(value) || 'Må være tall.',
         value => !!value || 'Påkrevd.',
       ],
       rulesPhone: [
+        value => !!value || 'Påkrevd.',
         value => !isNaN(value) || 'Må være tall.',
         value => (value && (value.length === 8)) || 'Må være et gyldig telefonnummer.',
       ],
       deleteDialog: false,
       tab: null,
       render: true,
+      isARental: false,
+      isARequest: false,
+      conflictRequests: [],
     }
   },
 
-  watch: {
-    files() {
-      this.addFiles()
-    }
-  },
   methods: {
-    forceRerender() {
-      this.render = false;
-
-      this.$nextTick(() => {
-        this.render = true;
-      });
+    fillFiles() {
+      console.log("new files " + this.newFiles)
+        for (let file of this.newFiles) {
+          if (file.size > 1024*1024*2) {
+            this.confirmationMsg = "Files over 2 MB not supported"
+            this.imgDialog=true;
+            break;
+          }
+          if (file.size + this.files.size > 1024*1024*10) {
+            this.confirmationMsg = "Total file size must be less than 10 MB \n" +
+            "Remove som files to make more space"
+            this.imgDialog=true;
+            break;
+          }
+          this.files.push(file);
+        }
+      this.componentKey++
+      this.newFiles = [];
+      console.log("new files " + this.newFiles)
     },
-
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
       categories.forEach(cat => {
@@ -333,12 +328,17 @@ export default {
       })
       if(this.updating) {
         const productInfo = (await ProductService.getProductById(this.itemId)).data
+        if(!(productInfo.userId == this.$store.state.myUserId)){
+          await this.$router.push({name: "NotFound"})
+        }
+
         this.adName = productInfo.title;
         this.adDescription = productInfo.description;
         this.adPrice = productInfo.price;
         this.adAddress = productInfo.address;
         this.adCategory = productInfo.category
         this.unListed = productInfo.unlisted;
+        this.adPhone = productInfo.tlf;
         this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)];
         this.image = (await ImageService.getImagesByProductId(this.itemId)).data;
         for (let x of this.image) {
@@ -347,7 +347,13 @@ export default {
         }
       }
     },
-
+    /**
+     * Method for creating a file from a base 64 encypted url
+     * @param base64 the encyprted file
+     * @param data meta data
+     * @param filename name of the file
+     * @returns {Promise<File>} image file
+     */
     urlToFile(base64, data, filename){
       let url = data +","+base64;
       return (fetch(url)
@@ -356,61 +362,75 @@ export default {
       );
     },
 
-    async dataUrlToFile(base64, data, fileName) {
-      const dataUrl = data +","+base64;
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      return new File([blob], fileName, { type: 'image/png' });
-    },
-
     async createAd() {
-      console.log("Listing was created.")
-      for (let file of this.files) {
-        this.image.push( await this.getBase64(file));
+      await this.$refs.form.validate()
+      if(this.valid){
+        await this.addFiles();
+        if(this.date !== undefined && this.date !== null && this.date[0] !== undefined && this.date[1] !== undefined && this.date[0] !== null && this.date[1] !== null) {
+          await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images, this.adPhone).then(response => {
+            this.confirmationMsg = "Annonsen ble opprettet!";
+            this.dialog = true
+          }).catch((error) => {
+            if (error.response) {
+              this.statusMessage = "Navnet er allerede tatt. Prøv med et annet navn";
+              this.error = true
+              window.scrollTo(0, 0)
+            }
+          })
+        } else {
+          this.statusMessage = "Du må velge til og fra dato"
+          this.error = true
+          window.scrollTo(0, 0)
+        }
+      } else {
+        this.error = true
+        this.statusMessage = "Du må fylle ut alle påkrevde felt"
+        window.scrollTo(0, 0)
       }
+    },
 
-      let tempStat = '';
-      if(this.date !== undefined && this.date !== null) {
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.image).then(response => {
-          tempStat = response.status;
-        }).catch((error) => {
-          if (error.response) {
-            tempStat = error.response.status;
-            this.statusMessage = error.response.data;
-          }
-        })
-        this.statusMessage = "Annonsen ble opprettet!";
-        this.dialog = true;
-      }
-    },
     async updateAd(){
-        let tempStat;
-        this.dialog = true;
-        this.createdStatus = true;
-        this.image = [];
-      for (let file of this.files) {
-        this.image.push( await this.getBase64(file));
-      }
-      console.log("Listing was updated.")
-        await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.adCategory, this.image).then(response => {
-          tempStat = response.data
-        }).catch((error) => {
-          if (error.response) {
-            this.statusMessage = error.response.data;
+      await this.$refs.form.validate()
+      if(this.valid){
+        //sjekke for dato konflikter
+        if(!(this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null)) {
+          await this.checkDateConflict()
+          if (!this.isARental && !this.isARequest){
+            await this.editAd()
+          } else {
+            this.warning = true
           }
-        })
-        this.statusMessage = "Endringen var vellykket!";
-        this.dialog = true;
+        } else {
+          this.error = true
+          this.statusMessage = "Du må velge til og fra dato"
+          window.scrollTo(0, 0)
+        }
+      }
     },
+
+    //oppdatere annonsen
+    async editAd() {
+      await this.addFiles();
+      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.images, this.adPhone)
+          .then(response => {
+            this.confirmationMsg = "Endringen var vellykket!";
+          }).catch((error) => {
+            this.confirmationMsg = "En feil har oppstått. Vennligst prøv på nytt";
+          })
+      this.dialog = true;
+    },
+
     async addFiles() {
       this.images = []
-      console.log(this.files)
       for (let file of this.files) {
         this.images.push(await this.getBase64(file))
       }
     },
-
-
+    /**
+     * Create a base64 representation of a file
+     * @param file image file to encrypt
+     * @returns {Promise<unknown>} Object containing data, metadata, name, and url to display the image
+     */
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -431,7 +451,7 @@ export default {
     async deleteAd(){
       await ListingsService.delete(this.$store.state.myUserId, this.itemId)
       this.deleteDialog = false;
-      this.statusMessage = "Annonsen ble slettet.";
+      this.confirmationMsg = "Annonsen ble slettet.";
       this.dialog = true;
     },
 
@@ -439,9 +459,58 @@ export default {
       this.dialog = false;
       router.back();
     },
-    deleteImage(index) {
+
+    imgClose(){
+      this.newFiles = [];
+      this.imgDialog = false;
+    },
+
+    acceptChangeDate() {
+      this.warning = false
+      if (this.isARequest) {
+        this.isARequest = false
+        if (this.conflictRequests.length) {
+          //avslå forespørsler hvis dato endringen utenfor datoene på forespørsler er godtatt
+          this.conflictRequests.forEach((rental) => {
+            this.denyRentals(rental.rentalId)
+          })
+        }
+      } else if (this.isARental) {
+        this.isARental = false
+      }
+      this.editAd()
+    },
+
+    async denyRentals(id) {
+      await RentalService.deny(id)
+      this.$emit("update");
+    },
+
+    //sjekker om det skjer en dato konflikt med forespørsler og godtatt forespørsler ved endringen av dato i annonsen
+    async checkDateConflict() {
+      let allRentals = (await RentalService.getAllRentals(this.itemId)).data
+      if (!allRentals.length) {
+        return;
+      }
+      let requestRentals = []
+      allRentals.forEach((rental) => {
+        if (new Date(rental.dateFrom) < this.date[0] || new Date(rental.dateTo) > this.date[1]){
+          if (rental.accepted === true){
+            this.isARental = true
+          } else if(rental.accepted === false) {
+            requestRentals.push(rental)
+            this.isARequest = true
+          }
+        }
+      })
+      this.conflictRequests = requestRentals
+    },
+
+    async deleteImage(index) {
+      this.reset = true;
       this.files.splice(index, 1)
-      this.addFiles()
+      await this.addFiles()
+      this.reset = false;
     },
 
     async getRentals() {
@@ -449,14 +518,13 @@ export default {
     },
 
   },
-
-   beforeMount(){
+  beforeMount(){
     this.getInfo();
     if(this.itemId > 0){
       this.updating = true;
       this.getRentals();
     }
-  },
+   },
 }
 </script>
 
@@ -467,7 +535,9 @@ export default {
   width: 350px;
   padding: 1em;
 }
-
+.v-tabs.v-slide-group--is-overflowing:not(.v-slide-group--has-affixes) .v-tab:first-child {
+  margin-left: 4px;
+}
 .v-text-field, .v-file-input, .v-textarea, #datepicker {
   margin-bottom: 22px;
 }
@@ -499,15 +569,6 @@ button {
 .tabHeader {
   margin-top: 0;
 }
-
-#pictures {
-  padding-bottom: 10px;
-  margin: auto;
-  place-content: center;
-}
-.image {
-  margin: 2px;
-}
 #space {
   margin-left: 4px;
 }
@@ -517,9 +578,9 @@ button {
   grid-template-rows: auto;
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-  margin-bottom: 3px;
   overflow-y: scroll;
+  overflow-x: scroll;
   height: 200px;
-  border: solid grey 2px;
+  padding: 10px;
 }
 </style>

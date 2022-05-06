@@ -3,15 +3,17 @@ import Home from '../views/Home.vue'
 import Account from '../views/Account.vue'
 import NotFound from '../views/NotFoundPage.vue'
 import Login from '../views/Login'
-import RegisterForm from "@/components/RegisterForm";
+import RegisterForm from "@/components/LogIn/RegisterForm";
 import DeleteUser from "@/components/UserProfile/DeleteUser";
 import ListingDetails from "@/components/Listing/ListingDetails";
 import Listing from "@/components/Listing/Listing";
-import Contact from "@/components/Contact";
+import Contact from "@/components/Misc/Contact";
 import {getApiClient} from "@/service/ApiService";
 import Landing from "@/views/Landing";
 import Lessor from "@/views/Lessor";
-import FAQ from "@/components/FAQ";
+import FAQ from "@/components/Misc/FAQ";
+import RequestPasswordReset from "@/components/LogIn/RequestPasswordReset";
+import ResetPassword from "@/components/LogIn/ResetPassword";
 
 const routes = [
   {
@@ -73,9 +75,19 @@ const routes = [
     name: "FAQ",
     component: FAQ
   },
+  {
+    path: "/password/reset/request",
+    name: "RequestPasswordReset",
+    component: RequestPasswordReset
+  },
+  {
+    path: "/password/reset",
+    name: "ResetPassword",
+    component: ResetPassword
+  },
   // Redirect any none-existing path to 404 page
   {
-    path: '/:catchAll(.*)',
+    path: '/:catchAll(.*)?',
     name: 'NotFound',
     component: NotFound
   }

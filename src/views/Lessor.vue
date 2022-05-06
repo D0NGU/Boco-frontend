@@ -1,3 +1,5 @@
+<!-- Side som viser en annen person sin profil -->
+
 <template>
   <div id="grid">
     <div id="topProfileContainer">
@@ -16,16 +18,18 @@
     <v-carousel id="carousel" height="300px" hide-delimiter-background="" :show-arrows="false">
       <v-carousel-item class="carouselItem">
         <v-avatar size="x-large">
-          <v-img src="../assets/images/missing_profile_img.png"></v-img>
+          <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
+          <v-img v-else src="../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
         </v-avatar>
+
         <div>
           <p class="text-button">{{name}}
-            <v-icon v-if="isVerified">mdi-account-check-outline</v-icon>
+            <v-icon v-if="isVerified">mdi-shield-check</v-icon>
           </p>
         </div>
 
         <div>
-          <p id="userDescription" v-if="!edit" class="text-body-1">{{ userDescription }}</p>
+          <p id="userDescription" class="text-body-1">{{ userDescription }}</p>
         </div>
 
       </v-carousel-item>
@@ -35,7 +39,7 @@
         <p>Rangering som låner</p>
         <v-rating readonly="" v-model="ratingRenter"></v-rating>
         <br>
-        <v-icon> mdi-message-draw </v-icon> {{reviewsCount}}
+        <v-icon id="reviewCounter" @click="this.tab = 'reviews'"> mdi-message-draw </v-icon> {{reviewsCount}}
       </v-carousel-item>
     </v-carousel>
   </div>
@@ -43,7 +47,8 @@
   <v-card-text>
     <v-window v-model="tab">
       <v-window-item value="items">
-        <ListingView :ownerId="this.userId"/>
+        <h1>Mine annonser</h1>
+        <ListingView :ownerId="this.userId" :showSearch="false"/>
       </v-window-item>
       <v-window-item value="reviews">
         <MyReviews :user-id="this.userId"/>
@@ -59,8 +64,9 @@ import MyReviews from "@/components/UserProfile/MyReviews";
 import { useRoute } from 'vue-router'
 
 export default {
-  name: 'lessor',
+  name: 'Lessor',
   components: {MyReviews, ListingView},
+
   setup() {
     const route = useRoute();
     const userId = route.params.userId;
@@ -72,16 +78,16 @@ export default {
   data() {
     return {
       name: 'Bruker',
-      ratingSeller: 5,
-      ratingRenter: 5,
+      ratingSeller: '',
+      ratingRenter: '',
       reviewsCount: '',
       tab: null,
       userInfo: '',
       userDescription: '',
-      edit: false,
       isVerified: false,
       rules: [v => v.length <= 189 || 'Max 190 characters allowed'],
       background_img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd53l9d6fqlxs2.cloudfront.net%2Fphotos%2F75616-adobestock_63768956jpeg.jpeg&f=1&nofb=1',
+      profilePicSrc: '',
     }
   },
   methods: {
@@ -97,10 +103,14 @@ export default {
     },
   },
   async beforeMount() {
+    // Get user information
     const userInfo = await UserAccountService.getUser(this.userId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
+    if (userInfo.data.profile64 !== "" && userInfo.data.profile64 !== null) {
+      this.profilePicSrc = "data:image/jpeg;base64," +userInfo.data.profile64;
+    }
 
-    //check if user is verified
+    // check if user is verified
     await UserAccountService.getVerifiedUser(this.userId)
         .then(res => this.isVerified = res.data)
         .catch((err) => {
@@ -161,6 +171,13 @@ export default {
   width: 100%;
   z-index: 10;
   display: flex;
+}
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#reviewCounter {
+  cursor: pointer;
 }
 
 </style>

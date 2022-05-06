@@ -1,13 +1,26 @@
 <template>
   <h1>Anmeldelser om meg</h1>
-  <div v-for="review in reviews">
-    <ReviewCard
-        :rating="review.rating"
-        :comment="review.comment"
-        :authorId="review.author"
+  <v-container id="mobile">
+    <div v-for="review in reviews">
+      <ReviewCard
+          :rating="review.rating"
+          :comment="review.comment"
+          :authorId="review.author"
+      />
+    </div>
+  </v-container>
 
-    />
-  </div>
+  <v-container id="wideScreen">
+    <v-row>
+      <v-col v-for="(review, index) in reviews" :key="index">
+          <ReviewCard
+              :rating="review.rating"
+              :comment="review.comment"
+              :authorId="review.author"
+          />
+      </v-col>
+    </v-row>
+  </v-container>
 
 </template>
 
@@ -39,5 +52,17 @@ export default {
 h1 {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+#mobile {
+  display:none;
+}
+@media only screen and (max-width: 600px) {
+  #wideScreen {
+    display: none;
+  }
+  #mobile {
+    display: block;
+  }
 }
 </style>

@@ -4,32 +4,34 @@
       <v-col class="navItem">
       <router-link :to="{name: 'Home'}">
         <div class="navLink">
-          <v-icon>mdi-home</v-icon>
+          <v-icon size="x-large">mdi-home</v-icon>
         </div>
       </router-link>
       </v-col>
       <v-col class="navItem">
       <router-link :to="{name: 'Account'}">
         <div>
-          <v-icon> mdi-account</v-icon>
+          <v-icon size="x-large"> mdi-account</v-icon>
         </div>
       </router-link>
       </v-col>
       <v-col class="navItem">
         <router-link :to="{name: 'Listing'}">
           <div>
-            <v-icon> mdi-plus-circle</v-icon>
+            <v-icon size="x-large"> mdi-plus-circle</v-icon>
           </div>
         </router-link>
       </v-col>
-      <v-col class="navItem">
+      <v-col class="navItem" id="notificationButton">
         <v-dialog
             v-model="dialog"
             fullscreen=""
         >
           <template v-slot:activator="{ props }">
-              <v-icon v-show="!notification" color="white" v-bind="props"> mdi-bell </v-icon>
-              <v-icon v-show="notification"  color="white" v-bind="props"> mdi-bell-alert </v-icon>
+            <div id="=notifIcon" v-bind="props">
+              <v-icon v-show="!notification" color="white" size="x-large"> mdi-bell </v-icon>
+              <v-icon v-show="notification"  color="white" size="x-large"> mdi-bell-alert </v-icon>
+            </div>
           </template>
 
           <v-card id="notificationDialog">
@@ -83,7 +85,6 @@ export default {
       if (this.isInt(userId)) {
         await getApiClient.get('alerts/user/' + userId + '/unseen').then(response => {
           if (response.data !== "") {
-            console.info("New alert received")
             this.notification = true;
           } else {
             this.notification = false;
@@ -124,7 +125,7 @@ export default {
   text-decoration: none;
 }
 #navBar a.router-link-active {
-  color: orange;
+  color: #FFB429;
 
 }
 .navItem {
@@ -135,11 +136,17 @@ export default {
 #notificationDialog {
   background-color: #edf1f5;
 }
-#chatDialog {
-  background-color: #edf1f5;
+
+#notifIcon {
+  width: 100%;
 }
 #closeButton {
   color: var(--bocoBlue);
   font-weight: bold;
 }
+
+#notificationButton {
+  cursor: pointer;
+}
+
 </style>

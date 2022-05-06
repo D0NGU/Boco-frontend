@@ -3,7 +3,8 @@
 <template>
   <v-card class="rounded-l itemCard">
     <div class="itemContainer">
-      <img src="../../assets/images/missing_profile_img.png" alt="profile picture" id="userImage"/>
+      <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
+      <v-img v-else src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
 
       <v-divider vertical />
       <div class="itemDetail">
@@ -53,6 +54,7 @@ export default {
     return {
       itemLoanerName: '',
       dialog: false,
+      profilePicSrc: '',
     }
   },
   methods: {
@@ -60,6 +62,9 @@ export default {
   async beforeMount() {
     const userInfo = (await UserAccountService.getUser(this.itemLoaner)).data
     this.itemLoanerName = userInfo.fname + " " + userInfo.lname
+    if (userInfo.profile64 !== "" && userInfo.profile64 !== null) {
+      this.profilePicSrc = "data:image/jpeg;base64," +userInfo.profile64;
+    }
   }
 }
 </script>
@@ -77,12 +82,6 @@ export default {
   align-items: center;
   position: relative;
 }
-#userImage {
-  width: 30%;
-  object-fit: contain;
-  max-height: 100%;
-  z-index: 1;
-}
 .itemDetail {
   height: 100%;
   margin: 10px 0 10px 20px;
@@ -94,4 +93,8 @@ export default {
 #writeReviewBtn {
   font-size: 11px;
 }
+.v-img {
+  margin: 0 1em 0 1em;
+}
+
 </style>

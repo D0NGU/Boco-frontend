@@ -1,11 +1,11 @@
 <!-- registrerings komponent -->
 
 <template>
+  <h1 id="title">Opprett bruker</h1>
   <v-form ref="form" id="RegisterForm"
           @submit.prevent="submit"
           v-model="valid"
           lazy-validation>
-    <h1 id="title">Opprett bruker</h1>
 
     <div id="test">
       <v-text-field
@@ -31,7 +31,7 @@
 
       <v-text-field
           id="password"
-          :rules="rulesApplyToAll"
+          :rules="rulesPassword"
           v-model="password"
           :type="show ?'text': 'password'"
           label="Passord"
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import LoginService from '../service/LoginService'
+import LoginService from '../../service/LoginService'
 export default {
   data() {
     return {
@@ -99,10 +99,15 @@ export default {
       password: '',
       emailRules: [
         v => !!v || 'E-post er påkrevd',
-        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-post må være gyldig',
       ],
       rulesApplyToAll: [
         value => !!value || 'Påkrevd.',
+        value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
+      ],
+      rulesPassword: [
+        value => !!value || 'Påkrevd.',
+        value => (value && (value.length >= 8)) || 'Minimum 8 (bokstaver/tall).',
       ],
       show: false,
       regisState: '',
@@ -116,7 +121,6 @@ export default {
       let tempStat = '';
       this.dialog = true
       if (this.$refs.form.validate()) {
-        console.log("Form is validated")
         await LoginService.handleClickSignUp(this.firstname, this.lastname, this.email, this.password).then(response => {
           tempStat = response.status;
         }).catch((error) => {
@@ -130,7 +134,7 @@ export default {
         this.regisState = "Brukeren ble opprettet!";
       } else if (tempStat === 409) {
         this.regisState = "E-posten er allerede i bruk.";
-      } else if (tempStat === 500) {
+      } else {
         this.regisState = "Det oppsto en feil ved registrering. Prøv igjen";
       }
     },
@@ -155,14 +159,16 @@ export default {
 <style scoped>
 
 #RegisterForm {
-  display: grid;
+  display: inline-block;
   justify-content: center;
   padding: 20px;
-  margin-top: 30px;
+  background-color: white;
+  margin-bottom: 60px;
 }
 
 h1 {
   margin-bottom: 30px;
+  margin-top: 30px;
 }
 
 #test {
@@ -177,6 +183,7 @@ h1 {
   background-color: var(--bocoBlue) !important;
   color: white !important;
   font-weight: bold;
+  margin-top: 1em;
 }
 
 #backToLoginButton {

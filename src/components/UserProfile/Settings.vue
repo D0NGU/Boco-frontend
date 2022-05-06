@@ -4,7 +4,7 @@
   <v-card id="container">
     <div id="textFieldWrapper">
       <v-text-field id="name" v-model="name" readonly label="Navn"></v-text-field>
-      <v-text-field id="email" v-model="email" readonly label="E-postadresse"></v-text-field>
+      <v-text-field id="email" v-model="email" label="E-postadresse"></v-text-field>
       <v-file-input
           v-model="picture"
           label="Last opp bilde"
@@ -12,7 +12,17 @@
           accept="image/jpeg"
           prepend-icon="mdi-camera"
       />
-      <v-text-field type="password" label="Gammelt passord" v-model="oldPassword"></v-text-field>
+      <v-alert
+          dismissible
+          type="error"
+          max-width="300px"
+          v-if="error"
+      > {{errorMsg}}
+      </v-alert>
+      <v-text-field type="password" label="Gammelt passord"
+                    v-model="oldPassword"
+                    hint="Tast inn gammelt passord ved endring av e-post eller passord"
+                    persistent-hint></v-text-field>
       <v-text-field type="password" label="Nytt passord" v-model="newPassword"></v-text-field>
       <v-text-field type="password" label="Gjenta passord" v-model="newPasswordRepeat"></v-text-field>
       <v-switch inset="" color="indigo" label="Offentlig kjøpshistorikk" v-model="hideHistory"></v-switch>
@@ -55,7 +65,7 @@
         :timeout="3000"
         v-model="confirmationSnackBar"
         top
-    >Passordet har blitt endret! </v-snackbar>
+    >Endringene har blitt lagret! </v-snackbar>
   </v-card>
 
 </template>
@@ -77,19 +87,44 @@ export default {
       hideHistory: false,
       confirmationSnackBar: false,
       dialog: false,
-      picture: []
+      picture: [],
+      errorMsg: '',
+      error: false,
     }
   },
   methods: {
     async handleSaveClick(){
       if(this.newPassword === this.newPasswordRepeat && this.newPassword !== ""){
-        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword);
-        this.confirmationSnackBar = true;
+        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword).then(response =>{
+          this.confirmationSnackBar = true;
+          this.error = false;
+        }).catch(error => {
+          if(error.response.status === 401){
+            this.errorMsg = "Passordet var feil. Prøv igjen."
+            this.error = true;
+          } else {
+            this.errorMsg = "Noe gikk galt. Prøv igjen eller ta kontakt med kundestøtte."
+            this.error = true;
+          }
+        });
       }
-      if (this.picture) {
+      if(this.newPassword === ""){
+        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.oldPassword).then(response =>{
+          this.confirmationSnackBar = true;
+          this.error = false;
+        }).catch(error => {
+          if(error.response.status === 401){
+            this.errorMsg = "Passordet var feil. Prøv igjen."
+            this.error = true;
+          } else {
+            this.errorMsg = "Noe gikk galt. Prøv igjen eller ta kontakt med kundestøtte."
+            this.error = true;
+          }
+        });
+      }
+      if (this.picture.length > 0) {
         let img = await this.getBase64(this.picture[0]);
-        console.log(img);
-        await ImageService.setProfilePic(img, this.$store.state.myUserId);
+        await ImageService.setProfilePic(img, this.$store.getters.myUserId);
         this.confirmationSnackBar = true;
       }
     },
@@ -110,7 +145,8 @@ export default {
       cookies.set('token', "", { path: '/' });
       cookies.set('userId', "", {path: '/'})
       cookies.set('email', "", {path: '/'})
-      setTimeout( () => this.$router.push({ path: '/login'}), 1500);
+      this.dialog = false;
+      setTimeout( () => this.$router.push({ path: '/login'}), 300);
     },
   },
   async beforeMount() {
@@ -148,5 +184,10 @@ h1 {
 button {
   margin: 0.4em 0.4em 0.8em 0.4em;
 }
+
+.v-file-input {
+  margin-bottom: 2.5em;
+}
+
 
 </style>

@@ -1,4 +1,4 @@
-<!-- typ "min profil" eller "settings" (endre passord, slett bruker osv) -->
+<!-- Min profil hvor du kan se dine annonser, anmeldelser, endre passord og lignende -->
 
 <template>
   <div id="grid">
@@ -19,13 +19,10 @@
     <div class="profileDetails">
       <v-carousel id="carousel" height="300px" hide-delimiter-background="" :show-arrows="false">
         <v-carousel-item class="carouselItem">
-          <div>
             <v-avatar size="x-large">
               <v-img v-if="profilePicSrc" :src="profilePicSrc"/>
-              <v-img v-else src="https://kvener.no/wp-content/uploads/2019/02/blank-profile-picture-973460_640.png"/>
+              <v-img v-else src="../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
             </v-avatar>
-
-          </div>
 
           <div>
             <p class="text-button">{{name}}
@@ -79,13 +76,12 @@
 
         </v-carousel-item>
         <v-carousel-item class="carouselItem">
-          <!-- TODO: Hent rating fra backend -->
           <p>Rangering som selger</p>
           <v-rating readonly="" v-model="ratingSeller"></v-rating>
           <p>Rangering som låner</p>
           <v-rating readonly="" v-model="ratingRenter"></v-rating>
           <br>
-          <v-icon> mdi-message-draw </v-icon> {{reviewsCount}}
+          <v-icon id="reviewCounter" @click="this.tab = 'reviews'"> mdi-message-draw </v-icon> {{reviewsCount}}
         </v-carousel-item>
       </v-carousel>
     </div>
@@ -93,13 +89,14 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
-          <ListingView :ownerId="this.$store.state.myUserId"/>
+          <h1>Mine annonser</h1>
+          <ListingView :ownerId="this.$store.getters.myUserId" :showSearch="false"/>
         </v-window-item>
         <v-window-item value="history">
           <HistoryComponent/>
         </v-window-item>
         <v-window-item value="reviews">
-          <MyReviews :user-id="this.$store.state.myUserId"/>
+          <MyReviews :user-id="this.$store.getters.myUserId"/>
         </v-window-item>
         <v-window-item value="settings">
           <Settings />
@@ -114,7 +111,6 @@ import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
-import {getApiClient} from "@/service/ApiService";
 
 export default {
     name: 'account',
@@ -122,7 +118,6 @@ export default {
 
   data() {
     return {
-      //TODO Hent rating fra backend
       name: 'Bruker',
       ratingSeller: '',
       ratingRenter: '',
@@ -158,13 +153,9 @@ export default {
       this.snackbar = true
       this.edit = false
     },
-    async getNumberOfReviews() {
+    async getReviewData(){
       this.reviewsCount = (await UserAccountService.getNumberOfReviews(this.$store.getters.myUserId)).data;
-    },
-    async getAverageScoreAsOwner() {
       this.ratingSeller = (await UserAccountService.getAverageScoreAsOwner(this.$store.getters.myUserId)).data;
-    },
-    async getAverageScoreAsRenter() {
       this.ratingRenter = (await UserAccountService.getAverageScoreAsRenter(this.$store.getters.myUserId)).data;
     },
     async updateUserDescription() {
@@ -181,16 +172,12 @@ export default {
         this.statusForEditUserDescription = "Noe gikk galt. Prøv igjen"
       }
     },
-
-    setProfilePic() {
-
-    }
   },
   async beforeMount() {
     let myUserId = this.$store.getters.myUserId;
     const userInfo = await UserAccountService.getUser(myUserId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
-    if (userInfo.data.profile64 !== "") {
+    if (userInfo.data.profile64 !== "" && userInfo.data.profile64 !== null) {
       this.profilePicSrc = "data:image/jpeg;base64," +userInfo.data.profile64;
     }
 
@@ -199,9 +186,7 @@ export default {
     //get user description
     this.userDescription =  (await UserAccountService.getUserDescription(myUserId)).data
 
-    await this.getNumberOfReviews()
-    await this.getAverageScoreAsOwner()
-    await this.getAverageScoreAsRenter()
+    await this.getReviewData()
   }
 }
 </script>
@@ -210,9 +195,6 @@ export default {
 #grid {
   display: grid;
   height: 400px;
-}
-#components {
-  min-height: 30%;
 }
 #topProfileContainer {
   height: 400px;
@@ -255,13 +237,17 @@ export default {
   z-index: 10;
   display: flex;
 }
-.v-card-text {
-  padding: 0;
-}
 
 #userDescription {
   width: 350px;
   margin: 0 auto;
+}
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#reviewCounter {
+  cursor: pointer;
 }
 
 </style>
