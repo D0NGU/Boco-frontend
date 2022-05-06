@@ -3,6 +3,13 @@
   <h1>Innstillinger</h1>
   <v-card id="container">
     <div id="textFieldWrapper">
+      <v-alert
+          dismissible
+          type="error"
+          max-width="300px"
+          v-if="error"
+      > {{errorMsg}}
+      </v-alert>
       <v-text-field id="name" v-model="name" readonly label="Navn"></v-text-field>
       <v-text-field id="email" v-model="email" label="E-postadresse"></v-text-field>
       <v-file-input
@@ -12,7 +19,10 @@
           accept="image/jpeg"
           prepend-icon="mdi-camera"
       />
-      <v-text-field type="password" label="Gammelt passord" v-model="oldPassword"></v-text-field>
+      <v-text-field type="password" label="Gammelt passord"
+                    v-model="oldPassword"
+                    hint="Tast inn gammelt passord ved endring av e-post eller passord"
+                    persistent-hint></v-text-field>
       <v-text-field type="password" label="Nytt passord" v-model="newPassword"></v-text-field>
       <v-text-field type="password" label="Gjenta passord" v-model="newPasswordRepeat"></v-text-field>
       <v-switch inset="" color="indigo" label="Offentlig kjøpshistorikk" v-model="hideHistory"></v-switch>
@@ -77,23 +87,44 @@ export default {
       hideHistory: false,
       confirmationSnackBar: false,
       dialog: false,
-      picture: []
+      picture: [],
+      errorMsg: '',
+      error: false,
     }
   },
   methods: {
     async handleSaveClick(){
       if(this.newPassword === this.newPasswordRepeat && this.newPassword !== ""){
-        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword);
-        this.confirmationSnackBar = true;
+        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword).then(response =>{
+          this.confirmationSnackBar = true;
+        }).catch(error => {
+          if(error.response.status === 401){
+            this.errorMsg = "Passordet var feil. Prøv igjen."
+            this.error = true;
+          } else {
+            this.errorMsg = "Noe gikk galt. Prøv igjen eller ta kontakt med kundestøtte."
+            this.error = true;
+          }
+        });
+      }
+      if(this.newPassword === ""){
+        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.oldPassword).then(response =>{
+          this.confirmationSnackBar = true;
+        }).catch(error => {
+          if(error.response.status === 401){
+            this.errorMsg = "Passordet var feil. Prøv igjen."
+            this.error = true;
+          } else {
+            this.errorMsg = "Noe gikk galt. Prøv igjen eller ta kontakt med kundestøtte."
+            this.error = true;
+          }
+        });
       }
       if (this.picture) {
         let img = await this.getBase64(this.picture[0]);
         console.log(img);
         await ImageService.setProfilePic(img, this.$store.getters.myUserId);
         this.confirmationSnackBar = true;
-      }
-      if(this.newPassword === ""){
-        await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.oldPassword);
       }
     },
     getBase64(file) {
