@@ -270,9 +270,21 @@ export default {
       categories: [],
       dialog: false,
       imgDialog: false,
+      /**
+       * New files from the file input
+       */
       newFiles: [],
+      /**
+       * List of all the image files
+       */
       files: [],
+      /**
+       * List of objects conating, image name, image data, image meta data and image url
+       */
       images: [],
+      /**
+       * List of image objects found then editing a product
+       */
       shownImages: [],
       confirmationMsg: '',
       statusMessage: '',
@@ -351,7 +363,13 @@ export default {
         }
       }
     },
-
+    /**
+     * Method for creating a file from a base 64 encypted url
+     * @param base64 the encyprted file
+     * @param data meta data
+     * @param filename name of the file
+     * @returns {Promise<File>}
+     */
     urlToFile(base64, data, filename){
       let url = data +","+base64;
       return (fetch(url)
@@ -424,7 +442,11 @@ export default {
         this.images.push(await this.getBase64(file))
       }
     },
-
+    /**
+     * Create a base64 representation of a file
+     * @param file image file to encrypt
+     * @returns {Promise<unknown>} Object containing data, metadata, name, and url to display the image
+     */
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
