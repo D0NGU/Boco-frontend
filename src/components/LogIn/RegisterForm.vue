@@ -121,7 +121,6 @@ export default {
       let tempStat = '';
       this.dialog = true
       if (this.$refs.form.validate()) {
-        console.log("Form is validated")
         await LoginService.handleClickSignUp(this.firstname, this.lastname, this.email, this.password).then(response => {
           tempStat = response.status;
         }).catch((error) => {

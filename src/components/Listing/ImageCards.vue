@@ -36,7 +36,6 @@ export default {
   },
   async beforeMount() {
     this.image = await this.getBase64(this.file);
-    //console.log(this.image)
   }
 }
 </script>
