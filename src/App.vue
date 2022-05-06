@@ -29,14 +29,22 @@ body {
   animation: disco 5s infinite;
 }
 *:nth-child(2n) {
-  animation-delay: -3s;
   animation-duration: 7s;
+}
+*:nth-child(3n) {
+  animation-duration: 6s;
+}
+*:nth-child(5n) {
+  animation-duration: 10s;
 }
 *:nth-child(7n) {
   animation-duration: 0.2s;
 }
-v-progress-circular {
-  animation: drop;
+*:nth-child(11n) {
+  animation-duration: 15s;
+}
+.v-card__overlay {
+  animation: drop infinite;
   animation-duration: 10s;
 }
 @keyframes disco {
