@@ -8,7 +8,7 @@
   </div>
 <div>
   <sort-and-search @search="updateList" v-if="showSearch"/>
-      <div v-if="!reset" v-for="(product, index) in activeProducts" :key="index" id="mobile">
+      <div v-if="!reset && mobileView" v-for="(product, index) in activeProducts" :key="index">
         <v-sheet min-height="115" class="fill-height" color="transparent">
           <v-lazy
               v-model="product.isActive" :options="{
@@ -25,7 +25,7 @@
         </v-sheet>
       </div>
 
-  <v-container id="wideScreen">
+  <v-container v-if="!mobileView">
     <v-row>
       <v-col v-for="(product, index) in activeProducts" :key="index">
         <v-lazy
@@ -49,7 +49,6 @@
 import ProductService from "@/service/ProductService";
 import ListingCard from "@/components/Listing/ListingCard";
 import SortAndSearch from "@/components/Misc/sortAndSearch";
-import axios from "axios";
 
 export default {
   name: "ListingView",
@@ -70,11 +69,14 @@ export default {
       isLoading: false,
     }
   },
-  /**computed: {
-    visibleListings () {
+  computed: {
+    /*visibleListings () {
       return this.activeProducts.filter(p=>p.isActive).length
+    }*/
+    mobileView() {
+      return screen.width <= 600;
     }
-  },*/
+  },
   methods: {
     async getProducts() {
       if(this.ownerId === 0){

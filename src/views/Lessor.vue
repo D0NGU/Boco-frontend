@@ -34,13 +34,12 @@
 
       </v-carousel-item>
       <v-carousel-item class="carouselItem">
-        <!-- TODO: Hent rating fra backend -->
         <p>Rangering som selger</p>
         <v-rating readonly="" v-model="ratingSeller"></v-rating>
         <p>Rangering som låner</p>
         <v-rating readonly="" v-model="ratingRenter"></v-rating>
         <br>
-        <v-icon> mdi-message-draw </v-icon> {{reviewsCount}}
+        <v-icon id="reviewCounter" @click="this.tab = 'reviews'"> mdi-message-draw </v-icon> {{reviewsCount}}
       </v-carousel-item>
     </v-carousel>
   </div>
@@ -48,6 +47,7 @@
   <v-card-text>
     <v-window v-model="tab">
       <v-window-item value="items">
+        <h1>Mine annonser</h1>
         <ListingView :ownerId="this.userId" :showSearch="false"/>
       </v-window-item>
       <v-window-item value="reviews">
@@ -64,7 +64,7 @@ import MyReviews from "@/components/UserProfile/MyReviews";
 import { useRoute } from 'vue-router'
 
 export default {
-  name: 'lessor',
+  name: 'Lessor',
   components: {MyReviews, ListingView},
 
   setup() {
@@ -78,8 +78,8 @@ export default {
   data() {
     return {
       name: 'Bruker',
-      ratingSeller: 5,
-      ratingRenter: 5,
+      ratingSeller: '',
+      ratingRenter: '',
       reviewsCount: '',
       tab: null,
       userInfo: '',
@@ -103,13 +103,14 @@ export default {
     },
   },
   async beforeMount() {
+    // Get user information
     const userInfo = await UserAccountService.getUser(this.userId)
     this.name = userInfo.data.fname + " " + userInfo.data.lname
     if (userInfo.data.profile64 !== "" && userInfo.data.profile64 !== null) {
       this.profilePicSrc = "data:image/jpeg;base64," +userInfo.data.profile64;
     }
 
-    //check if user is verified
+    // check if user is verified
     await UserAccountService.getVerifiedUser(this.userId)
         .then(res => this.isVerified = res.data)
         .catch((err) => {
@@ -170,6 +171,13 @@ export default {
   width: 100%;
   z-index: 10;
   display: flex;
+}
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#reviewCounter {
+  cursor: pointer;
 }
 
 </style>

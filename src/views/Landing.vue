@@ -13,7 +13,7 @@
     <div id="coverText" :class="{ titleFade: !isLoading }">
     <h1 id="title">Borrow <br> Community</h1>
     <h3>- for å skape et
-      <br>bærekraftigere samfunn</h3>
+      <br>mer bærekraftig samfunn</h3>
     <v-btn class="button" @click="startButton">Start nå</v-btn>
     </div>
   </div>

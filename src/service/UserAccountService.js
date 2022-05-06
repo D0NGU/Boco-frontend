@@ -1,4 +1,4 @@
-import {getApiClient} from "@/service/ApiService";
+import {baseURL, getApiClient} from "@/service/ApiService";
 import axios from "axios";
 import VueCookie from "vue-cookie";
 
@@ -13,7 +13,7 @@ export default {
 
     editPassword (id, email, oldPassword, newPassword) {
         const userDetails = {id: id, email: email, oldPassword: oldPassword, newPassword: newPassword}
-        return getApiClient.post('user/edit', userDetails )
+        return getApiClient.post('user/edit', userDetails ); // TODO Burde være PUT (standard)
     },
 
     getUser(userId) {
@@ -29,7 +29,7 @@ export default {
     },
 
     getUserDescription(userId) {
-        const url = 'http://localhost:8080/api/user/' + userId + '/description';
+        const url = baseURL + 'user/' + userId + '/description';
         var config = {
             headers: {
                 'Content-Type': 'text/plain',
@@ -40,7 +40,7 @@ export default {
     },
 
     updateUserDescription(userId, description) {
-        const url = 'http://localhost:8080/api/user/' + userId + '/description';
+        const url = baseURL + 'user/' + userId + '/description';
         var config = {
             headers: {
                 'Content-Type': 'text/plain',
@@ -67,11 +67,11 @@ export default {
     },
 
     requestPasswordReset(email) {
-        return axios.post("http://localhost:8080/api/forgot_password?email=" + email)
+        return axios.post(baseURL + "forgot_password?email=" + email)
     },
 
     resetPassword(token, password) {
-        return axios.put("http://localhost:8080/api/reset_password?token=" + token + "&password=" + password)
+        return axios.put(baseURL + "reset_password?token=" + token + "&password=" + password)
     },
 
 

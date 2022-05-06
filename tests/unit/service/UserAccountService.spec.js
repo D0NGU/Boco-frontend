@@ -1,47 +1,57 @@
-import axios from "axios";
-import { baseURL } from "@/service/ApiService";
+import UserAccountService from "@/service/UserAccountService";
+import { getApiClient, baseURL } from "@/service/ApiService";
 
+beforeEach(() => 
+    jest.spyOn(getApiClient, 'post'), 
+    jest.spyOn(getApiClient, 'get'),
+    jest.spyOn(getApiClient, 'delete'),
+);
+afterEach(() => jest.clearAllMocks());
 
 describe('Testing UserAccountService.js', () => {
 
     it('test axios get for getUserRentalHistory api call', () => {
-        jest.spyOn(axios, "get");
-        axios.get(baseURL + "products/user/" + "3" + "/history")
-        expect(axios.get).toHaveBeenCalledTimes(1)
-        expect(axios.get).toHaveBeenCalledWith(baseURL + "products/user/" + 3 + "/history")
-        jest.clearAllMocks()
+        UserAccountService.getUserRentalHistory(3)
+        expect(getApiClient.get).toHaveBeenCalledTimes(1)
+        expect(getApiClient.get).toHaveBeenCalledWith("products/user/" + 3 + "/history")
     });
 
     it('test axios delete for delete api call', () => {
-        jest.spyOn(axios, "delete");
-        const userToDelete = {  fname: test, lname: test, email: test, password: test };
-        axios.delete(baseURL + "user/", {
-            params: {userToDelete}
-        })
-        expect(axios.delete).toHaveBeenCalledTimes(1)
-        expect(axios.delete).toHaveBeenCalledWith(baseURL + "user/", {
-            params: {userToDelete}
-        })
-        jest.clearAllMocks()
+        UserAccountService.delete(1, 'password')
+        expect(getApiClient.delete).toHaveBeenCalledTimes(1)
+        const deleteParams = {  'userId':1, 'password':'password' };
+        expect(getApiClient.delete).toHaveBeenCalledWith("user/delete/", {'params': deleteParams})
     });
 
     it('test axios put for editPassword api call', () => {
-        jest.spyOn(axios, "put");
-        const userDetails = {email: "email", oldPassword: "oldPassword", newPassword: "newPassword"};
-        axios.put(baseURL + "user/", { userDetails })
-        expect(axios.put).toHaveBeenCalledTimes(1)
-        expect(axios.put).toHaveBeenCalledWith(baseURL + "user/", { userDetails })
-        jest.clearAllMocks()
-
+        const userDetails = {id:1, email:"email", oldPassword:"oldPassword", newPassword:"newPassword"};
+        UserAccountService.editPassword(1,'email','oldPassword','newPassword');
+        expect(getApiClient.post).toHaveBeenCalledTimes(1)
+        expect(getApiClient.post).toHaveBeenCalledWith("user/edit", userDetails)
     });
 
     it('test axios get for getUser call', () => {
-        jest.spyOn(axios, "get");
         const userId = 1
-        axios.get(baseURL + "user/get/", {params: {userId}})
-        expect(axios.get).toHaveBeenCalledTimes(1)
-        expect(axios.get).toHaveBeenCalledWith(baseURL + "user/get/", {params: {userId}})
-        jest.clearAllMocks()
+        UserAccountService.getUser(1);
+        expect(getApiClient.get).toHaveBeenCalledTimes(1)
+        expect(getApiClient.get).toHaveBeenCalledWith("user/get/", {params: {userId}})
     });
 
+    it('test getUserId call', () => {
+        UserAccountService.getUserId('test@tset.edu');
+        expect(getApiClient.get).toHaveBeenCalledTimes(1);
+        expect(getApiClient.get).toHaveBeenCalledWith('user/get/'+'test@tset.edu')
+    });
+
+    it('test vertified user', () => {
+        UserAccountService.getVerifiedUser(1);
+        expect(getApiClient.get).toHaveBeenCalledTimes(1);
+        expect(getApiClient.get).toHaveBeenCalledWith('user/' + 1 + '/vertified')
+    });
+
+    it('test getAverageScoreAsRenter', () => {
+        UserAccountService.getAverageScoreAsOwner(1);
+        expect(getApiClient.get).toHaveBeenCalledTimes(1);
+        expect(getApiClient.get).toHaveBeenCalledWith('review/user/' + 1 + '/average/owner')
+    });
 })

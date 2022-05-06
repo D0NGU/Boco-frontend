@@ -1,4 +1,4 @@
-<!-- inneholder loginform komponent -->
+<!-- inneholder LoginForm komponent -->
 
 <template>
   <div id="loginPage">
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import LoginForm from "@/components/LoginForm";
+import LoginForm from "@/components/LogIn/LoginForm";
 export default {
     name: 'Login',
     components: {

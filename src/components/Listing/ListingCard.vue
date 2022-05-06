@@ -96,7 +96,20 @@
                 </v-row>
               </template>
             </v-img>
-            <img v-else :src="defaultimage" class="itemImage">
+            <v-img v-else :src="defaultimage" class="itemImage" :cover="true">
+              <template v-slot:placeholder>
+                <v-row
+                    class="fill-height ma-0 "
+                    align="center"
+                    justify="center"
+                >
+                  <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
         <v-divider />
             <v-card-header>
               <v-card-header-text>
@@ -122,7 +135,6 @@
               </v-card-header-text>
             </v-card-header>
             <v-card-text>
-
 
 
             <v-dialog
@@ -178,7 +190,7 @@ export default {
       itemOwnerName: '',
       dialog: false,
       isOwner: false,
-      thumbnail: '',
+      thumbnail: '@/assets/images/product.png',
       ownerVerified: false,
       profilePicSrc: '',
       imgExist: true,
@@ -241,6 +253,9 @@ export default {
   white-space: nowrap;
   width: 230px;
 }
+.itemCard {
+  border: 1px solid white;
+}
 @media screen and (min-width: 600px) {
   #mobile {
     display: none;
@@ -296,13 +311,13 @@ export default {
 }
 
 @keyframes flashyBorder {
-  0% {border: solid 2px red}
-  10% {border: solid 2px orange}
-  30% {border: solid 2px yellow}
-  50% {border: solid 2px green}
-  70% {border: solid 2px blue}
-  90%{border: solid 2px purple}
-  100%{border: solid 2px red}
+  0% {border: solid 1px red}
+  10% {border: solid 1px orange}
+  30% {border: solid 1px yellow}
+  50% {border: solid 1px green}
+  70% {border: solid 1px blue}
+  90%{border: solid 1px purple}
+  100%{border: solid 1px red}
 }
 
 </style>

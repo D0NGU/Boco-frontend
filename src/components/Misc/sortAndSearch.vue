@@ -254,10 +254,6 @@ export default {
   :deep()#v-expansion-panel-text__wrapper {
     padding: 0;
   }
-  .v-col {
-    padding: 0;
-    margin: 2px;
-  }
   #sort-and-search-container[data-v-6fb11601] {
     padding: 20px 8px
   }

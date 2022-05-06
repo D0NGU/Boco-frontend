@@ -31,7 +31,7 @@
 
       <v-text-field
           id="password"
-          :rules="rulesApplyToAll"
+          :rules="rulesPassword"
           v-model="password"
           :type="show ?'text': 'password'"
           label="Passord"
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import LoginService from '../service/LoginService'
+import LoginService from '../../service/LoginService'
 export default {
   data() {
     return {
@@ -99,10 +99,15 @@ export default {
       password: '',
       emailRules: [
         v => !!v || 'E-post er påkrevd',
-        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+        v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-post må være gyldig',
       ],
       rulesApplyToAll: [
         value => !!value || 'Påkrevd.',
+        value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
+      ],
+      rulesPassword: [
+        value => !!value || 'Påkrevd.',
+        value => (value && (value.length >= 8)) || 'Minimum 8 (bokstaver/tall).',
       ],
       show: false,
       regisState: '',
@@ -130,7 +135,7 @@ export default {
         this.regisState = "Brukeren ble opprettet!";
       } else if (tempStat === 409) {
         this.regisState = "E-posten er allerede i bruk.";
-      } else if (tempStat === 500) {
+      } else {
         this.regisState = "Det oppsto en feil ved registrering. Prøv igjen";
       }
     },
