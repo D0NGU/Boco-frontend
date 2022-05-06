@@ -107,7 +107,7 @@ export default {
       ],
       rulesPassword: [
         value => !!value || 'Påkrevd.',
-        value => (value && (value.length === 8)) || 'Lengden til passordet må være 8.',
+        value => (value && (value.length >= 8)) || 'Minimum 8 (bokstaver/tall).',
       ],
       show: false,
       regisState: '',
