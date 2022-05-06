@@ -49,10 +49,21 @@
 import ProductService from "@/service/ProductService";
 import ListingCard from "@/components/Listing/ListingCard";
 import SortAndSearch from "@/components/Misc/sortAndSearch";
+import { useRoute } from 'vue-router'
 
 export default {
   name: "ListingView",
   components: {SortAndSearch, ListingCard},
+
+  setup() {
+    const route = useRoute();
+    const category = route.params.category;
+    console.log(category)
+    return {
+      category,
+    }
+  },
+
   props: {
     showSearch: Boolean,
     ownerId: {
@@ -67,6 +78,7 @@ export default {
       renderKey: 0,
       reset: false,
       isLoading: false,
+      categoryFromProduct: this.category,
     }
   },
   computed: {
@@ -108,7 +120,11 @@ export default {
     }
   },
   created(){
-    this.getProducts()
+    if (this.categoryFromProduct) {
+      this.updateList('', this.category, 'price', true)
+    } else {
+      this.getProducts()
+    }
   },
   /**beforeMount() {
     this.getProducts()

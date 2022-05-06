@@ -58,7 +58,7 @@
                 />
 
                 <div id="pictures" v-if="files.length!==0">
-                  <v-badge content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
+                  <v-badge v-if="!reset" content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
                     <div id="space">
                       <ImageCards :file="file"></ImageCards>
                     </div>
@@ -270,6 +270,7 @@ export default {
       categories: [],
       dialog: false,
       imgDialog: false,
+      reset: false,
       /**
        * New files from the file input
        */
@@ -524,8 +525,10 @@ export default {
     },
 
     async deleteImage(index) {
+      this.reset = true;
       this.files.splice(index, 1)
       await this.addFiles()
+      this.reset = false;
     },
 
     async getRentals() {
