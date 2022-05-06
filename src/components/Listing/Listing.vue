@@ -465,7 +465,6 @@ export default {
         if (this.conflictRequests.length) {
           //avslå forespørsler hvis dato endringen utenfor datoene på forespørsler er godtatt
           this.conflictRequests.forEach((rental) => {
-            console.log(rental.rentalId)
             this.denyRentals(rental.rentalId)
           })
         }
@@ -566,7 +565,6 @@ button {
 }
 #pictures {
   display: grid;
-  padding: 10px;
   grid-template-columns: auto auto;
   grid-template-rows: auto;
   grid-column-gap: 20px;
@@ -574,5 +572,6 @@ button {
   overflow-y: scroll;
   overflow-x: scroll;
   height: 200px;
+  place-content: center;
 }
 </style>

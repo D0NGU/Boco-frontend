@@ -1,8 +1,6 @@
 <template>
   <v-img :src="image.img" outlined width="130" class="grey lighten-2">
   </v-img>
-
-
 </template>
 
 <script>
@@ -35,14 +33,10 @@ export default {
         reader.onerror = error => reject(error);
       });
     },
-
-    check() {
-      console.log(this.file)
-    }
   },
   async beforeMount() {
     this.image = await this.getBase64(this.file);
-    console.log(this.image)
+    //console.log(this.image)
   }
 }
 </script>
