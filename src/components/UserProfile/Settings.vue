@@ -120,7 +120,7 @@ export default {
           }
         });
       }
-      if (this.picture) {
+      if (this.picture.length > 0) {
         let img = await this.getBase64(this.picture[0]);
         console.log(img);
         await ImageService.setProfilePic(img, this.$store.getters.myUserId);
