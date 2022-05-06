@@ -37,7 +37,7 @@
       <p style="white-space: pre-wrap;">{{ productInfo.description }}</p>
       <br><br>
       <!-- Tags -->
-      <v-chip color="indigo" style="  margin-left: 10px;"><p>{{ productInfo.category }}</p></v-chip>
+      <v-chip color="indigo" style="  margin-left: 10px; cursor:pointer; " @click="searchForCategory()"><p>{{ productInfo.category }}</p></v-chip>
       <v-chip color="indigo"><p>{{ priceRange }}</p></v-chip>
       <!-- Brukers -->
       <v-divider style="margin: 10px;"/>
@@ -80,6 +80,7 @@ import UserAccountService from "@/service/UserAccountService";
 import router from "@/router";
 import ProductService from "@/service/ProductService";
 import ImageService from "@/service/ImageService";
+import {useRoute} from "vue-router";
 
 export default {
   name: "ListingDetails",
@@ -110,6 +111,7 @@ export default {
       profilePicSrc: '',
       productImages: [],
       imagesFound: false,
+      category: ''
     }
   },
 
@@ -120,6 +122,10 @@ export default {
       router.push({name: 'Lessor', params: { userId: this.userId }})
     },
 
+    searchForCategory() {
+      this.$router.push({name: 'Home', params: { category: this.category }})
+    },
+
     async getListingInfo(){
       const product = (await ProductService.getProductById(this.itemId)).data
       const owner = (await UserAccountService.getUser(product.userId)).data
@@ -127,6 +133,7 @@ export default {
       this.productInfo = product;
       this.ownerInfo = owner;
       this.userId = owner.id;
+      this.category = product.category;
       if (this.ownerInfo.profile64 !== "" && this.ownerInfo.profile64 !== null) {
         this.profilePicSrc = "data:image/jpeg;base64,"+this.ownerInfo.profile64;
       }
