@@ -1,25 +1,47 @@
 <template>
-  <v-card class="rounded-l itemCard">
-    <div class="itemContainer">
-      <div id="rating">
-      <v-icon size="x-large">mdi-star</v-icon>
-      <p id="starsAmount"> {{ rating }} av 5 </p>
-      </div>
-      <v-divider vertical="" />
-      <div class="itemDetail">
+  <div id="wideScreen">
+    <v-card  class="mx-auto my-12 rounded-l itemCard"
+             max-width="280">
+      <v-rating length="5" readonly size="35" v-model="rating"></v-rating>
+      <v-divider/>
+
+      <div class="itemContainer">
         <p class="text-subtitle-1">{{ comment }} </p>
         <!--<p class="text-caption" >{{itemPrice}} kr/dag</p>-->
 
-
         <!-- TODO HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
-        <p class="text-overline" id="itemOwner">
+        <p class="text-overline itemOwner">
           <v-avatar size="x-small">
             <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
           </v-avatar> {{author}} </p>
-
       </div>
-    </div>
-  </v-card>
+
+    </v-card>
+  </div>
+
+  <div id="mobile">
+    <v-card class="rounded-l itemCard">
+      <div class="itemContainer">
+        <div class="rating">
+          <v-icon size="x-large">mdi-star</v-icon>
+          <p class="starsAmount"> {{ rating }} av 5 </p>
+        </div>
+        <v-divider vertical />
+        <div class="itemDetail">
+          <p class="text-subtitle-1">{{ comment }} </p>
+          <!--<p class="text-caption" >{{itemPrice}} kr/dag</p>-->
+
+          <!-- TODO HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
+          <p class="text-overline itemOwner">
+            <v-avatar size="x-small">
+              <v-img src="../../assets/images/missing_profile_img.png" alt="profile picture"></v-img>
+            </v-avatar> {{author}} </p>
+
+        </div>
+      </div>
+    </v-card>
+  </div>
+
 </template>
 
 
@@ -49,15 +71,17 @@ export default {
 .itemCard {
   margin: 20px;
   background-color: white;
-}
-.itemContainer {
-  height: 120px;
   padding: 10px;
+}
+
+.itemContainer {
+  height: 150px;
+  padding: 15px;
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-#rating {
+.rating {
   margin: 10px;
 }
 .itemDetail {
@@ -68,11 +92,46 @@ export default {
   z-index: 1;
   flex-grow: 1;
 }
-#itemOwner {
+.itemOwner {
   position: absolute;
   bottom: 0;
+  padding: 10px;
 }
-#starsAmount {
+.starsAmount {
   width: 45px;
+}
+
+@media screen and (min-width: 600px) {
+  #mobile {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #wideScreen {
+    display: none;
+  }
+  .itemCard {
+    max-width: 450px;
+    margin: 10px auto;
+    background-color: white;
+  }
+  .itemContainer {
+    align-content: center;
+    height: 115px;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+  }
+  .itemOwner {
+    position: absolute;
+    bottom: 0;
+    padding: 0px;
+  }
+  .rating {
+    margin-left: 5px;
+  }
 }
 </style>
