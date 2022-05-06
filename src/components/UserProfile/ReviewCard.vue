@@ -69,7 +69,6 @@ export default {
 
 <style scoped>
 .itemCard {
-  margin: 20px;
   background-color: white;
   padding: 10px;
 }
@@ -113,6 +112,31 @@ export default {
 @media screen and (min-width: 600px) {
   #mobile {
     display: none;
+  }
+  .my-12 {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+  }
+  .itemCard {
+    width: 250px;
+  }
+  .text-subtitle-1 {
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+  }
+  .text-subtitle-1::-webkit-scrollbar {
+    width: 0.4em;
+  }
+  .text-subtitle-1::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  .text-subtitle-1::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 1em;
+  }
+  .text-subtitle-1::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 }
 
