@@ -152,8 +152,8 @@
                 <v-card-title v-if="!isARequest && !isARental && stayInUpdatePage" class="text-h5"> {{statusMessage}} </v-card-title>
                 <v-card-title v-if="!isARequest && !isARental && !stayInUpdatePage" class="text-h5"> {{statusMessage}} </v-card-title>
                 <v-card-title v-if="isARequest || isARental" class="text-h5"> Er du sikker? </v-card-title>
-                <v-card-text v-if="isARental"> Den produkt har blitt lånt utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, vennligst ta kontakt med personen som har lånt produktet for å avklare dato</v-card-text>
-                <v-card-text v-if="isARequest"> Den produkt har forespørsler utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, så avslår vi forespørslene til den produkt</v-card-text>
+                <v-card-text v-if="isARental"> Dette produktet har blitt lånt utenfor datoen som du har valgt. <br>Vil du fortsette å endre? <br>Hvis ja, vennligst ta kontakt med personen som har lånt produktet for å avklare dato.</v-card-text>
+                <v-card-text v-if="isARequest"> Dette produktet har forespørsler utenfor datoen som du har valgt. <br>Vil du fortsette å endre? <br>Hvis ja, avslår vi forespørslene til dette produktet.</v-card-text>
                 <v-card-actions>
                   <v-btn v-if="stayInUpdatePage"
                          color="red"
