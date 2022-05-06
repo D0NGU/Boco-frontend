@@ -380,7 +380,7 @@ export default {
     },
 
     async createAd() {
-      this.$refs.form.validate()
+      await this.$refs.form.validate()
       if(this.valid){
         await this.addFiles();
         if(this.date !== undefined && this.date !== null && this.date[0] !== undefined && this.date[1] !== undefined && this.date[0] !== null && this.date[1] !== null) {
@@ -407,7 +407,7 @@ export default {
     },
 
     async updateAd(){
-      this.$refs.form.validate()
+      await this.$refs.form.validate()
       if(this.valid){
         //sjekke for dato konflikter
         if(!(this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null)) {
