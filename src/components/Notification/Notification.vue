@@ -96,9 +96,6 @@ export default {
 .dateText {
   padding: 0 0 6px 0;
 }
-.v-icon {
-  cursor: pointer;
-}
 .notifIcon {
   margin: 10px;
 }

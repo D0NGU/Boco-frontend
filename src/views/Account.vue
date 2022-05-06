@@ -1,4 +1,4 @@
-<!-- typ "min profil" eller "settings" (endre passord, slett bruker osv) -->
+<!-- Min profil hvor du kan se dine annonser, anmeldelser, endre passord og lignende -->
 
 <template>
   <div id="grid">
@@ -89,6 +89,7 @@
     <v-card-text>
       <v-window v-model="tab">
         <v-window-item value="items">
+          <h1>Mine annonser</h1>
           <ListingView :ownerId="this.$store.getters.myUserId" :showSearch="false"/>
         </v-window-item>
         <v-window-item value="history">
@@ -110,7 +111,6 @@ import ListingView from "@/components/Listing/ListingView";
 import HistoryComponent from "@/components/UserProfile/HistoryComponent";
 import UserAccountService from "@/service/UserAccountService";
 import MyReviews from "@/components/UserProfile/MyReviews";
-import {getApiClient} from "@/service/ApiService";
 
 export default {
     name: 'account',
@@ -153,13 +153,9 @@ export default {
       this.snackbar = true
       this.edit = false
     },
-    async getNumberOfReviews() {
+    async getReviewData(){
       this.reviewsCount = (await UserAccountService.getNumberOfReviews(this.$store.getters.myUserId)).data;
-    },
-    async getAverageScoreAsOwner() {
       this.ratingSeller = (await UserAccountService.getAverageScoreAsOwner(this.$store.getters.myUserId)).data;
-    },
-    async getAverageScoreAsRenter() {
       this.ratingRenter = (await UserAccountService.getAverageScoreAsRenter(this.$store.getters.myUserId)).data;
     },
     async updateUserDescription() {
@@ -176,13 +172,6 @@ export default {
         this.statusForEditUserDescription = "Noe gikk galt. Prøv igjen"
       }
     },
-
-    async setProfilePic() {
-      await UserAccountService.getUser(this.$store.getters.myUserId).then(response => {
-        this.profilePicSrc = "data:image/jpeg;base64," +response.data.profile64;
-      })
-
-    }
   },
   async beforeMount() {
     let myUserId = this.$store.getters.myUserId;
@@ -197,9 +186,7 @@ export default {
     //get user description
     this.userDescription =  (await UserAccountService.getUserDescription(myUserId)).data
 
-    await this.getNumberOfReviews()
-    await this.getAverageScoreAsOwner()
-    await this.getAverageScoreAsRenter()
+    await this.getReviewData()
   }
 }
 </script>
@@ -208,9 +195,6 @@ export default {
 #grid {
   display: grid;
   height: 400px;
-}
-#components {
-  min-height: 30%;
 }
 #topProfileContainer {
   height: 400px;
@@ -253,13 +237,14 @@ export default {
   z-index: 10;
   display: flex;
 }
-.v-card-text {
-  padding: 0;
-}
 
 #userDescription {
   width: 350px;
   margin: 0 auto;
+}
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 </style>

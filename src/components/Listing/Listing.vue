@@ -14,6 +14,7 @@
         <h1 v-else >Opprett en ny annonse</h1>
         <div class="flex-column mb-6">
           <v-card class="container">
+            <v-alert type="error" closable="" v-model="error" style="font-size: 16px; font-weight: bold"> {{statusMessage}}  </v-alert>
             <v-form
                 v-model="valid"
                 lazy-validation
@@ -27,8 +28,7 @@
                   readonly
                   label="Navn på annonse"
                   hide-details="auto"
-                  data-test="adName"
-              ></v-text-field>
+                  data-test="adName"/>
               <v-text-field
                   v-else
                   data-testid="name-input"
@@ -37,16 +37,14 @@
                   v-model="adName"
                   label="Navn på annonse"
                   :rules="rules"
-                  hide-details="auto"
-              ></v-text-field>
+                  hide-details="auto"/>
               <v-textarea
                   rows="5"
                   no-resize
                   v-model="adDescription"
                   label="Beskrivelse"
                   :rules="rules"
-                  hide-details="auto"
-              ></v-textarea>
+                  hide-details="auto"/>
               <div>
                 <v-file-input
                     v-model="newFiles"
@@ -63,7 +61,6 @@
                 <div id="pictures" v-if="files.length!==0">
                   <v-badge content="x" color="error" v-for="(file, i) in files" @click="deleteImage(i)">
                     <div id="space">
-                      <!--Bruk image cards. Den inneholder metoden for å rendre ett bilde fra en fil-->
                       <ImageCards :file="file"></ImageCards>
                     </div>
                   </v-badge>
@@ -75,99 +72,49 @@
                    v-model="adCategory"
                    :items="categories"
                    label="Kategori"
+                   :rules="rules"
                    outlined
-                   prepend-icon="mdi-widgets"
-               ></v-select>
+                   prepend-icon="mdi-widgets" />
                <v-text-field
                    v-model="adPrice"
                    type="text"
                    label="Pris"
                    :rules="rulesNumber"
-                   hide-details="auto"
-               />
+                   hide-details="auto"/>
                <v-radio-group
                    v-model="pricePer"
-                   column
-               >
+                   column>
                  <v-radio
                      label="Pris per dag"
                      color="indigo"
-                     value="perDay"
-                 ></v-radio>
+                     value="perDay" />
                  <v-radio
                      label="Fastpris"
                      color="indigo"
-                     value="set"
-                 ></v-radio>
+                     value="set" />
                </v-radio-group>
-               <!--
-                     <v-container class="grey lighten-5">
-                       <v-row no-gutters>
-                         <v-col order="1">
-                           <v-card
-                             class="pa-2"
-                             outlined
-                             tile
-                           >
-                             <div>
-                               <label>Fra dato:</label>
-                             </div>
-                             <div>
-                               <input
-                                   id="fromDate"
-                                   v-model="fromDate"
-                                   type="date"
-                               >
-                             </div>
-                           </v-card>
-                         </v-col>
-                         <v-col order="2">
-                           <v-card
-                             class="pa-2"
-                             outlined
-                             tile
-                           >
-                             <div>
-                               <label>Til dato:</label>
-                             </div>
-                             <div>
-                               <input
-                                   id="toDate"
-                                   v-model="toDate"
-                                   type="date"
-                               >
-                             </div>
-                           </v-card>
-                         </v-col>
-                       </v-row>
-                     </v-container>
-               -->
-              <Datepicker id="datepicker" range v-model="date" :enableTimePicker="false" showNowButton :monthChangeOnScroll="false"></Datepicker>
+              <Datepicker id="datepicker" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
 
               <v-text-field
                   v-model="adAddress"
                   type="text"
                   label="Adresse"
                   :rules="rules"
-                  hide-details="auto"
-              />
+                  hide-details="auto"/>
               <v-text-field
                   v-model="adPhone"
                   type="text"
                   label="Telefon"
                   :rules="rulesPhone"
-                  hide-details="auto"
-              />
+                  hide-details="auto"/>
             </v-form>
             <v-switch
                 v-model="unListed"
                 inset=""
                 color="indigo"
-                :label="`Skjul annonse`"
-            ></v-switch>
+                :label="`Skjul annonse`" />
             <div v-if="updating">
               <v-btn
-                  :disabled="!valid"
                   class="createAdButton"
                   @click="updateAd()"
               >Oppdater annonse
@@ -179,56 +126,52 @@
               </v-btn>
             </div>
             <v-btn
-                :disabled="!valid"
                 class="createAdButton"
                 @click="createAd()"
-                v-else
-            >Opprett annonse
+                v-else>
+              Opprett annonse
             </v-btn>
             <v-btn
                 id="cancelButton"
-                @click="$router.back()"
-            >Avbryt
+                @click="$router.back()">
+              Avbryt
             </v-btn>
-            <v-dialog id="popOut" v-model="dialog">
+
+            <v-dialog v-model="warning" persistent>
               <v-card>
-                <v-card-title v-if="!isARequest && !isARental && stayInUpdatePage" class="text-h5"> {{statusMessage}} </v-card-title>
-                <v-card-title v-if="!isARequest && !isARental && !stayInUpdatePage" class="text-h5"> {{statusMessage}} </v-card-title>
-                <v-card-title v-if="isARequest || isARental" class="text-h5"> Er du sikker? </v-card-title>
-                <v-card-text v-if="isARental"> Den produkt har blitt lånt utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, vennligst ta kontakt med personen som har lånt produktet for å avklare dato</v-card-text>
-                <v-card-text v-if="isARequest"> Den produkt har forespørsler utenfor datoen som du har valgt. Vil du fortsette å endre? Hvis ja, så avslår vi forespørslene til den produkt</v-card-text>
+                <v-card-title class="text-h5"> Er du sikker? </v-card-title>
+                <v-card-text>Dette produktet har allerede en planlagt utleie eller har forespørsler for utleie utenfor valgte dato. Dersom du fortsetter med endringen vil alle forespørsler utenfor datoendringen
+                bli avslått. Vi anbefaler at du tar kontakt med personen med planlagt utleie for å avklare dato</v-card-text>
                 <v-card-actions>
-                  <v-btn v-if="stayInUpdatePage"
-                         color="red"
+                  <v-btn color="green"
                          text
-                         @click="this.dialog = false"
-                  >
-                    Lukk
+                         @click="acceptChangeDate">
+                    Endre
                   </v-btn>
-                  <v-btn v-if="!isARequest && !isARental && !stayInUpdatePage"
-                      color="red"
-                      text
-                      @click=close()
-                  >
-                    Lukk
-                  </v-btn>
-                  <v-btn v-if="isARequest || isARental"
-                      color="green"
-                      text
-                      @click="acceptChangeDate"
-                  >
-                    JA
-                  </v-btn>
-                  <v-btn v-if="isARequest || isARental"
-                      color="red"
-                      text
-                      @click="declineChangeDate"
-                  >
-                    NEI
+                  <v-btn color="red"
+                         text
+                         @click="this.warning = false">
+                    Avbryt
                   </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
+
+            <v-dialog v-model="dialog" persistent>
+              <v-card>
+                <v-card-title> {{confirmationMsg}}</v-card-title>
+                <v-spacer />
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red"
+                         text
+                         @click=close()>
+                    Lukk
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
             <v-spacer />
             <v-dialog v-model="deleteDialog">
               <v-card>
@@ -238,15 +181,13 @@
                   <v-btn
                       color="red"
                       text
-                      @click="deleteDialog=false"
-                  >
+                      @click="deleteDialog=false">
                     Avbryt
                   </v-btn>
                   <v-btn
                       color="red"
                       text
-                      @click=deleteAd
-                  >
+                      @click=deleteAd>
                     Slett
                   </v-btn>
                 </v-card-actions>
@@ -254,9 +195,6 @@
             </v-dialog>
           </v-card>
         </div>
-
-
-
       </v-window-item>
 
       <v-window-item value="rentalRequests">
@@ -302,13 +240,15 @@ export default {
   data() {
     return {
       rentalList: [],
-      valid: false,
+      valid: true,
+      error: false,
+      warning: false,
       updating: false,
       adName: '',
       adDescription: '',
       adCategory: '',
       adPrice: '',
-      pricePer: '',
+      pricePer: 'perDay',
       date: ref(),
       adAddress: '',
       adPhone: '',
@@ -319,6 +259,7 @@ export default {
       files: [],
       images: [],
       shownImages: [],
+      confirmationMsg: '',
       statusMessage: '',
       rules: [
         value => !!value || 'Påkrevd.',
@@ -343,7 +284,6 @@ export default {
       isARental: false,
       isARequest: false,
       conflictRequests: [],
-      stayInUpdatePage: false,
     }
   },
 
@@ -372,6 +312,7 @@ export default {
         this.adAddress = productInfo.address;
         this.adCategory = productInfo.category
         this.unListed = productInfo.unlisted;
+        this.adPhone = productInfo.tlf;
         this.date = [new Date(productInfo.availableFrom),new Date(productInfo.availableTo)];
         this.image = (await ImageService.getImagesByProductId(this.itemId)).data;
         for (let x of this.image) {
@@ -389,67 +330,60 @@ export default {
       );
     },
 
-    async dataUrlToFile(base64, data, fileName) {
-      const dataUrl = data +","+base64;
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      return new File([blob], fileName, { type: 'image/png' });
-    },
-
     async createAd() {
-      await this.addFiles();
-      if(this.date !== undefined && this.date !== null && this.date[0] !== undefined && this.date[1] !== undefined && this.date[0] !== null && this.date[1] !== null) {
-        await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images).then(response => {
-          this.statusMessage = "Annonsen ble opprettet!";
-          this.stayInUpdatePage = false
-        }).catch((error) => {
-          if (error.response) {
-            this.statusMessage = "Navnet til annonsen er tatt. Prøv med an annen navn";
-            this.stayInUpdatePage = true
-          }
-        })
-      } else if (this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null) {
-        this.statusMessage = "Velg dato (fra-til)"
-        this.stayInUpdatePage = true
+      this.$refs.form.validate()
+      if(this.valid){
+        await this.addFiles();
+        if(this.date !== undefined && this.date !== null && this.date[0] !== undefined && this.date[1] !== undefined && this.date[0] !== null && this.date[1] !== null) {
+          await ListingsService.create(4, this.adName, this.adDescription, this.adAddress, this.adPrice, this.unListed, this.date[0], this.date[1], this.$store.state.myUserId, this.adCategory, this.images, this.adPhone).then(response => {
+            this.confirmationMsg = "Annonsen ble opprettet!";
+            this.dialog = true
+          }).catch((error) => {
+            if (error.response) {
+              this.statusMessage = "Navnet er allerede tatt. Prøv med et annet navn";
+              this.error = true
+              window.scrollTo(0, 0)
+            }
+          })
+        } else {
+          this.statusMessage = "Du må velge til og fra dato"
+          this.error = true
+          window.scrollTo(0, 0)
+        }
       } else {
-        this.statusMessage = "En feil har skjedd. Prøv igjen"
-        this.stayInUpdatePage = true
+        this.error = true
+        this.statusMessage = "Du må fylle ut alle påkrevde felt"
+        window.scrollTo(0, 0)
       }
-      this.dialog = true
     },
 
     async updateAd(){
-      //sjekke for dato konflikter
-      if(this.date !== undefined && this.date !== null && this.date[0] !== undefined && this.date[1] !== undefined && this.date[0] !== null && this.date[1] !== null) {
-        await this.checkDateConflict()
-        if (!this.isARental && !this.isARequest){
-          await this.editAd()
-        } else if (this.isARental || this.isARequest) {
-          this.dialog = true
+      this.$refs.form.validate()
+      if(this.valid){
+        //sjekke for dato konflikter
+        if(!(this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null)) {
+          await this.checkDateConflict()
+          if (!this.isARental && !this.isARequest){
+            await this.editAd()
+          } else {
+            this.warning = true
+          }
+        } else {
+          this.error = true
+          this.statusMessage = "Du må velge til og fra dato"
+          window.scrollTo(0, 0)
         }
-      } else if (this.date === undefined || this.date === null || this.date[0] === undefined || this.date[1] === undefined || this.date[0] === null || this.date[1] === null){
-        this.statusMessage = "Velg dato (fra-til)"
-        this.stayInUpdatePage = true
-      } else {
-        this.statusMessage = "En feil har skjedd. Prøv igjen"
-        this.stayInUpdatePage = true
       }
-      this.dialog = true
     },
 
     //oppdatere annonsen
     async editAd() {
-      this.dialog = true;
-      this.createdStatus = true;
       await this.addFiles();
-
-      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image)
+      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image, this.adPhone)
           .then(response => {
-            this.statusMessage = "Endringen var vellykket!";
-            this.stayInUpdatePage = false
+            this.confirmationMsg = "Endringen var vellykket!";
           }).catch((error) => {
-            this.statusMessage = "En feil har oppstått!";
-            this.stayInUpdatePage = true
+            this.confirmationMsg = "En feil har oppstått. Vennligst prøv på nytt";
           })
       this.dialog = true;
     },
@@ -481,7 +415,7 @@ export default {
     async deleteAd(){
       await ListingsService.delete(this.$store.state.myUserId, this.itemId)
       this.deleteDialog = false;
-      this.statusMessage = "Annonsen ble slettet.";
+      this.confirmationMsg = "Annonsen ble slettet.";
       this.dialog = true;
     },
 
@@ -491,7 +425,7 @@ export default {
     },
 
     acceptChangeDate() {
-      this.dialog = false
+      this.warning = false
       if (this.isARequest) {
         this.isARequest = false
         if (this.conflictRequests.length) {
@@ -512,10 +446,6 @@ export default {
       this.$emit("update");
     },
 
-    declineChangeDate() {
-      this.dialog = false
-    },
-
     //sjekker om det skjer en dato konflikt med forespørsler og godtatt forespørsler ved endringen av dato i annonsen
     async checkDateConflict() {
       let allRentals = (await RentalService.getAllRentals(this.itemId)).data
@@ -527,7 +457,6 @@ export default {
         if (new Date(rental.dateFrom) < this.date[0] || new Date(rental.dateTo) > this.date[1]){
           if (rental.accepted === true){
             this.isARental = true
-
           } else if(rental.accepted === false) {
             requestRentals.push(rental)
             this.isARequest = true

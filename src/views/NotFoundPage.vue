@@ -22,7 +22,7 @@
         <h1>Oops! Siden du leter etter finnes ikke</h1>
       </v-alert>
       <br><br>
-      <router-link to="Home">
+      <router-link to="/Home">
         <h3> Tilbake til hjemskjermen </h3>
       </router-link>
     </div>
