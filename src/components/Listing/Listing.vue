@@ -65,7 +65,7 @@
                   </v-badge>
                  </div>
 
-                </div>
+              </div>
 
                <v-select
                    v-model="adCategory"
@@ -567,6 +567,7 @@ button {
 }
 #pictures {
   display: grid;
+  padding: 10px;
   grid-template-columns: auto auto;
   grid-template-rows: auto;
   grid-column-gap: 20px;
@@ -574,6 +575,5 @@ button {
   overflow-y: scroll;
   overflow-x: scroll;
   height: 200px;
-  place-content: center;
 }
 </style>
