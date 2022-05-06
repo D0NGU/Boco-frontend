@@ -80,18 +80,6 @@
                    label="Pris"
                    :rules="rulesNumber"
                    hide-details="auto"/>
-               <v-radio-group
-                   v-model="pricePer"
-                   column>
-                 <v-radio
-                     label="Pris per dag"
-                     color="indigo"
-                     value="perDay" />
-                 <v-radio
-                     label="Fastpris"
-                     color="indigo"
-                     value="set" />
-               </v-radio-group>
               <Datepicker id="datepicker" range v-model="date" :enableTimePicker="false" showNowButton  ></Datepicker>
 
               <v-text-field
@@ -262,7 +250,6 @@ export default {
       adDescription: '',
       adCategory: '',
       adPrice: '',
-      pricePer: 'perDay',
       date: ref(),
       adAddress: '',
       adPhone: '',
