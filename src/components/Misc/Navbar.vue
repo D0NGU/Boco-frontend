@@ -22,12 +22,12 @@
           </div>
         </router-link>
       </v-col>
-      <v-col class="navItem">
+      <v-col class="navItem" id="notificationButton">
         <v-dialog
             v-model="dialog"
             fullscreen=""
         >
-          <template v-slot:activator="{ props }">
+          <template  v-slot:activator="{ props }">
               <v-icon v-show="!notification" color="white" v-bind="props"> mdi-bell </v-icon>
               <v-icon v-show="notification"  color="white" v-bind="props"> mdi-bell-alert </v-icon>
           </template>
@@ -140,4 +140,9 @@ export default {
   color: var(--bocoBlue);
   font-weight: bold;
 }
+
+#notificationButton {
+  cursor: pointer;
+}
+
 </style>

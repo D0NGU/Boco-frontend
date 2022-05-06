@@ -93,4 +93,8 @@ export default {
 #writeReviewBtn {
   font-size: 11px;
 }
+.v-img {
+  margin: 0 1em 0 1em;
+}
+
 </style>

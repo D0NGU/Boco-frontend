@@ -111,6 +111,10 @@ h1 {
   margin-bottom: 30px;
 }
 
+#textFieldWrapper{
+  margin: 0 auto;
+}
+
 #container {
   width: 350px;
   background-color: white;

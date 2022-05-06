@@ -153,4 +153,9 @@ button {
   margin: 0.4em 0.4em 0.8em 0.4em;
 }
 
+.v-file-input {
+  margin-bottom: 2.5em;
+}
+
+
 </style>

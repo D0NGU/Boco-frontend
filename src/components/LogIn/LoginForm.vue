@@ -191,6 +191,10 @@ h1 {
   margin-bottom: 15px;
 }
 
+.v-btn {
+  padding: 10px;
+}
+
 #forgotPassword {
   color: var(--bocoBlue);
   cursor: pointer;
