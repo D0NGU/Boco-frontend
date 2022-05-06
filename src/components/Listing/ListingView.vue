@@ -58,7 +58,6 @@ export default {
   setup() {
     const route = useRoute();
     const category = route.params.category;
-    console.log(category)
     return {
       category,
     }
@@ -114,7 +113,6 @@ export default {
         })
       })
       this.reset = false;
-      console.log(this.renderKey)
       this.isLoading = true;
       setTimeout(() => this.isLoading = false, 1500);
     }

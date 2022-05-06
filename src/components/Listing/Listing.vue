@@ -331,12 +331,10 @@ export default {
                 this.imgDialog=true;
                 break;
           }
-          console.log(file)
           this.files.push(file);
         }
         this.newFiles = [];
       }
-      console.log(this.files)
     },
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data

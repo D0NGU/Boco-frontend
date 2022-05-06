@@ -77,7 +77,6 @@ export default {
       if (this.$refs.loginform.validate()) {
         await LoginService.handleClickSignIn(this.email, this.password).then(async response => {
           status = response.status;
-          console.log(response.data);
           token = response.data.access_token;
           await cookies.set('token', response.data.access_token);
           await axios.get(baseURL + 'user/get/' + this.email, {

@@ -51,7 +51,6 @@ export default {
           .then(res => this.historyRentedProducts = res.data)
           .catch((err) => {
             this.error = "En feil har skjedd"
-            console.error(err);
           })
 
       if (!this.historyRentedProducts.length){

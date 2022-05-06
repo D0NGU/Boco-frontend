@@ -85,7 +85,6 @@ export default {
       if (this.isInt(userId)) {
         await getApiClient.get('alerts/user/' + userId + '/unseen').then(response => {
           if (response.data !== "") {
-            console.info("New alert received")
             this.notification = true;
           } else {
             this.notification = false;
