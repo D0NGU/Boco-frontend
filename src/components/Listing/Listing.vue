@@ -55,6 +55,7 @@
                     chips
                     prepend-icon="mdi-camera"
                     @change="fillFiles"
+                    :key="componentKey"
                 />
 
                 <div id="pictures" v-if="files.length!==0">
@@ -258,6 +259,7 @@ export default {
       dialog: false,
       imgDialog: false,
       reset: false,
+      componentKey: 0,
       /**
        * New files from the file input
        */
@@ -280,11 +282,6 @@ export default {
         value => !!value || 'Påkrevd.',
         value => (value && value.length >= 3) || 'Minimum 3 bokstaver.',
       ],
-      rulesImage: [
-        /* REGEL: Bilde kan ikke være større enn gitt størrelse */
-        files => !files || !files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
-        files => !files || this.files.some(file => file.size > 2097152) || 'Bildet må være mindre enn 2MB',
-      ],
       rulesNumber: [
         value => !isNaN(value) || 'Må være tall.',
         value => !!value || 'Påkrevd.',
@@ -305,7 +302,7 @@ export default {
 
   methods: {
     fillFiles() {
-      if (this.rulesImage) {
+      console.log("new files " + this.newFiles)
         for (let file of this.newFiles) {
           if (file.size > 1024*1024*2) {
             this.confirmationMsg = "Files over 2 MB not supported"
@@ -314,14 +311,15 @@ export default {
           }
           if (file.size + this.files.size > 1024*1024*10) {
             this.confirmationMsg = "Total file size must be less than 10 MB \n" +
-                "Remove som files to make more space"
-                this.imgDialog=true;
-                break;
+            "Remove som files to make more space"
+            this.imgDialog=true;
+            break;
           }
           this.files.push(file);
         }
-        this.newFiles = [];
-      }
+      this.componentKey++
+      this.newFiles = [];
+      console.log("new files " + this.newFiles)
     },
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
