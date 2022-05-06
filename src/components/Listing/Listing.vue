@@ -302,7 +302,6 @@ export default {
 
   methods: {
     fillFiles() {
-      console.log("new files " + this.newFiles)
         for (let file of this.newFiles) {
           if (file.size > 1024*1024*2) {
             this.confirmationMsg = "Files over 2 MB not supported"
@@ -319,7 +318,6 @@ export default {
         }
       this.componentKey++
       this.newFiles = [];
-      console.log("new files " + this.newFiles)
     },
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
