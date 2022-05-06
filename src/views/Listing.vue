@@ -1,4 +1,4 @@
-<!-- inneholder listing component -->
+<!-- inneholder Listing component -->
 
 <template>
   <div id="listingPage">
