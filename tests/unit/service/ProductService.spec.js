@@ -50,12 +50,11 @@ describe('Testing ProductService.js', () => {
             searchWord: 'hammer',
             category: 'verktoy',
             sortBy: 'price',
-            ascending: false
-
+            ascending: false,
         }
+
         await ProductService.getProducts(data.searchWord, data.category, data.sortBy, data.ascending)
         expect(getApiClient.get).toHaveBeenCalledTimes(1)
-        //expect(getApiClient.get).toHaveBeenCalledWith("products/search?q?"+data.searchWord+"&category="+data.category+"&ascending="+data.ascending+"&sortBy="+data.sortBy, {null})
 
     })
 
