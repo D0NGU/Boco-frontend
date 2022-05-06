@@ -323,6 +323,7 @@ export default {
         }
         this.newFiles = [];
       }
+      console.log(this.files)
     },
     async getInfo(){
       const categories = (await ListingsService.getCategories()).data
@@ -408,7 +409,7 @@ export default {
     //oppdatere annonsen
     async editAd() {
       await this.addFiles();
-      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.image, this.adPhone)
+      await ListingsService.editProduct(this.itemId, this.adDescription, this.adAddress, this.adPrice, this.date[0], this.date[1], this.unListed, this.adCategory, this.images, this.adPhone)
           .then(response => {
             this.confirmationMsg = "Endringen var vellykket!";
           }).catch((error) => {
@@ -500,9 +501,9 @@ export default {
       this.conflictRequests = requestRentals
     },
 
-    deleteImage(index) {
+    async deleteImage(index) {
       this.files.splice(index, 1)
-      this.addFiles()
+      await this.addFiles()
     },
 
     async getRentals() {
