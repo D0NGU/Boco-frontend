@@ -369,7 +369,7 @@ export default {
      * @param base64 the encyprted file
      * @param data meta data
      * @param filename name of the file
-     * @returns {Promise<File>}
+     * @returns {Promise<File>} image file
      */
     urlToFile(base64, data, filename){
       let url = data +","+base64;
