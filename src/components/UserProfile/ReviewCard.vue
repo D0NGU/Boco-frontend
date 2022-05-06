@@ -6,7 +6,7 @@
       <v-divider/>
 
       <div class="itemContainer">
-        <p class="text-subtitle-1">{{ comment }} </p>
+        <p class="text-subtitle-1 box">{{ comment }} </p>
         <!--<p class="text-caption" >{{itemPrice}} kr/dag</p>-->
 
         <!-- TODO HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
@@ -28,7 +28,7 @@
         </div>
         <v-divider vertical />
         <div class="itemDetail">
-          <p class="text-subtitle-1">{{ comment }} </p>
+          <p class="text-subtitle-1 box">{{ comment }} </p>
           <!--<p class="text-caption" >{{itemPrice}} kr/dag</p>-->
 
           <!-- TODO HVIS DU ER EIER, FÅ EDIT KNAPPER I STEDET -->
@@ -81,6 +81,15 @@ export default {
   flex-direction: row;
   align-items: center;
 }
+
+.box {
+  height: 90px;
+  inline-size: 220px;
+  overflow-wrap: break-word;
+  hyphens: manual;
+  overflow: scroll;
+}
+
 .rating {
   margin: 10px;
 }
@@ -132,6 +141,13 @@ export default {
   }
   .rating {
     margin-left: 5px;
+  }
+
+  .box {
+    inline-size: 200px;
+    overflow-wrap: break-word;
+    hyphens: manual;
+    height: 80px;
   }
 }
 </style>
