@@ -32,6 +32,7 @@ describe('Testing ProductService.js', () => {
 
         await ProductService.getProductById(1)
         expect(getApiClient.get).toHaveBeenCalledTimes(1)
+        expect(getApiClient.get).toHaveBeenCalledWith("products/1")
 
     });
 
@@ -39,6 +40,7 @@ describe('Testing ProductService.js', () => {
 
         await ProductService.getProductsByUserId(1)
         expect(getApiClient.get).toHaveBeenCalledTimes(1)
+        expect(getApiClient.get).toHaveBeenCalledWith('products/user/1')
 
     })
 
@@ -53,6 +55,7 @@ describe('Testing ProductService.js', () => {
         }
         await ProductService.getProducts(data.searchWord, data.category, data.sortBy, data.ascending)
         expect(getApiClient.get).toHaveBeenCalledTimes(1)
+        //expect(getApiClient.get).toHaveBeenCalledWith("products/search?q?"+data.searchWord+"&category="+data.category+"&ascending="+data.ascending+"&sortBy="+data.sortBy, {null})
 
     })
 
@@ -60,6 +63,7 @@ describe('Testing ProductService.js', () => {
 
         await ProductService.getOwnerProductAcceptedRentals(5)
         expect(getApiClient.get).toHaveBeenCalledTimes(1)
+        expect(getApiClient.get).toHaveBeenCalledWith("rentals/product/"+ 5 + "/true")
 
     })
 
@@ -67,6 +71,7 @@ describe('Testing ProductService.js', () => {
 
         await ProductService.getAvailabilityWindow(2)
         expect(getApiClient.get).toHaveBeenCalledTimes(1)
+        expect(getApiClient.get).toHaveBeenCalledWith("products/"+2+"/availability")
 
     })
 
