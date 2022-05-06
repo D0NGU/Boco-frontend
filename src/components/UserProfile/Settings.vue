@@ -3,13 +3,6 @@
   <h1>Innstillinger</h1>
   <v-card id="container">
     <div id="textFieldWrapper">
-      <v-alert
-          dismissible
-          type="error"
-          max-width="300px"
-          v-if="error"
-      > {{errorMsg}}
-      </v-alert>
       <v-text-field id="name" v-model="name" readonly label="Navn"></v-text-field>
       <v-text-field id="email" v-model="email" label="E-postadresse"></v-text-field>
       <v-file-input
@@ -19,6 +12,13 @@
           accept="image/jpeg"
           prepend-icon="mdi-camera"
       />
+      <v-alert
+          dismissible
+          type="error"
+          max-width="300px"
+          v-if="error"
+      > {{errorMsg}}
+      </v-alert>
       <v-text-field type="password" label="Gammelt passord"
                     v-model="oldPassword"
                     hint="Tast inn gammelt passord ved endring av e-post eller passord"
@@ -97,6 +97,7 @@ export default {
       if(this.newPassword === this.newPasswordRepeat && this.newPassword !== ""){
         await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.newPassword).then(response =>{
           this.confirmationSnackBar = true;
+          this.error = false;
         }).catch(error => {
           if(error.response.status === 401){
             this.errorMsg = "Passordet var feil. Prøv igjen."
@@ -110,6 +111,7 @@ export default {
       if(this.newPassword === ""){
         await UserAccountService.editPassword(this.$store.getters.myUserId, this.email, this.oldPassword, this.oldPassword).then(response =>{
           this.confirmationSnackBar = true;
+          this.error = false;
         }).catch(error => {
           if(error.response.status === 401){
             this.errorMsg = "Passordet var feil. Prøv igjen."
@@ -122,7 +124,6 @@ export default {
       }
       if (this.picture.length > 0) {
         let img = await this.getBase64(this.picture[0]);
-        console.log(img);
         await ImageService.setProfilePic(img, this.$store.getters.myUserId);
         this.confirmationSnackBar = true;
       }
