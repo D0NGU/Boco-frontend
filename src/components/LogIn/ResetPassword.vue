@@ -51,7 +51,6 @@
 
 <script>
 import UserAccountService from "@/service/UserAccountService";
-import router from "@/router";
 import {useRoute} from "vue-router";
 
 export default {
@@ -117,10 +116,6 @@ h1 {
   background-color: white;
   padding: 1em;
   margin: auto auto 60px;
-}
-
-#textFieldWrapper{
-  margin: 0 auto;
 }
 
 #sendForm{
